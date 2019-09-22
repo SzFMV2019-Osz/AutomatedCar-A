@@ -1,8 +1,9 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 
 /**
  * World object containing the Model of the world
@@ -17,6 +18,7 @@ public class World implements IWorld {
      * Initializes a new instance of the {@link World} class
      * @param width Width of the {@link World}
      * @param height Height of t he {@link World}
+     * @deprecated
      */
     public World(int width, int height){
         this.width = width;
@@ -43,10 +45,6 @@ public class World implements IWorld {
         return this.width;
     }
 
-    /**
-     * Sets the  width
-     * @param width Width of the {@link World} object
-     */
     public void setWidth(int width) {
         this.width = width;
     }
@@ -58,10 +56,6 @@ public class World implements IWorld {
         return this.height;
     }
 
-    /**
-     * Sets the height
-     * @param height Height of the {@link World} object
-     */
     public void setHeight(int height) {
         this.height = height;
     }
