@@ -15,7 +15,7 @@ public class WorldObject {
     protected int y;
     protected int width;
     protected int height;
-    protected float rotation = 0f;
+    protected int rotation = 0;
     protected String imageFileName;
     protected BufferedImage image;
 
@@ -23,6 +23,14 @@ public class WorldObject {
         this.x = x;
         this.y = y;
         this.imageFileName = imageFileName;
+        initImage();
+    }
+
+    public WorldObject(String type, int posX, int posY, int m11, int m12, int m21, int m22){
+        this.x = posX;
+        this.y = posY;
+        this.rotation = this.getRotationValue(m11, m12, m21, m22);
+        this.imageFileName = type;
         initImage();
     }
 
@@ -58,11 +66,16 @@ public class WorldObject {
         this.height = height;
     }
 
-    public float getRotation() {
+    public int getRotation() {
         return rotation;
     }
 
-    public void setRotation(float rotation) {
+    public int getRotationValue(int m11, int m12, int m21, int m22){
+        // TODO calculate rotation
+        return 0;
+    }
+
+    public void setRotation(int rotation) {
         this.rotation = rotation;
     }
 
