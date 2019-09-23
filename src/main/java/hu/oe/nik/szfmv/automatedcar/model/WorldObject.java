@@ -42,9 +42,7 @@ public class WorldObject {
         initImage();
     }
 
-    /**
-     *
-     * @return
+    /** {@inheritDoc}
      */
     public int getX() {
         return x;
@@ -54,6 +52,8 @@ public class WorldObject {
         this.x = x;
     }
 
+    /** {@inheritDoc}
+     */
     public int getY() {
         return y;
     }
@@ -62,6 +62,8 @@ public class WorldObject {
         this.y = y;
     }
 
+    /** {@inheritDoc}
+     */
     public int getWidth() {
         return width;
     }
@@ -70,6 +72,8 @@ public class WorldObject {
         this.width = width;
     }
 
+    /** {@inheritDoc}
+     */
     public int getHeight() {
         return height;
     }
