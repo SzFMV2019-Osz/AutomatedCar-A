@@ -2,7 +2,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/szfmv2019-osz/automatedcar-a/badge)](https://www.codefactor.io/repository/github/szfmv2019-osz/automatedcar-a)
 [![codecov](https://codecov.io/gh/SzFMV2019-Osz/AutomatedCar-A/branch/master/graph/badge.svg)](https://codecov.io/gh/SzFMV2019-Osz/AutomatedCar-A)
 [![forum](https://img.shields.io/badge/forum-Everyone-94B2E0.svg)](https://github.com/orgs/szfmv2019-osz/teams/everyone)
-[![Handout](https://img.shields.io/badge/handout-jegyzet-yellow.svg)](https://szfmv2019-osz.github.io/handout/)
+[![Handout](https://img.shields.io/badge/handout-wiki-yellow.svg)](https://szfmv2019-osz.github.io/handout/)
 
 
 # AutomatedCar
