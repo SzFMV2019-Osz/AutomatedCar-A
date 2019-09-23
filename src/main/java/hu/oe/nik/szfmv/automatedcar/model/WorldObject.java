@@ -11,6 +11,10 @@ import java.io.IOException;
 public class WorldObject {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    private double m11;
+    private double m12;
+    private double m21;
+    private double m22;
     protected int x;
     protected int y;
     protected int width;
