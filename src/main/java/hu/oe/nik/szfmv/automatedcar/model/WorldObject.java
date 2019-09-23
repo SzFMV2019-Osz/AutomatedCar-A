@@ -15,7 +15,7 @@ public class WorldObject {
     protected int y;
     protected int width;
     protected int height;
-    protected int rotation = 0;
+    protected double rotation = 0;
     protected String imageFileName;
     protected BufferedImage image;
 
@@ -26,14 +26,22 @@ public class WorldObject {
         initImage();
     }
 
-    public WorldObject(String type, int posX, int posY, int m11, int m12, int m21, int m22){
+    public WorldObject(String type, int posX, int posY, double m11, double m12, double m21, double m22){
         this.x = posX;
         this.y = posY;
+        this.m11 = m11;
+        this.m12 = m12;
+        this.m21 = m21;
+        this.m22 = m22;
         this.rotation = this.getRotationValue(m11, m12, m21, m22);
         this.imageFileName = type;
         initImage();
     }
 
+    /**
+     *
+     * @return
+     */
     public int getX() {
         return x;
     }
@@ -66,16 +74,28 @@ public class WorldObject {
         this.height = height;
     }
 
-    public int getRotation() {
+    /**
+     * Gets the rotation of the {@link WorldObject} object
+     * @return rotation of the object
+     */
+    public double getRotation() {
         return rotation;
     }
 
-    public int getRotationValue(int m11, int m12, int m21, int m22){
+    /**
+     * Calculates and gets the rotation value from the distance of the corners
+     * @param m11 Distance from top left corner
+     * @param m12 Distance from top right corner
+     * @param m21 Distance from bottom left corner
+     * @param m22 Distance from bottom right corner
+     * @return calculated rotation
+     */
+    public double getRotationValue(double m11, double m12, double m21, double m22){
         // TODO calculate rotation
         return 0;
     }
 
-    public void setRotation(int rotation) {
+    public void setRotation(double rotation) {
         this.rotation = rotation;
     }
 

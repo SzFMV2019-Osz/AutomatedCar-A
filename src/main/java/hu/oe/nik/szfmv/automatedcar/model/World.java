@@ -89,7 +89,7 @@ public class World implements IWorld {
      * @param m21 Distance from bottom left corner
      * @param m22 Distance from bottom right corner
      */
-    public void addObject(String type, int posX, int posY, int m11, int m12, int m21, int m22){
+    public void addObject(String type, int posX, int posY, double m11, double m12, double m21, double m22){
         this.worldObjects.add(new WorldObject(type, posX, posY, m11, m12, m21, m22));
     }
 }
