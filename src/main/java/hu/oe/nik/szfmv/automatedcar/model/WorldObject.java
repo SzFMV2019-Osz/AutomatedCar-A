@@ -15,8 +15,7 @@ public class WorldObject {
     private double m12;
     private double m21;
     private double m22;
-    protected int x;
-    protected int y;
+    protected Position position;
     protected int width;
     protected int height;
     protected double rotation = 0;
@@ -24,15 +23,13 @@ public class WorldObject {
     protected BufferedImage image;
 
     public WorldObject(int x, int y, String imageFileName) {
-        this.x = x;
-        this.y = y;
+        this.position = new Position(x, y);
         this.imageFileName = imageFileName;
         initImage();
     }
 
     public WorldObject(String type, int posX, int posY, double m11, double m12, double m21, double m22){
-        this.x = posX;
-        this.y = posY;
+        this.position = new Position(posX, posY);
         this.m11 = m11;
         this.m12 = m12;
         this.m21 = m21;
@@ -42,24 +39,22 @@ public class WorldObject {
         initImage();
     }
 
-    /** {@inheritDoc}
+    public Position getPosition(){
+        return this.position;
+    }
+
+    /**
+     * @deprecated
      */
-    public int getX() {
-        return x;
+    public int getX(){
+        return this.position.getX();
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    /** {@inheritDoc}
+    /**
+     * @deprecated
      */
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+    public int getY(){
+        return this.position.getY();
     }
 
     /** {@inheritDoc}
