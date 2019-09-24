@@ -2,13 +2,13 @@ package hu.oe.nik.szfmv.automatedcar.model.utility;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 /**
  * Common utility functions in model
  */
-public class ModelCommonUtil {
+public final class ModelCommonUtil {
 
     private static final double MAX_DEGREE = 360;
 
@@ -19,8 +19,7 @@ public class ModelCommonUtil {
      * @throws IOException If the IO operation cannot be processed, perhaps accessing rights
      */
     public static BufferedImage loadObjectImage(String name) throws IOException {
-        return ImageIO.read(Objects.requireNonNull(ModelCommonUtil.class.getClassLoader().getResourceAsStream(
-                "/" + name + ".png")));
+        return ImageIO.read(new File(ClassLoader.getSystemResource((name + ".png")).getFile()));
     }
 
     /**
