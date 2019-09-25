@@ -32,27 +32,28 @@ public class WorldObject {
         initImage();
     }
 
-
-    public Position getPosition(){
-        return this.position;
-    }
-
-    public Transform getTransform(){
-        return  this.transform;
-    }
-
-    /**
-     * @deprecated
+    /** {@inheritDoc}
      */
     public int getX(){
         return this.position.getX();
     }
 
-    /**
-     * @deprecated
+    /** {@inheritDoc}
+     */
+    public void setX(int x){
+        this.position.setX(x);
+    }
+
+    /** {@inheritDoc}
      */
     public int getY(){
         return this.position.getY();
+    }
+
+    /** {@inheritDoc}
+     */
+    public void setY(int y){
+        this.position.setY(y);
     }
 
     /** {@inheritDoc}
@@ -73,6 +74,20 @@ public class WorldObject {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    /** {@inheritDoc}
+     */
+    public double getRotation(){
+        return this.transform.getRotation();
+    }
+
+    /**
+     * @deprecated
+     * @param rotation rotation of the object
+     */
+    public void setRotation(double rotation){
+        this.transform.setRotation(rotation);
     }
 
     public String getImageFileName() {

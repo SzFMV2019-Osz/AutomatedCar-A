@@ -33,16 +33,16 @@ public class AutomatedCar extends WorldObject {
 
         switch (virtualFunctionBus.samplePacket.getKey()) {
             case 0:
-                this.position.setY(this.position.getY() - 5);
+                this.setY(this.getY() - 5);
                 break;
             case 1:
-                this.position.setX(this.position.getX() + 5);
+                this.setX(this.getX() + 5);
                 break;
             case 2:
-                this.position.setY(this.position.getY() + 5);
+                this.setY(this.getY() + 5);
                 break;
             case 3:
-                this.position.setX(this.position.getX() - 5);
+                this.setX(this.getX() - 5);
                 break;
             default:
                 break;
