@@ -45,19 +45,11 @@ public class World implements IWorld {
         return this.width;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
     /** {@inheritDoc}
      */
     @Override
     public int getHeight() {
         return this.height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
     }
 
     /** {@inheritDoc}
