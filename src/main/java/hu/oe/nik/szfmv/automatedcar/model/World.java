@@ -4,15 +4,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
+import hu.oe.nik.szfmv.automatedcar.xml.converter.IntegerConverter;
+
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import hu.oe.nik.szfmv.automatedcar.xml.converter.ObjectConverter;
 
 /**
  * World object containing the Model of the world
  */
+@XmlRootElement(name = "Scene")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class World implements IWorld {
+    
+    @XmlAttribute(name = "width", required = true)
+    @XmlJavaTypeAdapter(value = IntegerConverter.class, type = int.class)
     private int width = 0;
+    
+    @XmlAttribute(name = "height", required = true)
+    @XmlJavaTypeAdapter(value = IntegerConverter.class, type = int.class)
     private int height = 0;
+    
+    @XmlElementWrapper(name = "Objects", required = true)
+    @XmlElement(name = "Object")
+    @XmlJavaTypeAdapter(ObjectConverter.class)
     private List<WorldObject> worldObjects = new ArrayList<>();
-    private int color;
+    
+    @XmlAttribute(name = "color", required = false)
+    private String color;
+
+
+    public World() {
+    }
 
     /**
      * Initializes a new instance of the {@link World} class
@@ -23,7 +47,7 @@ public class World implements IWorld {
     public World(int width, int height){
         this.width = width;
         this.height = height;
-        this.color = 0xEEEEEE;
+        this.color = "#FFFFFF";
     }
 
     /**
@@ -32,7 +56,7 @@ public class World implements IWorld {
      * @param height Height of the {@link World} object
      * @param color Color of the {@link World} object
      */
-    public World(int width, int height, int color) {
+    public World(int width, Integer height, String color) {
         this.width = width;
         this.height = height;
         this.color = color;
@@ -40,7 +64,6 @@ public class World implements IWorld {
 
     /** {@inheritDoc}
      */
-    @Override
     public int getWidth() {
         return this.width;
     }
@@ -55,7 +78,7 @@ public class World implements IWorld {
     /** {@inheritDoc}
      */
     @Override
-    public int getColor() { return this.color; }
+    public String getColor() { return this.color; }
 
     public List<WorldObject> getWorldObjects() {
         return worldObjects;

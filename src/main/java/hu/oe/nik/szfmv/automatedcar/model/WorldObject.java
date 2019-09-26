@@ -8,15 +8,31 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import javax.xml.bind.annotation.*;
 
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Object")
+@XmlType(name = "field")
 public class WorldObject implements IObject {
 
     private static final Logger LOGGER = LogManager.getLogger();
+    
+    @XmlElement(name = "Position", required = true)
     protected Position position;
+    
+    @XmlElement(name = "Transform", required = true)
     protected Transform transform;
+    
+    @XmlTransient
     protected int width;
+    
+    @XmlTransient
     protected int height;
+    
+    @XmlAttribute(name = "type", required = true)
     protected String imageFileName;
+    
+    @XmlTransient
     protected BufferedImage image;
 
     public WorldObject() {

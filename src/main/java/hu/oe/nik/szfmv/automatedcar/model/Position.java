@@ -1,8 +1,23 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.xml.converter.IntegerConverter;
+
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Position")
 public class Position {
+
+    @XmlAttribute(name = "x")
+    @XmlJavaTypeAdapter(value = IntegerConverter.class, type = int.class)
     private int x;
+
+    @XmlAttribute(name = "y")
+    @XmlJavaTypeAdapter(value = IntegerConverter.class, type = int.class)
     private int y;
+
+    @XmlTransient
     private int z;
 
     public Position(int x, int y) {
@@ -21,11 +36,11 @@ public class Position {
      * Gets the X position of the object
      * @return x position of the object
      */
-    public int getX(){
+    public int getX() {
         return  this.x;
     }
 
-    public void setX(int x){
+    public void setX(int x) {
         this.x = x;
     }
 
@@ -33,11 +48,11 @@ public class Position {
      * Gets the Y position of the object
      * @return y position of the object
      */
-    public int getY(){
+    public int getY() {
         return this.y;
     }
 
-    public void setY(int y){
+    public void setY(int y) {
         this.y = y;
     }
 
