@@ -1,11 +1,10 @@
 package hu.oe.nik.szfmv.automatedcar.xml;
 
 import hu.oe.nik.szfmv.automatedcar.model.*;
-
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,5 +101,10 @@ public class XmlParserTest {
         assertEquals(expected.getPosX(), objFromXml.getPosX());
         assertEquals(expected.getPosY(), objFromXml.getPosY());
         assertEquals(expected.getPosZ(), objFromXml.getPosZ());
+        if (StringUtils.equals(objFromXml.getImageFileName(), "unknown_type")) {
+            assertNull(objFromXml.getImage());
+        } else {
+            assertNotNull(objFromXml.getImage());
+        }
     }
 }

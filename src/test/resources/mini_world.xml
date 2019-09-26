@@ -21,7 +21,7 @@
       <Position x="169" y="2454"/>
       <Transform m11="1" m12="0" m21="0" m22="1"/>
     </Object>
-    <Object type="car3">
+    <Object type="car_2_white">
       <Position x="356" y="1648"/>
       <Transform m11="1" m12="0" m21="0" m22="1"/>
     </Object>

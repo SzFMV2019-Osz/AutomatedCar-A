@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -8,6 +9,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -158,4 +160,18 @@ public class WorldObject implements IObject {
         }
     }
 
+    /**
+     * JAXB unmarshaller event listenerje.
+     * Az objektum felépítése után hívódik meg, a kép betöltéséért felel.
+     *
+     * @param u unmarshaller
+     * @param parent JAXBElement
+     */
+    public void afterUnmarshal(Unmarshaller u, Object parent) {
+        try {
+            image = ModelCommonUtil.loadObjectImage(getImageFileName());
+        } catch (Exception e) {
+            LOGGER.error("Nem sikerült a képfájl betöltése!", e);
+        }
+    }
 }
