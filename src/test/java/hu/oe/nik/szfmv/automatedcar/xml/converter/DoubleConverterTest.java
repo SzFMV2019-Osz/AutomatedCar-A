@@ -52,7 +52,6 @@ public class DoubleConverterTest {
                 logger.error("A DoubleConverter tesztelése közben hiba lépett fel: " + e.getMessage());
             }
         }
-        logger.info("DoubleConverter validated " + validDoubles.length + " valid values.");
     }
 
     @Test
@@ -67,6 +66,5 @@ public class DoubleConverterTest {
                 logger.error("A DoubleConverter tesztelése közben hiba lépett fel: " + e.getMessage());
             }
         }
-        logger.info("DoubleConverter validated " + invalidDoubles.length + " invalid values.");
     }
 }

@@ -44,7 +44,6 @@ public class IntegerConverterTest {
                 logger.error("A IntegerConverter tesztelése közben hiba lépett fel: " + e.getMessage());
             }
         }
-        logger.info("IntegerConverter validated " + validIntegers.length + " valid values.");
     }
 
     @Test
@@ -59,7 +58,6 @@ public class IntegerConverterTest {
                 logger.error("A IntegerConverter tesztelése közben hiba lépett fel: " + e.getMessage());
             }
         }
-        logger.info("IntegerConverter validated " + invalidIntegers.length + " invalid values.");
     }
 
 }
