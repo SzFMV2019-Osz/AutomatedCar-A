@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -8,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class WorldObject {
+public class WorldObject implements IObject {
 
     private static final Logger LOGGER = LogManager.getLogger();
     protected Position position;
@@ -34,7 +35,8 @@ public class WorldObject {
 
     /** {@inheritDoc}
      */
-    public int getX(){
+    @Override
+    public int getPosX(){
         return this.position.getX();
     }
 
@@ -46,7 +48,8 @@ public class WorldObject {
 
     /** {@inheritDoc}
      */
-    public int getY(){
+    @Override
+    public int getPosY(){
         return this.position.getY();
     }
 
@@ -58,6 +61,14 @@ public class WorldObject {
 
     /** {@inheritDoc}
      */
+    @Override
+    public int getPosZ() { return this.position.getZ(); }
+
+    public void setZ(int z) { this.position.setZ(z);}
+
+    /** {@inheritDoc}
+     */
+    @Override
     public int getWidth() {
         return width;
     }
@@ -68,6 +79,7 @@ public class WorldObject {
 
     /** {@inheritDoc}
      */
+    @Override
     public int getHeight() {
         return height;
     }
@@ -78,6 +90,7 @@ public class WorldObject {
 
     /** {@inheritDoc}
      */
+    @Override
     public double getRotation(){
         return this.transform.getRotation();
     }
@@ -98,6 +111,7 @@ public class WorldObject {
         this.imageFileName = imageFileName;
     }
 
+    @Override
     public BufferedImage getImage() {
         return this.image;
     }
