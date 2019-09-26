@@ -1,6 +1,8 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -46,22 +48,13 @@ public class ModelCommonUtilTest {
     }
 
     @Test
-    public void loadExistingImage() {
-        try {
-            BufferedImage image = ModelCommonUtil.loadObjectImage("car_2_red");
-            assertNotNull(image);
-        } catch (IOException e) {
-
-        }
+    public void loadExistingImage() throws IOException {
+        BufferedImage image = ModelCommonUtil.loadObjectImage("car_2_red");
+        assertNotNull(image);
     }
 
     @Test
     public void loadNotExistingImage() {
-
-            /*BufferedImage image;
-                    = ModelCommonUtil.loadObjectImage("car_2_red");
-        } catch (IOException e){
-
-        }*/
+        assertThrows(NullPointerException.class, () -> ModelCommonUtil.loadObjectImage("car_2"));
     }
 }
