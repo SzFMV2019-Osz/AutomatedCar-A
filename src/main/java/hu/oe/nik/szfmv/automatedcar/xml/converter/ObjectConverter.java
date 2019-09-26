@@ -11,6 +11,10 @@ import javax.xml.bind.JAXBElement;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Node;
 
+/**
+ * Nem sikerült mindent annotációval megoldani, ezért jött létre ez a segédosztály,
+ * ami megmondja a JAXB-nek, hogy mit példányosítson.
+ */
 public class ObjectConverter extends XmlAdapter<Object, WorldObject> {
 
     @Override
@@ -31,18 +35,22 @@ public class ObjectConverter extends XmlAdapter<Object, WorldObject> {
             clazz = Sign.class;
         } else if (StringUtils.startsWith(classType, "car")){
             clazz = AutomatedCar.class;
-        }  else { // a fail-safe működés miatt került be, lehetne exceptiont is dobni
+        }  else if (StringUtils.startsWith(classType, "parking_bollard")) {
+            clazz = ParkingBollard.class;
+        } else { // a fail-safe működés miatt került be, lehetne exceptiont is dobni
             clazz = WorldObject.class;
         }
 
-        JAXBContext jc = JAXBContext.newInstance(clazz);
-        Binder<Node> binder = jc.createBinder();
+        // @OPTIMIZE: gyanítom az tart sok időbe, hogy minden objektumhoz új instance-t hoz létre,
+        // idővel meg lehetne próbálni ezeket elcachelni az XmlParser-ben.
+        JAXBContext jaxbContext = JAXBContext.newInstance(clazz);
+        Binder<Node> binder = jaxbContext.createBinder();
         JAXBElement<?> jaxBElement = binder.unmarshal(node, clazz);
         return (WorldObject) jaxBElement.getValue();
     }
 
     @Override
     public Object marshal(WorldObject worldObject) throws Exception {
-        return null;
+        return worldObject;
     }
 }
