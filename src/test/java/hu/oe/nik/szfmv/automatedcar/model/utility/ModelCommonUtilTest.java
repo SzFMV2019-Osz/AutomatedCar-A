@@ -14,7 +14,7 @@ public class ModelCommonUtilTest {
     @Test
     public void matrixShouldRotate0Degrees() {
         // https://en.wikipedia.org/wiki/Rotation_matrix#Common_rotations
-        double angle = ModelCommonUtil.calculateRotationFromMatrix(0, 0, 0, 0);
+        double angle = ModelCommonUtil.getRotationValue(0, 0, 0, 0);
 
         // assert statements
         assertEquals(0, angle, 0.1);
@@ -23,7 +23,7 @@ public class ModelCommonUtilTest {
     @Test
     public void matrixShouldRotate90Degrees() {
         // https://en.wikipedia.org/wiki/Rotation_matrix#Common_rotations
-        double angle = ModelCommonUtil.calculateRotationFromMatrix(0, -1, 1, 0);
+        double angle = ModelCommonUtil.getRotationValue(0, -1, 1, 0);
 
         // assert statements
         assertEquals(90, angle, 0.1);
@@ -32,7 +32,7 @@ public class ModelCommonUtilTest {
     @Test
     public void matrixShouldRotate180egrees() {
         // https://en.wikipedia.org/wiki/Rotation_matrix#Common_rotations
-        double angle = ModelCommonUtil.calculateRotationFromMatrix(-1, 0, 0, -1);
+        double angle = ModelCommonUtil.getRotationValue(-1, 0, 0, -1);
 
         // assert statements
         assertEquals(180, angle, 0.1);

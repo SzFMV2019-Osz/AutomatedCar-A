@@ -47,7 +47,7 @@ public final class ModelCommonUtil {
      * @param m22 Matrix 2,2 position
      * @return Rotation in degrees
      */
-    public static double calculateRotationFromMatrix(double m11, double m12, double m21, double m22){
+    private static double calculateRotationFromMatrix(double m11, double m12, double m21, double m22){
         double angle = Math.atan2(m21, m11); // http://nghiaho.com/?page_id=846
         return Math.toDegrees(angle);
     }
