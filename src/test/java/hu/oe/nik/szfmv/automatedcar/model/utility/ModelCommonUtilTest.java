@@ -1,13 +1,13 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
-import static org.junit.Assert.*;
 
 public class ModelCommonUtilTest {
 
