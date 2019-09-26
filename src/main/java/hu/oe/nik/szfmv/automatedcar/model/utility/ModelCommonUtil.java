@@ -10,6 +10,7 @@ import java.io.IOException;
  */
 public final class ModelCommonUtil {
 
+    private static final double MIN_DEGREE = 0;
     private static final double MAX_DEGREE = 360;
 
     /**
@@ -23,18 +24,18 @@ public final class ModelCommonUtil {
     }
 
     /**
-     * Gets a rotation value from 4 points
-     * @param m11 Top left point
-     * @param m12 Top right point
-     * @param m21 Bottom left point
-     * @param m22 Bottom right point
+     * Gets a rotation value from 2x2 matrix values
+     * @param m11 Mx top left value
+     * @param m12 Mx top left value
+     * @param m21 Mx bottom left point
+     * @param m22 Mx bottom right point
      * @return Double between [0,360[
      */
     public static double getRotationValue(double m11, double m12, double m21, double m22) {
-        // A Math.PI / 2.0 az elvileg a 0 pontot északra teszi, mert alapból kelet, én se értem
-        double angle = Math.atan2(m11 - m21, m12 - m22) + (Math.PI / 2.0E00);
+        // A Math.PI / 2.0 az elvileg a 0 pontot északra teszi, mert alapból kelet felé néz
+        double angle = Math.atan2(m11, m21) + (Math.PI / 2.0E00);
         angle = Math.toDegrees(angle);
-        if (angle < 0) {
+        if (angle < MIN_DEGREE) {
             return (angle + MAX_DEGREE);
         }
         return angle;
