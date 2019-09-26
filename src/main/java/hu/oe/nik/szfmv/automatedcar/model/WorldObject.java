@@ -19,6 +19,10 @@ public class WorldObject implements IObject {
     protected String imageFileName;
     protected BufferedImage image;
 
+    public WorldObject() {
+        // default konstruktor
+    }
+
     public WorldObject(int x, int y, String imageFileName) {
         this.position = new Position(x, y);
         this.transform = new Transform();
