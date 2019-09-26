@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model.managers;
 
+import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
@@ -43,15 +44,12 @@ public class WorldManager {
 
     /**
      * Visszaadja az összes objektumot a három pont között
-     * @param x1 Első pont X
-     * @param y1 Első pont Y
-     * @param x2 Második pont X
-     * @param y2 Második pont Y
-     * @param x3 Harmadik pont X
-     * @param y3 Harmadik pont Y
+     * @param pointA Első pont
+     * @param pointB Második pont
+     * @param pointC Harmadik pont
      * @return IObject lista amiben benne vannak a szűrt objectek amik a háromszögen belül
      */
-    public List<IObject> getAllObjectsInTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
+    public List<IObject> getAllObjectsInTriangle(Position pointA, Position pointB, Position pointC) {
         // TODO
         validate();
         return null;
