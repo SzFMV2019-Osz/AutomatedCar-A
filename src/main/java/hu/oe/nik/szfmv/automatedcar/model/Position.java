@@ -18,7 +18,7 @@ public class Position {
     private int y;
 
     @XmlTransient
-    private int z;
+    private int z = 0;
 
     public Position(int x, int y) {
         this.x = x;

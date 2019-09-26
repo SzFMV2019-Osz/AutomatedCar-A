@@ -120,11 +120,19 @@ public class WorldObject implements IObject {
     }
 
     /**
-     * @deprecated
+     * <b>Nem használható, csak Unit tesztelés miatt kell!<b/>
      * @param rotation rotation of the object
      */
     public void setRotation(double rotation) {
         this.transform.setRotation(rotation);
+    }
+
+    /**
+     * <b>Nem használható, csak Unit tesztelés miatt kell!<b/>
+     * @param position of the object
+     */
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public String getImageFileName() {
