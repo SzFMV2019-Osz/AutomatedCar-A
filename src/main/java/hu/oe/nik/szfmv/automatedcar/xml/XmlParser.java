@@ -8,9 +8,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -21,6 +25,33 @@ public class XmlParser
     private static Logger logger = LogManager.getLogger();
 
     private static StopWatch stopWatch;
+
+    /**
+     * A JAXB instance létrehozás meglehetősen költséges folyamat, ezért nem hozunk létre újat minden objektum
+     * példányosításakor, hanem ebből a cache-ből dolgozunk. Ezt nyugodtan megtehetjük, mert a {@link JAXBContext} thread-safe.
+     *
+     * Ugyanezt az {@link Unmarshaller}-el nem tehetjük meg (nem thread-safe). Szerencsére létrehozása kevésbé is költséges.
+     */
+    private static Map<Class<?>, JAXBContext> jaxbInstanceCache = new HashMap<>();
+
+    private static JAXBContext createJAXBContext(Class<?> newClass) throws JAXBException {
+        return JAXBContext.newInstance(newClass);
+    }
+
+    public static JAXBContext getJAXBContextFromCache(Class<?> neededClass) throws JAXBException {
+        if ( ! jaxbInstanceCache.containsKey(neededClass)) {
+            putJAXBContextToCache(neededClass);
+        }
+        return jaxbInstanceCache.get(neededClass);
+    }
+
+    private static void putJAXBContextToCache(Class<?> newClass) throws JAXBException {
+        jaxbInstanceCache.put(newClass, createJAXBContext(newClass));
+    }
+
+    private static void invalidateCache() {
+        jaxbInstanceCache = new HashMap<>();
+    }
 
     /**
      * Beolvassa a kapott XML fájlt, majd felépíti belőle a world-öt és a benne elhelyezkedő objektumokat.
@@ -43,7 +74,7 @@ public class XmlParser
             Properties props = System.getProperties();
             props.setProperty("com.sun.xml.bind.v2.bytecode.ClassTailor.noOptimize", "true");
 
-            JAXBContext jaxbContext = JAXBContext.newInstance(World.class);
+            JAXBContext jaxbContext = createJAXBContext(World.class); // nem cacheljük, mert elég belőle egy instance
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             world = (World) jaxbUnmarshaller.unmarshal(new File(ClassLoader.getSystemResource(xmlFileName).getFile()));
         } catch (NullPointerException e) {
@@ -51,9 +82,10 @@ public class XmlParser
             throw new NullPointerException("Valószínűleg nem létezik a fájl!");
         } catch (Exception ex) {
             logger.error("Az XML parse-olása közben hiba lépett fel!", ex);
+        } finally {
+            invalidateCache();
+            logger.info("Az XML feldolgozása " + getElapsedTimeAndResetStopWatch() + " ms-et vett igénybe.");
         }
-        logger.info("Az XML feldolgozása " + getElapsedTimeAndResetStopWatch() + " ms-et vett igénybe.");
-
         return world;
     }
 
