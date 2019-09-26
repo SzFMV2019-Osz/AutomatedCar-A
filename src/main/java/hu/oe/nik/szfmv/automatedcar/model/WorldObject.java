@@ -30,7 +30,7 @@ public class WorldObject implements IObject {
         initImage();
     }
 
-    public WorldObject(String type, int posX, int posY, double m11, double m12, double m21, double m22){
+    public WorldObject(String type, int posX, int posY, double m11, double m12, double m21, double m22) {
         this.position = new Position(posX, posY);
         this.transform = new Transform(m11, m12, m21, m22);
         this.imageFileName = type;
@@ -66,9 +66,13 @@ public class WorldObject implements IObject {
     /** {@inheritDoc}
      */
     @Override
-    public int getPosZ() { return this.position.getZ(); }
+    public int getPosZ() {
+        return this.position.getZ();
+    }
 
-    public void setZ(int z) { this.position.setZ(z);}
+    public void setZ(int z) {
+        this.position.setZ(z);
+    }
 
     /** {@inheritDoc}
      */
@@ -103,7 +107,7 @@ public class WorldObject implements IObject {
      * @deprecated
      * @param rotation rotation of the object
      */
-    public void setRotation(double rotation){
+    public void setRotation(double rotation) {
         this.transform.setRotation(rotation);
     }
 
