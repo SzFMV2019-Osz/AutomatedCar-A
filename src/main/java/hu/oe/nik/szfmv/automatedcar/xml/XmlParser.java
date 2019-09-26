@@ -28,13 +28,11 @@ public class XmlParser
      *
      * @param xmlFileName Feldolgozandó fájl neve, kiterjesztés nélkül is megadható.
      * @return Felépített világ a betöltött képekkel.
-     * @throws FileNotFoundException Ha nem található a megadott fájl.
+     * @throws NullPointerException Ha nem található a megadott fájl.
      */
-    public static World parseWorldObjects(String xmlFileName) throws FileNotFoundException {
+    public static World parseWorldObjects(String xmlFileName) throws NullPointerException {
         World world = null;
         xmlFileName = getXmlNameWithExtension(xmlFileName);
-
-//        checkFileExists(xmlFileName);
 
         try {
             startStopWatch();
@@ -48,20 +46,15 @@ public class XmlParser
             JAXBContext jaxbContext = JAXBContext.newInstance(World.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             world = (World) jaxbUnmarshaller.unmarshal(new File(ClassLoader.getSystemResource(xmlFileName).getFile()));
+        } catch (NullPointerException e) {
+            logger.error("Hiba lépett fel feldolgozás közben, valószínűleg nem létezik a fájl!", e);
+            throw new NullPointerException("Valószínűleg nem létezik a fájl!");
         } catch (Exception ex) {
             logger.error("Az XML parse-olása közben hiba lépett fel!", ex);
         }
         logger.info("Az XML feldolgozása " + getElapsedTimeAndResetStopWatch() + " ms-et vett igénybe.");
 
         return world;
-    }
-
-    private static void checkFileExists(String fileName) throws FileNotFoundException {
-        File file = new File(fileName);
-        if ( ! file.exists()) {
-            logger.error(fileName + " nem található!");
-            throw new FileNotFoundException(fileName + " nem található!");
-        }
     }
 
     private static String getXmlNameWithExtension(String fileName) {

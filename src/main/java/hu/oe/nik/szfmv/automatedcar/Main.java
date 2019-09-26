@@ -28,7 +28,7 @@ public class Main {
     public void run() {
         try {
             world = XmlParser.parseWorldObjects("test_world");
-        } catch (FileNotFoundException ex){
+        } catch (NullPointerException ex){
             // handle exception
         }
         init();

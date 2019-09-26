@@ -70,9 +70,8 @@ public class XmlParserTest {
         return new Position(x, y);
     }
 
-    // file exists check még nem tökéletes
-    // @Test(expected = NullPointerException.class)
-    public void throwsFileNotFoundException_WhenCalledWith_NotExistingFileName() throws FileNotFoundException {
+    @Test(expected = NullPointerException.class)
+    public void throwsNullPointerException_WhenCalledWith_NotExistingFileName() throws NullPointerException {
         XmlParser.parseWorldObjects(notExistingFile);
     }
 
@@ -85,7 +84,7 @@ public class XmlParserTest {
                 List<WorldObject> result = world.getWorldObjects();
                 for (int i = 0; i < result.size(); i++)
                     assertPositionsAndType(result.get(i), expectedObjects.get(i));
-            } catch (FileNotFoundException e) {
+            } catch (NullPointerException e) {
                 // handle exception
             }
         }
