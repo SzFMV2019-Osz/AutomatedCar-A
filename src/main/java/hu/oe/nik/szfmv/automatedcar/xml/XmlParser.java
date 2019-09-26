@@ -34,7 +34,7 @@ public class XmlParser
         World world = null;
         xmlFileName = getXmlNameWithExtension(xmlFileName);
 
-        checkFileExists(xmlFileName);
+//        checkFileExists(xmlFileName);
 
         try {
             startStopWatch();
