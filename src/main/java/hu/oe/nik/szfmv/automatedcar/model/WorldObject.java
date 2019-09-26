@@ -11,37 +11,53 @@ import java.io.IOException;
 public class WorldObject {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    protected int x;
-    protected int y;
+    protected Position position;
+    protected Transform transform;
     protected int width;
     protected int height;
-    protected float rotation = 0f;
     protected String imageFileName;
     protected BufferedImage image;
 
     public WorldObject(int x, int y, String imageFileName) {
-        this.x = x;
-        this.y = y;
+        this.position = new Position(x, y);
+        this.transform = new Transform();
         this.imageFileName = imageFileName;
         initImage();
     }
 
-    public int getX() {
-        return x;
+    public WorldObject(String type, int posX, int posY, double m11, double m12, double m21, double m22){
+        this.position = new Position(posX, posY);
+        this.transform = new Transform(m11, m12, m21, m22);
+        this.imageFileName = type;
+        initImage();
     }
 
-    public void setX(int x) {
-        this.x = x;
+    /** {@inheritDoc}
+     */
+    public int getX(){
+        return this.position.getX();
     }
 
-    public int getY() {
-        return y;
+    /** {@inheritDoc}
+     */
+    public void setX(int x){
+        this.position.setX(x);
     }
 
-    public void setY(int y) {
-        this.y = y;
+    /** {@inheritDoc}
+     */
+    public int getY(){
+        return this.position.getY();
     }
 
+    /** {@inheritDoc}
+     */
+    public void setY(int y){
+        this.position.setY(y);
+    }
+
+    /** {@inheritDoc}
+     */
     public int getWidth() {
         return width;
     }
@@ -50,6 +66,8 @@ public class WorldObject {
         this.width = width;
     }
 
+    /** {@inheritDoc}
+     */
     public int getHeight() {
         return height;
     }
@@ -58,12 +76,18 @@ public class WorldObject {
         this.height = height;
     }
 
-    public float getRotation() {
-        return rotation;
+    /** {@inheritDoc}
+     */
+    public double getRotation(){
+        return this.transform.getRotation();
     }
 
-    public void setRotation(float rotation) {
-        this.rotation = rotation;
+    /**
+     * @deprecated
+     * @param rotation rotation of the object
+     */
+    public void setRotation(double rotation){
+        this.transform.setRotation(rotation);
     }
 
     public String getImageFileName() {
