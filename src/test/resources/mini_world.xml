@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene height="3000" measureType="0" color="#FFFFFF" width="5120">
+  <Objects>
+    <Object type="road_2lane_straight">
+      <Position x="1700" y="144"/>
+      <Transform m11="0" m12="1" m21="-1" m22="0"/>
+    </Object>
+    <Object type="parking_space_parallel">
+      <Position x="470" y="766"/>
+      <Transform m11="1" m12="0" m21="0" m22="1"/>
+    </Object>
+    <Object type="crosswalk">
+      <Position x="1495" y="486"/>
+      <Transform m11="0" m12="-1" m21="1" m22="0"/>
+    </Object>
+    <Object type="roadsign_priority_stop">
+      <Position x="4039" y="1431"/>
+      <Transform m11="0" m12="-1" m21="1" m22="0"/>
+    </Object>
+    <Object type="tree">
+      <Position x="169" y="2454"/>
+      <Transform m11="1" m12="0" m21="0" m22="1"/>
+    </Object>
+    <Object type="car3">
+      <Position x="356" y="1648"/>
+      <Transform m11="1" m12="0" m21="0" m22="1"/>
+    </Object>
+    <Object type="parking_bollard">
+      <Position x="581" y="844"/>
+      <Transform m11="1" m12="0" m21="0" m22="1"/>
+    </Object>
+	<Object type="unknown_type">
+      <Position x="581" y="844"/>
+      <Transform m11="1" m12="0" m21="0" m22="1"/>
+    </Object>
+  </Objects>
+</Scene>
