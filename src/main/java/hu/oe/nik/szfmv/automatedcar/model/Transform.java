@@ -1,11 +1,32 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.xml.converter.DoubleConverter;
+
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "Position")
 public class Transform {
-    private double m11;
-    private double m12;
-    private double m21;
-    private double m22;
-    private double rotation;
+    
+    @XmlAttribute(name = "m11", required = true)
+    @XmlJavaTypeAdapter(DoubleConverter.class)
+    private Double m11;
+
+    @XmlAttribute(name = "m12", required = true)
+    @XmlJavaTypeAdapter(DoubleConverter.class)
+    private Double m12;
+
+    @XmlAttribute(name = "m21", required = true)
+    @XmlJavaTypeAdapter(DoubleConverter.class)
+    private Double m21;
+
+    @XmlAttribute(name = "m22", required = true)
+    @XmlJavaTypeAdapter(DoubleConverter.class)
+    private Double m22;
+
+    @XmlTransient
+    private Double rotation;
 
     /**
      *
@@ -14,7 +35,7 @@ public class Transform {
      * @param m21 Distance from bottom left corner
      * @param m22 Distance from bottom right corner
      */
-    public Transform(double m11, double m12, double m21, double m22){
+    public Transform(double m11, Double m12, Double m21, Double m22){
         this.m11 = m11;
         this.m12 = m12;
         this.m21 = m21;
@@ -23,14 +44,14 @@ public class Transform {
     }
 
     public Transform(){
-        this.m11 = 0;
-        this.m12 = 0;
-        this.m21 = 0;
-        this.m22 = 0;
+        this.m11 = 0.0;
+        this.m12 = 0.0;
+        this.m21 = 0.0;
+        this.m22 = 0.0;
         this.rotation = this.calculateRotation();
     }
 
-    public double getRotation(){
+    public Double getRotation(){
         return this.rotation;
     }
 
@@ -42,8 +63,8 @@ public class Transform {
      * Calculates and gets the rotation value from the distance of the corners
      * @return calculated rotation
      */
-    private double calculateRotation(){
+    private Double calculateRotation(){
         // TODO calculate rotation
-        return 0;
+        return 0.0;
     }
 }
