@@ -7,11 +7,19 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 public class AutomatedCar extends WorldObject implements ICrashable, IDynamic {
 
+    @XmlTransient
     private static final Logger LOGGER = LogManager.getLogger();
 
+    @XmlTransient
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
+
+    public AutomatedCar() {
+        // default konstruktor
+    }
 
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
