@@ -41,6 +41,16 @@ public class WorldManager {
         return null;
     }
 
+    /**
+     * Visszaadja az összes objektumot a három pont között
+     * @param x1 Első pont X
+     * @param y1 Első pont Y
+     * @param x2 Második pont X
+     * @param y2 Második pont Y
+     * @param x3 Harmadik pont X
+     * @param y3 Harmadik pont Y
+     * @return IObject lista amiben benne vannak a szűrt objectek amik a háromszögen belül
+     */
     public List<IObject> getAllObjectsInTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
         // TODO
         validate();
@@ -51,5 +61,6 @@ public class WorldManager {
      * Hibát dob, ha az initWorld nem volt még meghívva.
      */
     private void validate() {
+        // TODO
     }
 }
