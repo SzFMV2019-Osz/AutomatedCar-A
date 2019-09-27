@@ -60,7 +60,7 @@ public class World implements IWorld {
      * @param height Height of the {@link World} object
      * @param color Color of the {@link World} object
      */
-    public World(int width, Integer height, String color) {
+    public World(int width, int height, String color) {
         this.width = width;
         this.height = height;
         this.color = color;

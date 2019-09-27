@@ -2,13 +2,10 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
-import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.FileNotFoundException;
 
 public class Main {
 

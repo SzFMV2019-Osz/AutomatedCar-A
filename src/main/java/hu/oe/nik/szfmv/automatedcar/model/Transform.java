@@ -15,22 +15,22 @@ public class Transform {
     
     @XmlAttribute(name = "m11", required = true)
     @XmlJavaTypeAdapter(DoubleConverter.class)
-    private Double m11;
+    private double m11;
 
     @XmlAttribute(name = "m12", required = true)
     @XmlJavaTypeAdapter(DoubleConverter.class)
-    private Double m12;
+    private double m12;
 
     @XmlAttribute(name = "m21", required = true)
     @XmlJavaTypeAdapter(DoubleConverter.class)
-    private Double m21;
+    private double m21;
 
     @XmlAttribute(name = "m22", required = true)
     @XmlJavaTypeAdapter(DoubleConverter.class)
-    private Double m22;
+    private double m22;
 
     @XmlTransient
-    private Double rotation;
+    private double rotation;
 
     /**
      *
@@ -39,7 +39,7 @@ public class Transform {
      * @param m21 Distance from bottom left corner
      * @param m22 Distance from bottom right corner
      */
-    public Transform(double m11, Double m12, Double m21, Double m22){
+    public Transform(double m11, double m12, double m21, double m22){
         this.m11 = m11;
         this.m12 = m12;
         this.m21 = m21;
@@ -55,7 +55,7 @@ public class Transform {
         this.rotation = this.calculateRotation();
     }
 
-    public Double getRotation(){
+    public double getRotation(){
         return this.rotation;
     }
 
@@ -67,7 +67,7 @@ public class Transform {
      * Calculates and gets the rotation value from the distance of the corners
      * @return calculated rotation
      */
-    private Double calculateRotation(){
+    private double calculateRotation(){
         // TODO calculate rotation
         return 0.0;
     }
