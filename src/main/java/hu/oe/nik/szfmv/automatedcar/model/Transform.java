@@ -1,7 +1,9 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.xml.converter.DoubleConverter;
 
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -69,6 +71,17 @@ public class Transform {
      */
     private double calculateRotation(){
         // TODO calculate rotation
-        return 0.0;
+        return 1.0;
+    }
+
+    /**
+     * JAXB unmarshaller event listenerje.
+     * Az objektum felépítése után hívódik meg, a kép betöltéséért felel.
+     *
+     * @param u unmarshaller
+     * @param parent JAXBElement
+     */
+    public void afterUnmarshal(Unmarshaller u, Object parent) {
+        calculateRotation();
     }
 }

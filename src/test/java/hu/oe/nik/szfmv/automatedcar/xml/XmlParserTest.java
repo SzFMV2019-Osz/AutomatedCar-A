@@ -23,57 +23,63 @@ import static org.junit.Assert.assertNull;
 
 public class XmlParserTest {
 
+    /**
+     * Mivel a double kalkulált érték, meg kell adni egy tűréshatárt, amit még elfogadunk.
+     */
+    private Double maxDelta = 1e-10;
+
     private String notExistingFile;
 
     private String[] existingFileNames;
 
-    private List<WorldObject> expectedObjects;
+    private World expectedWorld;
 
     @Before
     public void initVariables() {
         notExistingFile = "not_existing.xml";
         existingFileNames = new String[] {"mini_world", "mini_world.xml"};
-        expectedObjects = new ArrayList<>();
+
+        expectedWorld = new World(5120, 3000, "#FFFFFF");
 
         Road road = new Road();
         road.setPosition(createPosition(1700, 144));
         road.setZ(0);
-        expectedObjects.add(road);
+        expectedWorld.getWorldObjects().add(road);
 
         ParkingSpace ps = new ParkingSpace();
         ps.setPosition(createPosition(470, 766));
         ps.setZ(0);
-        expectedObjects.add(ps);
+        expectedWorld.getWorldObjects().add(ps);
 
         Crosswalk cw = new Crosswalk();
         cw.setPosition(createPosition(1495, 486));
         cw.setZ(0);
-        expectedObjects.add(cw);
+        expectedWorld.getWorldObjects().add(cw);
 
         Sign sign = new Sign();
         sign.setPosition(createPosition(4039, 1431));
         sign.setZ(0);
-        expectedObjects.add(sign);
+        expectedWorld.getWorldObjects().add(sign);
 
         Tree tree = new Tree();
         tree.setPosition(createPosition(169, 2454));
         tree.setZ(0);
-        expectedObjects.add(tree);
+        expectedWorld.getWorldObjects().add(tree);
 
         AutomatedCar car = new AutomatedCar();
         car.setPosition(createPosition(356,1648));
         car.setZ(0);
-        expectedObjects.add(car);
+        expectedWorld.getWorldObjects().add(car);
 
         ParkingBollard pb = new ParkingBollard();
         pb.setPosition(createPosition(581, 844));
         pb.setZ(0);
-        expectedObjects.add(pb);
+        expectedWorld.getWorldObjects().add(pb);
 
         WorldObject wo = new WorldObject();
         wo.setPosition(createPosition(581, 844));
         wo.setZ(0);
-        expectedObjects.add(wo);
+        expectedWorld.getWorldObjects().add(wo);
     }
 
     private Position createPosition(int x, int y) {
@@ -93,7 +99,7 @@ public class XmlParserTest {
                 assertWorld(world);
                 List<WorldObject> result = world.getWorldObjects();
                 for (int i = 0; i < result.size(); i++)
-                    assertPositionsAndType(result.get(i), expectedObjects.get(i));
+                    assertPositionsAndType(result.get(i), expectedWorld.getWorldObjects().get(i));
             } catch (NullPointerException e) {
                 // handle exception
             }
@@ -102,9 +108,9 @@ public class XmlParserTest {
 
     private void assertWorld(World world) {
         assertNotNull(world);
-        assertEquals( "#FFFFFF", world.getColor());
-        assertEquals(5120, world.getWidth());
-        assertEquals(3000, world.getHeight());
+        assertEquals(expectedWorld.getColor(), world.getColor());
+        assertEquals(expectedWorld.getWidth(), world.getWidth());
+        assertEquals(expectedWorld.getHeight(), world.getHeight());
     }
 
     private void assertPositionsAndType(WorldObject objFromXml, WorldObject expected) {
@@ -112,6 +118,7 @@ public class XmlParserTest {
         assertEquals(expected.getPosX(), objFromXml.getPosX());
         assertEquals(expected.getPosY(), objFromXml.getPosY());
         assertEquals(expected.getPosZ(), objFromXml.getPosZ());
+        assertEquals(expected.getRotation(), objFromXml.getRotation(), maxDelta);
         if (StringUtils.equals(objFromXml.getImageFileName(), "unknown_type")) {
             assertNull(objFromXml.getImage());
         } else {
