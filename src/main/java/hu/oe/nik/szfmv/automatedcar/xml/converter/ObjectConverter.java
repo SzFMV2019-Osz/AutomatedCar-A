@@ -17,6 +17,8 @@ import javax.xml.bind.JAXBElement;
 
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Node;
 
 /**
@@ -24,6 +26,8 @@ import org.w3c.dom.Node;
  * ami megmondja a JAXB-nek, hogy mit példányosítson.
  */
 public class ObjectConverter extends XmlAdapter<Object, WorldObject> {
+
+    private static final Logger logger = LogManager.getLogger();
 
     @Override
     public WorldObject unmarshal(Object element) throws Exception {
@@ -48,11 +52,12 @@ public class ObjectConverter extends XmlAdapter<Object, WorldObject> {
             return Crosswalk.class;
         } else if (StringUtils.startsWith(classType,"roadsign")) {
             return Sign.class;
-        } else if (StringUtils.startsWith(classType, "car")){
+        } else if (StringUtils.startsWith(classType, "car")) {
             return AutomatedCar.class;
         }  else if (StringUtils.startsWith(classType, "parking_bollard")) {
             return ParkingBollard.class;
-        } else { // a fail-safe működés miatt került be, lehetne exceptiont is dobni
+        } else { // a fail-safe működés miatt került be, exception nem dobható, mert akkor az egész feldolgozás leáll
+            logger.warn("Ismeretlen típus található az XML-ben: " + classType);
             return WorldObject.class;
         }
     }
