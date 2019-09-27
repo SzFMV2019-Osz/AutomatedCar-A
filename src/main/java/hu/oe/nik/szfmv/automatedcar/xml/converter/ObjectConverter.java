@@ -1,6 +1,13 @@
 package hu.oe.nik.szfmv.automatedcar.xml.converter;
 
-import hu.oe.nik.szfmv.automatedcar.model.*;
+import hu.oe.nik.szfmv.automatedcar.model.AutomatedCar;
+import hu.oe.nik.szfmv.automatedcar.model.Crosswalk;
+import hu.oe.nik.szfmv.automatedcar.model.ParkingBollard;
+import hu.oe.nik.szfmv.automatedcar.model.ParkingSpace;
+import hu.oe.nik.szfmv.automatedcar.model.Road;
+import hu.oe.nik.szfmv.automatedcar.model.Sign;
+import hu.oe.nik.szfmv.automatedcar.model.Tree;
+import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
