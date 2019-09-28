@@ -5,11 +5,14 @@ import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javax.xml.bind.annotation.XmlTransient;
 
 public class AutomatedCar extends Car {
 
+    @XmlTransient
     private static final Logger LOGGER = LogManager.getLogger();
 
+    @XmlTransient
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
 
     public AutomatedCar(int x, int y, String imageFileName) {

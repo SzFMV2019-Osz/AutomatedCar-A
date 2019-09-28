@@ -29,7 +29,7 @@ public final class ModelCommonUtil {
      * @param m12 Matrix 1,2 position
      * @param m21 Matrix 2,1 position
      * @param m22 Matrix 2,2 position
-     * @return Double between [0,360[
+     * @return double between [0,360[
      */
     public static double getRotationValue(double m11, double m12, double m21, double m22) {
         double angle = calculateRotationFromMatrix(m11, m12, m21, m22);

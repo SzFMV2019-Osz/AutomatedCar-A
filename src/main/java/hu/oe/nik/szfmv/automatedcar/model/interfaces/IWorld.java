@@ -22,5 +22,5 @@ public interface IWorld {
      * Gets the color of a {@link World} object
      * @return the color of the object
      */
-    int getColor();
+    String getColor();
 }
