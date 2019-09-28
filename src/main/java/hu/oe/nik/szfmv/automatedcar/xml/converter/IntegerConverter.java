@@ -12,8 +12,6 @@ public class IntegerConverter extends XmlAdapter<String, Integer> {
 
     @Override
     public Integer unmarshal(String stringValue) throws Exception {
-        Integer result = 0;
-
         if (StringUtils.isNotBlank(stringValue)){
             try {
                 return Integer.parseInt(stringValue);
@@ -22,7 +20,7 @@ public class IntegerConverter extends XmlAdapter<String, Integer> {
             }
         }
 
-        return result;
+        return 0;
     }
 
     @Override

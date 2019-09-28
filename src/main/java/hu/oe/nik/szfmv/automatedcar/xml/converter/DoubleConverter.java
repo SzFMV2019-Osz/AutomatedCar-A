@@ -13,17 +13,15 @@ public class DoubleConverter extends XmlAdapter<String,Double>  {
 
     @Override
     public Double unmarshal(String stringValue) throws Exception {
-        Double result = 0.0;
-
         if (StringUtils.isNotBlank(stringValue)) {
             try {
-                result = Double.parseDouble(stringValue.replaceAll(",", "."));
+                return Double.parseDouble(stringValue.replaceAll(",", "."));
             } catch (NumberFormatException e) {
                 // do nothing
             }
         }
 
-        return result;
+        return 0.0;
     }
 
     @Override
