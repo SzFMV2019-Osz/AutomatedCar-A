@@ -5,7 +5,7 @@ public class GearShift {
     private int currValue = 0;
 
     public void Increment(){
-        if(currValue <= values.length - 1)
+        if(currValue <= POS.values().length - 1)
             ++currValue;
     }
 
@@ -14,7 +14,7 @@ public class GearShift {
             --currValue;
     }
 
-    public char GetCurrentState(){
-        return values[currValue];
+    public POS GetCurrentState(){
+        return POS.values()[currValue];
     }
 }
