@@ -1,6 +1,5 @@
 package hu.oe.nik.szfmv.automatedcar;
 
-import hu.oe.nik.szfmv.automatedcar.model.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;

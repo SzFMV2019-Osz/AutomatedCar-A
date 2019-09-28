@@ -1,15 +1,13 @@
-package hu.oe.nik.szfmv.automatedcar.model;
+package hu.oe.nik.szfmv.automatedcar;
 
-import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
-import hu.oe.nik.szfmv.automatedcar.model.interfaces.IDynamic;
+import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import javax.xml.bind.annotation.XmlTransient;
 
-public class AutomatedCar extends WorldObject implements ICrashable, IDynamic {
+public class AutomatedCar extends Car {
 
     @XmlTransient
     private static final Logger LOGGER = LogManager.getLogger();
@@ -56,10 +54,5 @@ public class AutomatedCar extends WorldObject implements ICrashable, IDynamic {
             default:
                 break;
         }
-    }
-
-    @Override
-    public double getWeight() {
-        return 0;
     }
 }
