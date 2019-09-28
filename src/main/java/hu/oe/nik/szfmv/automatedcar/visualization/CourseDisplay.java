@@ -4,12 +4,12 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,6 +72,7 @@ public class CourseDisplay extends JPanel {
      */
     public void drawWorld(World world) {
         paintComponent(getGraphics(), world);
+
     }
 
     /**
@@ -114,10 +115,14 @@ public class CourseDisplay extends JPanel {
     private void drawObjects(Graphics2D g2d, World world) {
         int[] offsets = getCarOffset(getCarObject(world.getWorldObjects()));
 
+        DebugViewer viewer = new DebugViewer(g2d);
+
         for (WorldObject object : world.getWorldObjects()) {
             AffineTransform t = new AffineTransform();
             t.translate(object.getX() + offsets[0], object.getY() + offsets[1]);
             g2d.drawImage(object.getImage(), t, this);
+
+            viewer.DrawPolygon(object.getX()+ offsets[0], object.getY() + offsets[1], object.getWidth(), object.getHeight(), object.getDebugColor());
         }
     }
 }
