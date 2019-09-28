@@ -16,7 +16,7 @@ public class WorldObjectTest {
 
     @Test
     void addition() {
-        assertEquals(100, worldObject.getX());
+        assertEquals(100, worldObject.getPosX());
     }
 
 }

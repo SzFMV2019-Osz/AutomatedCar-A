@@ -3,15 +3,18 @@ package hu.oe.nik.szfmv.automatedcar.model;
 public class Position {
     private int x;
     private int y;
+    private int z;
 
-    public Position(int x, int y){
+    public Position(int x, int y) {
         this.x = x;
         this.y = y;
+        this.z = 0;
     }
 
-    public Position(){
+    public Position() {
         this.x = 0;
         this.y = 0;
+        this.z = 0;
     }
 
     /**
@@ -36,5 +39,17 @@ public class Position {
 
     public void setY(int y){
         this.y = y;
+    }
+
+    /**
+     * Gets the Z position of the object
+     * @return z position of the object
+     */
+    public int getZ() {
+        return z;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
     }
 }

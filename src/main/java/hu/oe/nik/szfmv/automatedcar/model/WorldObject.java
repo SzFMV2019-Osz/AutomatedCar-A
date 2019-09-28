@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -8,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class WorldObject {
+public class WorldObject implements IObject {
 
     private static final Logger LOGGER = LogManager.getLogger();
     protected Position position;
@@ -18,6 +19,10 @@ public class WorldObject {
     protected String imageFileName;
     protected BufferedImage image;
 
+    public WorldObject() {
+        // default konstruktor
+    }
+
     public WorldObject(int x, int y, String imageFileName) {
         this.position = new Position(x, y);
         this.transform = new Transform();
@@ -25,7 +30,7 @@ public class WorldObject {
         initImage();
     }
 
-    public WorldObject(String type, int posX, int posY, double m11, double m12, double m21, double m22){
+    public WorldObject(String type, int posX, int posY, double m11, double m12, double m21, double m22) {
         this.position = new Position(posX, posY);
         this.transform = new Transform(m11, m12, m21, m22);
         this.imageFileName = type;
@@ -34,7 +39,8 @@ public class WorldObject {
 
     /** {@inheritDoc}
      */
-    public int getX(){
+    @Override
+    public int getPosX(){
         return this.position.getX();
     }
 
@@ -46,7 +52,8 @@ public class WorldObject {
 
     /** {@inheritDoc}
      */
-    public int getY(){
+    @Override
+    public int getPosY(){
         return this.position.getY();
     }
 
@@ -58,6 +65,18 @@ public class WorldObject {
 
     /** {@inheritDoc}
      */
+    @Override
+    public int getPosZ() {
+        return this.position.getZ();
+    }
+
+    public void setZ(int z) {
+        this.position.setZ(z);
+    }
+
+    /** {@inheritDoc}
+     */
+    @Override
     public int getWidth() {
         return width;
     }
@@ -68,6 +87,7 @@ public class WorldObject {
 
     /** {@inheritDoc}
      */
+    @Override
     public int getHeight() {
         return height;
     }
@@ -78,6 +98,7 @@ public class WorldObject {
 
     /** {@inheritDoc}
      */
+    @Override
     public double getRotation(){
         return this.transform.getRotation();
     }
@@ -86,7 +107,7 @@ public class WorldObject {
      * @deprecated
      * @param rotation rotation of the object
      */
-    public void setRotation(double rotation){
+    public void setRotation(double rotation) {
         this.transform.setRotation(rotation);
     }
 
@@ -98,6 +119,7 @@ public class WorldObject {
         this.imageFileName = imageFileName;
     }
 
+    @Override
     public BufferedImage getImage() {
         return this.image;
     }

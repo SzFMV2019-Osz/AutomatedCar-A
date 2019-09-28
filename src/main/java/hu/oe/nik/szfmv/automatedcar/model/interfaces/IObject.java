@@ -18,6 +18,9 @@ public interface IObject {
     int getPosY();
 
     /**
+     * Megmondja, hogy az objektum melyik layer-en helyezkedik el.
+     * Grafikai szempontból fontos, milyen "sorrendben" jelennek meg az elemek.
+     *
      * @return Z koordináta.
      */
     int getPosZ();
