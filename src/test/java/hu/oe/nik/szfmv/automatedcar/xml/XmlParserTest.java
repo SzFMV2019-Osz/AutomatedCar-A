@@ -1,6 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.xml;
 
-import hu.oe.nik.szfmv.automatedcar.model.AutomatedCar;
+import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.model.Crosswalk;
 import hu.oe.nik.szfmv.automatedcar.model.ParkingBollard;
 import hu.oe.nik.szfmv.automatedcar.model.ParkingSpace;
@@ -66,7 +66,7 @@ public class XmlParserTest {
         tree.setZ(0);
         expectedWorld.getWorldObjects().add(tree);
 
-        AutomatedCar car = new AutomatedCar();
+        Car car = new Car();
         car.setPosition(createPosition(356,1648));
         car.setZ(0);
         expectedWorld.getWorldObjects().add(car);

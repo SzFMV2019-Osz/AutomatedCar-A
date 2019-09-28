@@ -15,10 +15,6 @@ public class AutomatedCar extends Car {
     @XmlTransient
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
 
-    public AutomatedCar() {
-        // default konstruktor
-    }
-
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
 

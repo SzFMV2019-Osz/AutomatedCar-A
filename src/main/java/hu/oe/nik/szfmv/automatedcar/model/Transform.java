@@ -46,7 +46,6 @@ public class Transform {
         this.m12 = m12;
         this.m21 = m21;
         this.m22 = m22;
-        this.rotation = this.calculateRotation();
     }
 
     public Transform(){
@@ -54,7 +53,6 @@ public class Transform {
         this.m12 = 0.0;
         this.m21 = 0.0;
         this.m22 = 0.0;
-        this.rotation = this.calculateRotation();
     }
 
     public double getRotation(){
@@ -69,9 +67,8 @@ public class Transform {
      * Calculates and gets the rotation value from the distance of the corners
      * @return calculated rotation
      */
-    private double calculateRotation(){
-        // TODO calculate rotation
-        return 1.0;
+    private void calculateRotation(){
+        this.rotation = ModelCommonUtil.getRotationValue(m11, m12, m21, m22);
     }
 
     /**

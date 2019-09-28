@@ -1,6 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.xml.converter;
 
-import hu.oe.nik.szfmv.automatedcar.model.AutomatedCar;
+import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.model.Crosswalk;
 import hu.oe.nik.szfmv.automatedcar.model.ParkingBollard;
 import hu.oe.nik.szfmv.automatedcar.model.ParkingSpace;
@@ -53,7 +53,7 @@ public class ObjectConverter extends XmlAdapter<Object, WorldObject> {
         } else if (StringUtils.startsWith(classType,"roadsign")) {
             return Sign.class;
         } else if (StringUtils.startsWith(classType, "car")) {
-            return AutomatedCar.class;
+            return Car.class;
         }  else if (StringUtils.startsWith(classType, "parking_bollard")) {
             return ParkingBollard.class;
         } else { // a fail-safe működés miatt került be, exception nem dobható, mert akkor az egész feldolgozás leáll
