@@ -6,7 +6,7 @@ public class GearShift {
 
     public void Increment(){
         POS[] arr = POS.values();
-        if(currValue <= arr.length - 1)
+        if(currValue < arr.length - 1)
             ++currValue;
     }
 
