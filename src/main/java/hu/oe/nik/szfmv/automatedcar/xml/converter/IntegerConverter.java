@@ -12,7 +12,7 @@ public class IntegerConverter extends XmlAdapter<String, Integer> {
 
     @Override
     public Integer unmarshal(String stringValue) throws Exception {
-        if (StringUtils.isNotBlank(stringValue)){
+        if (StringUtils.isNotBlank(stringValue)) {
             try {
                 return Integer.parseInt(stringValue);
             } catch (NumberFormatException e) {

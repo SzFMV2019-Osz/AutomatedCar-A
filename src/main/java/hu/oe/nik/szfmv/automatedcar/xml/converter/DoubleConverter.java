@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
  * Null-safe, ha nem számot kap 0.0-t ad vissza.
  * Tört szám adható meg vesszővel és ponttal elválasztva is.
  */
-public class DoubleConverter extends XmlAdapter<String,Double>  {
+public class DoubleConverter extends XmlAdapter<String, Double>  {
 
     @Override
     public Double unmarshal(String stringValue) throws Exception {

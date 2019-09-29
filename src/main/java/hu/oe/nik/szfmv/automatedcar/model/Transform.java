@@ -11,6 +11,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+/**
+ * Transzformációs osztály ami rotációval kapcsolatos értékeket tárol.
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Position")
 public class Transform {
@@ -35,40 +38,31 @@ public class Transform {
     private double rotation;
 
     /**
-     *
-     * @param m11 Distance from top left corner
-     * @param m12 Distance from top right corner
-     * @param m21 Distance from bottom left corner
-     * @param m22 Distance from bottom right corner
+     * @param m11 Mátrix 1,1 helyen levő értéke.
+     * @param m12 Mátrix 1,2 helyen levő értéke.
+     * @param m21 Mátrix 2,1 helyen levő értéke.
+     * @param m22 Mátrix 2,2 helyen levő értéke.
      */
-    public Transform(double m11, double m12, double m21, double m22){
+    public Transform(double m11, double m12, double m21, double m22) {
         this.m11 = m11;
         this.m12 = m12;
         this.m21 = m21;
         this.m22 = m22;
     }
 
-    public Transform(){
+    public Transform() {
         this.m11 = 0.0;
         this.m12 = 0.0;
         this.m21 = 0.0;
         this.m22 = 0.0;
     }
 
-    public double getRotation(){
+    public double getRotation() {
         return this.rotation;
     }
 
-    public void setRotation(double rotation){
+    public void setRotation(double rotation) {
         this.rotation = rotation;
-    }
-
-    /**
-     * Calculates and gets the rotation value from the distance of the corners
-     * @return calculated rotation
-     */
-    private void calculateRotation(){
-        this.rotation = ModelCommonUtil.getRotationValue(m11, m12, m21, m22);
     }
 
     /**
@@ -80,5 +74,9 @@ public class Transform {
      */
     public void afterUnmarshal(Unmarshaller u, Object parent) {
         calculateRotation();
+    }
+
+    private void calculateRotation() {
+        this.rotation = ModelCommonUtil.getRotationValue(m11, m12, m21, m22);
     }
 }

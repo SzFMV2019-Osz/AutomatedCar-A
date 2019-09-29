@@ -10,6 +10,7 @@ import hu.oe.nik.szfmv.automatedcar.model.Sign;
 import hu.oe.nik.szfmv.automatedcar.model.Tree;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -97,7 +98,11 @@ public class XmlParserTest {
             try {
                 World world = XmlParser.parseWorldObjects(fileName);
                 assertWorld(world);
-                List<WorldObject> result = world.getWorldObjects();
+                List<IObject> tmpResult = world.getWorldObjects();
+                List<WorldObject> result = new ArrayList<>();
+                for (IObject r:tmpResult) {
+                    result.add((WorldObject)r);
+                }
                 for (int i = 0; i < result.size(); i++)
                     assertPositionsAndType(result.get(i), expectedWorld.getWorldObjects().get(i));
             } catch (NullPointerException e) {
@@ -113,7 +118,7 @@ public class XmlParserTest {
         assertEquals(expectedWorld.getHeight(), world.getHeight());
     }
 
-    private void assertPositionsAndType(WorldObject objFromXml, WorldObject expected) {
+    private void assertPositionsAndType(WorldObject objFromXml, IObject expected) {
         assertEquals(expected.getClass().toString(), objFromXml.getClass().toString());
         assertEquals(expected.getPosX(), objFromXml.getPosX());
         assertEquals(expected.getPosY(), objFromXml.getPosY());

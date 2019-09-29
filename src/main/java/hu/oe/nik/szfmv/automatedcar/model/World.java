@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.xml.converter.IntegerConverter;
 import hu.oe.nik.szfmv.automatedcar.xml.converter.ObjectConverter;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * World object containing the Model of the world
+ * World objektum ami tartalmazza a világ modeljét.
  */
 @XmlRootElement(name = "Scene")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -32,33 +33,28 @@ public class World implements IWorld {
     @XmlElementWrapper(name = "Objects", required = true)
     @XmlElement(name = "Object")
     @XmlJavaTypeAdapter(ObjectConverter.class)
-    private List<WorldObject> worldObjects = new ArrayList<>();
+    private List<IObject> worldObjects = new ArrayList<>();
     
     @XmlAttribute(name = "color", required = false)
     private String color;
 
 
     public World() {
-        // default konstruktor
     }
 
     /**
-     * Initializes a new instance of the {@link World} class
-     * @param width Width of the {@link World}
-     * @param height Height of t he {@link World}
      * @deprecated
      */
-    public World(int width, int height){
+    public World(int width, int height) {
         this.width = width;
         this.height = height;
         this.color = "#FFFFFF";
     }
 
     /**
-     * Initializes a new instance of the {@link World} class
-     * @param width Width of the {@link World} object
-     * @param height Height of the {@link World} object
-     * @param color Color of the {@link World} object
+     * @param width Világ szélessége.
+     * @param height Világ magassága.
+     * @param color Világ alapszíne.
      */
     public World(int width, int height, String color) {
         this.width = width;
@@ -74,41 +70,29 @@ public class World implements IWorld {
 
     /** {@inheritDoc}
      */
-    @Override
     public int getHeight() {
         return this.height;
     }
 
     /** {@inheritDoc}
      */
-    @Override
-    public String getColor() { return this.color; }
+    public String getColor() {
+        return this.color;
+    }
 
-    public List<WorldObject> getWorldObjects() {
+    /**
+     * Visszaadja a világban levő összes objektumot.
+     * @return Egy lista ami tartalmazza az összes világban levő objektumot.
+     */
+    public List<IObject> getWorldObjects() {
         return worldObjects;
     }
 
     /**
-     * Adds an object to the virtual world.
-     *
-     * @param o {@link WorldObject} to be added to the virtual world
+     * Hozzáad egy objektumot a virtuális világhoz.
+     * @param o {@link IObject} amit hozzá kell adni a világhoz.
      */
-    public void addObjectToWorld(WorldObject o) {
+    public void addObject(IObject o) {
         worldObjects.add(o);
-    }
-
-    /**
-     * Adds an object to the virtual world.
-     *
-     * @param type the type of {@link WorldObject}
-     * @param posX X position
-     * @param posY Y position
-     * @param m11 Distance from top left corner
-     * @param m12 Distance from top right corner
-     * @param m21 Distance from bottom left corner
-     * @param m22 Distance from bottom right corner
-     */
-    public void addObject(String type, int posX, int posY, double m11, double m12, double m21, double m22){
-        this.worldObjects.add(new WorldObject(type, posX, posY, m11, m12, m21, m22));
     }
 }

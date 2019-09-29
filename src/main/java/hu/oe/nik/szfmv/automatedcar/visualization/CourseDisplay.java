@@ -2,7 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
 import hu.oe.nik.szfmv.automatedcar.model.World;
-import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -70,7 +70,7 @@ public class CourseDisplay extends JPanel {
 
     private void drawObjects(Graphics2D g2d, World world) {
 
-        for (WorldObject object : world.getWorldObjects()) {
+        for (IObject object : world.getWorldObjects()) {
             AffineTransform t = new AffineTransform();
             t.translate(object.getPosX(), object.getPosY());
             g2d.drawImage(object.getImage(), t, this);
