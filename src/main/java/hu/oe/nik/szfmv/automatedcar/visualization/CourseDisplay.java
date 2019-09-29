@@ -122,7 +122,8 @@ public class CourseDisplay extends JPanel {
             t.translate(object.getX() + offsets[0], object.getY() + offsets[1]);
             g2d.drawImage(object.getImage(), t, this);
 
-            viewer.DrawPolygon(object.getX()+ offsets[0], object.getY() + offsets[1], object.getWidth(), object.getHeight(), object.getDebugColor());
+            // todo: decide on how model will signal colors
+            viewer.DrawPolygon(object.getX()+ offsets[0], object.getY() + offsets[1], object.getWidth(), object.getHeight());
         }
     }
 }

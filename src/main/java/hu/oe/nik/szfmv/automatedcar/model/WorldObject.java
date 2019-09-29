@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class WorldObject implements IDebugColorable {
+public class WorldObject  {
 
     private static final Logger LOGGER = LogManager.getLogger();
     protected int x;
@@ -91,15 +91,5 @@ public class WorldObject implements IDebugColorable {
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
-    }
-
-    @Override
-    public Color getDebugColor() {
-        return this.debugColor;
-    }
-
-    @Override
-    public void setColor(Color debugColor) {
-        this.debugColor = debugColor;
     }
 }
