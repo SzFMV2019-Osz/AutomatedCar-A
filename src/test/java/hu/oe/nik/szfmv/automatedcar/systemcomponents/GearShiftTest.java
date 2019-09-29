@@ -1,4 +1,4 @@
-package hu.oe.nik.szfmv.automatedcar.model;
+package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.GearShift;
 import org.junit.Before;
@@ -19,14 +19,14 @@ public class GearShiftTest {
     }
 
     @Test
-    void Decrement(){
+    void Decrement() {
         gearShift = new GearShift();
         gearShift.Decrement();
         assertEquals(GearShift.POS.P, gearShift.GetCurrentState());
     }
 
     @Test
-    void IncrementAtMax(){
+    void IncrementAtMax() {
         gearShift = new GearShift();
         gearShift.Increment();
         gearShift.Increment();
