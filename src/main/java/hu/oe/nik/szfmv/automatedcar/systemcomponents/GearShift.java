@@ -1,7 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 public class GearShift {
-    private char [] values = {'P', 'R', 'N', 'D'};
+    public enum POS {P, R, N, D}
     private int currValue = 0;
 
     public void Increment(){
