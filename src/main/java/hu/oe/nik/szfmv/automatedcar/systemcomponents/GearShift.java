@@ -5,16 +5,18 @@ public class GearShift {
     private int currValue = 0;
 
     public void Increment(){
-        if(currValue <= POS.values().length - 1)
+        POS[] arr = POS.values();
+        if(currValue <= arr.length - 1)
             ++currValue;
     }
 
     public void Decrement(){
-        if(currValue >= 0)
+        if(currValue > 0)
             --currValue;
     }
 
     public POS GetCurrentState(){
-        return POS.values()[currValue];
+        POS[] arr = POS.values();
+        return arr[currValue];
     }
 }
