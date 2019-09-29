@@ -1,9 +1,9 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 public class ACC {
-    private int referenceSpeed = 0;
+    protected int referenceSpeed = 50;
 
-    private boolean isOn = false;
+    protected boolean isOn = false;
     private static final int minValue = 30;
     private static final int maxValue = 160;
     private static final int step = 10;
@@ -31,7 +31,7 @@ public class ACC {
     }
 
     public void TimeGapSetter() {
-        if (index <= timeGap.length - 1) {
+        if (index < timeGap.length - 1) {
             ++index;
         } else {
             index = 0;
