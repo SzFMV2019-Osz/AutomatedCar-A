@@ -4,6 +4,7 @@ import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
+import java.util.ArrayList;
 
 import java.util.List;
 
@@ -27,8 +28,7 @@ public class WorldManager {
      * @return Jelenlegi világ {@link IWorld}-ként.
      */
     public IWorld getWorld() {
-        // TODO
-        return null;
+        return currentWorld;
     }
 
     /**
@@ -36,8 +36,7 @@ public class WorldManager {
      * @return {@link IObject} lista amiben minden a világban levő object benne van.
      */
     public List<IObject> getAllObjects() {
-        // TODO
-        return null;
+        return new ArrayList<>(currentWorld.getWorldObjects());
     }
 
     /**
