@@ -32,14 +32,14 @@ public class DebugViewer {
     /**
      * @return If debugger is switched on or not
      */
-    public boolean isdebuggerSwitchedOn() {
+    public boolean isDebuggerSwitchedOn() {
         return this.debuggerSwitchedOn;
     }
 
     /**
      * @param debuggerSwitchedOn Flag indicating if debugger is switched on or not
      */
-    public void setdebuggerSwitchedOn(boolean debuggerSwitchedOn) {
+    public void setDebuggerSwitchedOn(boolean debuggerSwitchedOn) {
         this.debuggerSwitchedOn = debuggerSwitchedOn;
     }
 
