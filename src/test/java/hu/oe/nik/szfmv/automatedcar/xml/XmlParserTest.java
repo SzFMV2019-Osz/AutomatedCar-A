@@ -21,6 +21,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class XmlParserTest {
 
@@ -98,13 +99,10 @@ public class XmlParserTest {
             try {
                 World world = XmlParser.parseWorldObjects(fileName);
                 assertWorld(world);
-                List<IObject> tmpResult = world.getWorldObjects();
-                List<WorldObject> result = new ArrayList<>();
-                for (IObject r:tmpResult) {
-                    result.add((WorldObject)r);
-                }
-                for (int i = 0; i < result.size(); i++)
+                List<WorldObject> result = world.getWorldObjects();
+                for (int i = 0; i < result.size(); i++) {
                     assertPositionsAndType(result.get(i), expectedWorld.getWorldObjects().get(i));
+                }
             } catch (NullPointerException e) {
                 // handle exception
             }
@@ -118,7 +116,7 @@ public class XmlParserTest {
         assertEquals(expectedWorld.getHeight(), world.getHeight());
     }
 
-    private void assertPositionsAndType(WorldObject objFromXml, IObject expected) {
+    private void assertPositionsAndType(WorldObject objFromXml, WorldObject expected) {
         assertEquals(expected.getClass().toString(), objFromXml.getClass().toString());
         assertEquals(expected.getPosX(), objFromXml.getPosX());
         assertEquals(expected.getPosY(), objFromXml.getPosY());
