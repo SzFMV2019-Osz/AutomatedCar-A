@@ -33,7 +33,7 @@ public class World implements IWorld {
     @XmlElementWrapper(name = "Objects", required = true)
     @XmlElement(name = "Object")
     @XmlJavaTypeAdapter(ObjectConverter.class)
-    private List<IObject> worldObjects = new ArrayList<>();
+    private List<WorldObject> worldObjects = new ArrayList<>();
     
     @XmlAttribute(name = "color", required = false)
     private String color;
@@ -84,7 +84,7 @@ public class World implements IWorld {
      * Visszaadja a világban levő összes objektumot.
      * @return Egy lista ami tartalmazza az összes világban levő objektumot.
      */
-    public List<IObject> getWorldObjects() {
+    public List<WorldObject> getWorldObjects() {
         return worldObjects;
     }
 
@@ -92,7 +92,7 @@ public class World implements IWorld {
      * Hozzáad egy objektumot a virtuális világhoz.
      * @param o {@link IObject} amit hozzá kell adni a világhoz.
      */
-    public void addObject(IObject o) {
+    public void addObject(WorldObject o) {
         worldObjects.add(o);
     }
 }
