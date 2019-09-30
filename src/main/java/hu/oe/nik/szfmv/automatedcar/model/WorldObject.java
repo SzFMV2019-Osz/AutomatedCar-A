@@ -42,7 +42,7 @@ public class WorldObject implements IObject {
     protected BufferedImage image;
 
     @XmlAttribute(name = "type", required = true)
-    private String imageFileName;
+    protected String imageFileName;
 
     public WorldObject() {
     }
