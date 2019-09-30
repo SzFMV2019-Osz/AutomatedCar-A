@@ -2,7 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.xml;
 
 
 import hu.oe.nik.szfmv.automatedcar.model.World;
-import hu.oe.nik.szfmv.automatedcar.model.utility.CommonMessages;
+import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
@@ -79,22 +79,21 @@ public class XmlParser {
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             world = (World) jaxbUnmarshaller.unmarshal(new File(ClassLoader.getSystemResource(xmlFileName).getFile()));
         } catch (NullPointerException e) {
-            logger.error(CommonMessages.ERROR_IN_PROCESSING + " "
-                    + CommonMessages.ERROR_FILE_LIKELY_DOESNT_EXIST, e);
-            throw new NullPointerException(CommonMessages.ERROR_FILE_LIKELY_DOESNT_EXIST);
+            logger.error(Consts.ERROR_IN_PROCESSING + " "
+                    + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST, e);
+            throw new NullPointerException(Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
         } catch (Exception ex) {
-            logger.error(CommonMessages.ERROR_IN_XML_PARSING, ex);
+            logger.error(Consts.ERROR_IN_XML_PARSING, ex);
         } finally {
             invalidateCache();
-            logger.info(
-                    MessageFormat.format(CommonMessages.XML_MS_DURATION_MESSAGE, getElapsedTimeAndResetStopWatch()));
+            logger.info(MessageFormat.format(Consts.XML_MS_DURATION_MESSAGE, getElapsedTimeAndResetStopWatch()));
         }
         return world;
     }
 
     private static String getXmlNameWithExtension(String fileName) {
-        if (! StringUtils.endsWith(fileName, CommonMessages.SUFFIX_XML)) {
-            fileName += CommonMessages.SUFFIX_XML;
+        if (! StringUtils.endsWith(fileName, Consts.SUFFIX_XML)) {
+            fileName += Consts.SUFFIX_XML;
         }
         return fileName;
     }

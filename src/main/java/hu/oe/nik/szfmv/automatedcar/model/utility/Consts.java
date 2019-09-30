@@ -1,6 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
-public final class CommonMessages {
+public final class Consts {
 
     // --- Resources
 

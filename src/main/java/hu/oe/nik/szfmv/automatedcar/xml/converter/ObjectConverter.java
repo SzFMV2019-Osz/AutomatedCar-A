@@ -15,7 +15,7 @@ import javax.xml.bind.Binder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 
-import hu.oe.nik.szfmv.automatedcar.model.utility.CommonMessages;
+import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -35,7 +35,7 @@ public class ObjectConverter extends XmlAdapter<Object, WorldObject> {
     @Override
     public WorldObject unmarshal(Object element) throws Exception {
         Node node = (Node)element;
-        String classType = node.getAttributes().getNamedItem(CommonMessages.XML_ATTRIBUTE_TYPE).getNodeValue();
+        String classType = node.getAttributes().getNamedItem(Consts.XML_ATTRIBUTE_TYPE).getNodeValue();
         Class<?> clazz = getClassByString(classType);
 
         JAXBContext jaxbContext = XmlParser.getJAXBContextFromCache(clazz);
@@ -45,22 +45,22 @@ public class ObjectConverter extends XmlAdapter<Object, WorldObject> {
     }
 
     private Class<?> getClassByString(String classType) {
-        if (StringUtils.startsWith(classType, CommonMessages.RES_IDENTIFIER_ROAD)) {
+        if (StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_ROAD)) {
             return Road.class;
-        } else if (StringUtils.startsWith(classType, CommonMessages.RES_IDENTIFIER_TREE)) {
+        } else if (StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_TREE)) {
             return Tree.class;
-        } else if (StringUtils.startsWith(classType, CommonMessages.RES_IDENTIFIER_PARKINGSPACE)) {
+        } else if (StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_PARKINGSPACE)) {
             return ParkingSpace.class;
-        } else if (StringUtils.startsWith(classType,  CommonMessages.RES_IDENTIFIER_CROSSWALK)) {
+        } else if (StringUtils.startsWith(classType,  Consts.RES_IDENTIFIER_CROSSWALK)) {
             return Crosswalk.class;
-        } else if (StringUtils.startsWith(classType, CommonMessages.RES_IDENTIFIER_SIGN)) {
+        } else if (StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_SIGN)) {
             return Sign.class;
-        } else if (StringUtils.startsWith(classType, CommonMessages.RES_IDENTIFIER_CAR)) {
+        } else if (StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_CAR)) {
             return Car.class;
-        }  else if (StringUtils.startsWith(classType, CommonMessages.RES_IDENTIFIER_BOLLARD)) {
+        }  else if (StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_BOLLARD)) {
             return ParkingBollard.class;
         } else { // a fail-safe működés miatt került be, exception nem dobható, mert akkor az egész feldolgozás leáll
-            logger.warn(MessageFormat.format(CommonMessages.XML_UNKNOWN_TYPE, classType));
+            logger.warn(MessageFormat.format(Consts.XML_UNKNOWN_TYPE, classType));
             return WorldObject.class;
         }
     }

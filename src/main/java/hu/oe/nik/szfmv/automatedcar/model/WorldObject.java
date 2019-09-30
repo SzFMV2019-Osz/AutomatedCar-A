@@ -1,7 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
-import hu.oe.nik.szfmv.automatedcar.model.utility.CommonMessages;
+import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -170,7 +170,7 @@ public class WorldObject implements IObject {
         try {
             image = ModelCommonUtil.loadObjectImage(getImageFileName());
         } catch (Exception e) {
-            LOGGER.error(CommonMessages.ERROR_COULDNT_LOAD_IMG_FILE, e);
+            LOGGER.error(Consts.ERROR_COULDNT_LOAD_IMG_FILE, e);
         }
     }
 }

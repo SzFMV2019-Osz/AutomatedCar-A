@@ -2,7 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
-import hu.oe.nik.szfmv.automatedcar.model.utility.CommonMessages;
+import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 
 import javax.xml.bind.Unmarshaller;
 
@@ -17,7 +17,7 @@ public class ParkingBollard extends WorldObject implements IStatic, ICrashable {
      */
     @Override
     public void afterUnmarshal(Unmarshaller u, Object parent) {
-        this.setImageFileName(CommonMessages.RES_FILENAME_BOLLARD);
+        this.setImageFileName(Consts.RES_FILENAME_BOLLARD);
         super.afterUnmarshal(u, parent);
     }
 
