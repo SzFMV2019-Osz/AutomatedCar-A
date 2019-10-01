@@ -20,6 +20,7 @@ public class ParkingBollard extends WorldObject implements IStatic, ICrashable {
     public void afterUnmarshal(Unmarshaller u, Object parent) {
         this.setImageFileName(Consts.RES_FILENAME_BOLLARD);
         super.afterUnmarshal(u, parent);
+        this.position.setZ(2);
     }
 
     public double getWeight() {

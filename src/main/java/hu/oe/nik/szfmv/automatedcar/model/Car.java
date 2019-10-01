@@ -23,7 +23,7 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
      */
     public Car(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
-        this.position.setZ(1);
+        this.position.setZ(2);
     }
 
     public double getWeight() {

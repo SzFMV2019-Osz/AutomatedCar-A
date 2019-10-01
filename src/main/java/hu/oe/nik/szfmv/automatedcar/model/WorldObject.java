@@ -175,6 +175,11 @@ public class WorldObject implements IObject {
     public void afterUnmarshal(Unmarshaller u, Object parent) {
         try {
             image = ModelCommonUtil.loadObjectImage(getImageFileName());
+            this.width = image.getWidth();
+            this.height = image.getHeight();
+
+            initShape();
+
         } catch (Exception e) {
             LOGGER.error(Consts.ERROR_COULDNT_LOAD_IMG_FILE, e);
         }

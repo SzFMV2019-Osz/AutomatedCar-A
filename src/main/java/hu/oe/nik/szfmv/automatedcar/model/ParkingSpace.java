@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.model;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IBackground;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
 
+import javax.xml.bind.Unmarshaller;
 import java.awt.Rectangle;
 
 /**
@@ -13,6 +14,15 @@ public class ParkingSpace extends WorldObject implements IStatic, IBackground {
     private final int RIGHT_BORDER = 14;
     private final int TOP_BORDER = 10;
     private final short BOTTOM_BORDER = 4;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void afterUnmarshal(Unmarshaller u, Object parent) {
+        super.afterUnmarshal(u, parent);
+        this.position.setZ(1);
+    }
 
     /**
      * {@inheritDoc}
