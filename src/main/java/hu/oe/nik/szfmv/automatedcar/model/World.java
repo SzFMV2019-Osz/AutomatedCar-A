@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class World implements IWorld {
     @XmlAttribute(name = "color", required = false)
     private String color;
 
+    @XmlTransient
     private List<IObject> objects = null;
 
     public World() {
