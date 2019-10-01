@@ -80,7 +80,7 @@ public class XmlParser {
             world = (World) jaxbUnmarshaller.unmarshal(new File(ClassLoader.getSystemResource(xmlFileName).getFile()));
         } catch (NullPointerException e) {
             logger.error(Consts.ERROR_IN_PROCESSING + " "
-                    + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST, e);
+                    + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
             throw new NullPointerException(Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
         } catch (Exception ex) {
             logger.error(Consts.ERROR_IN_XML_PARSING, ex);

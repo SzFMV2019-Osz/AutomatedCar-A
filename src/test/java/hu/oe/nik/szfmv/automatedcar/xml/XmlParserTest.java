@@ -15,13 +15,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class XmlParserTest {
 
@@ -99,7 +97,7 @@ public class XmlParserTest {
             try {
                 World world = XmlParser.parseWorldObjects(fileName);
                 assertWorld(world);
-                List<WorldObject> result = world.getWorldObjects();
+                List<IObject> result = world.getWorldObjects();
                 for (int i = 0; i < result.size(); i++) {
                     assertPositionsAndType(result.get(i), expectedWorld.getWorldObjects().get(i));
                 }
@@ -116,13 +114,13 @@ public class XmlParserTest {
         assertEquals(expectedWorld.getHeight(), world.getHeight());
     }
 
-    private void assertPositionsAndType(WorldObject objFromXml, WorldObject expected) {
+    private void assertPositionsAndType(IObject objFromXml, IObject expected) {
         assertEquals(expected.getClass().toString(), objFromXml.getClass().toString());
         assertEquals(expected.getPosX(), objFromXml.getPosX());
         assertEquals(expected.getPosY(), objFromXml.getPosY());
         assertEquals(expected.getPosZ(), objFromXml.getPosZ());
         assertEquals(expected.getRotation(), objFromXml.getRotation(), maxDelta);
-        if (StringUtils.equals(objFromXml.getImageFileName(), "unknown_type")) {
+        if (StringUtils.equals(((WorldObject)objFromXml).getImageFileName(), "unknown_type")) {
             assertNull(objFromXml.getImage());
         } else {
             assertNotNull(objFromXml.getImage());
