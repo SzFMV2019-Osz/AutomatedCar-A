@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,16 +38,21 @@ public class WorldObject implements IObject {
     @XmlTransient
     protected int height;
     
-    @XmlAttribute(name = "type", required = true)
-    protected String imageFileName;
-    
     @XmlTransient
     protected BufferedImage image;
 
+    @XmlAttribute(name = "type", required = true)
+    protected String imageFileName;
+
     public WorldObject() {
-        // default konstruktor
     }
 
+    /**
+     * Konstruktor manuális létrehozáshoz.
+     * @param x Objektum X pozíciója.
+     * @param y Objektum Y pozíciója.
+     * @param imageFileName Objektum fájlneve.
+     */
     public WorldObject(int x, int y, String imageFileName) {
         this.position = new Position(x, y);
         this.transform = new Transform();
@@ -54,42 +60,32 @@ public class WorldObject implements IObject {
         initImage();
     }
 
-    public WorldObject(String type, int posX, int posY, double m11, double m12, double m21, double m22) {
-        this.position = new Position(posX, posY);
-        this.transform = new Transform(m11, m12, m21, m22);
-        this.imageFileName = type;
-        initImage();
-    }
-
     /** {@inheritDoc}
      */
-    @Override
-    public int getPosX(){
+    public int getPosX() {
         return this.position.getX();
     }
 
     /** {@inheritDoc}
      */
-    public void setX(int x){
+    public void setPosX(int x) {
         this.position.setX(x);
     }
 
     /** {@inheritDoc}
      */
-    @Override
-    public int getPosY(){
+    public int getPosY() {
         return this.position.getY();
     }
 
     /** {@inheritDoc}
      */
-    public void setY(int y){
+    public void setPosY(int y) {
         this.position.setY(y);
     }
 
     /** {@inheritDoc}
      */
-    @Override
     public int getPosZ() {
         return this.position.getZ();
     }
@@ -100,7 +96,6 @@ public class WorldObject implements IObject {
 
     /** {@inheritDoc}
      */
-    @Override
     public int getWidth() {
         return width;
     }
@@ -111,7 +106,6 @@ public class WorldObject implements IObject {
 
     /** {@inheritDoc}
      */
-    @Override
     public int getHeight() {
         return height;
     }
@@ -123,7 +117,7 @@ public class WorldObject implements IObject {
     /** {@inheritDoc}
      */
     @Override
-    public double getRotation(){
+    public double getRotation() {
         return this.transform.getRotation();
     }
 
@@ -151,7 +145,6 @@ public class WorldObject implements IObject {
         this.imageFileName = imageFileName;
     }
 
-    @Override
     public BufferedImage getImage() {
         return this.image;
     }
@@ -177,7 +170,7 @@ public class WorldObject implements IObject {
         try {
             image = ModelCommonUtil.loadObjectImage(getImageFileName());
         } catch (Exception e) {
-            LOGGER.error("Nem sikerült a képfájl betöltése!", e);
+            LOGGER.error(Consts.ERROR_COULDNT_LOAD_IMG_FILE, e);
         }
     }
 }

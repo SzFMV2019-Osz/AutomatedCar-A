@@ -1,7 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model.interfaces;
 
 /**
- * Dynamic objects that can move around
+ * Objektum ami mozog.
  */
 public interface IDynamic {
 }

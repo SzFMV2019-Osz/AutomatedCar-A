@@ -3,24 +3,24 @@ package hu.oe.nik.szfmv.automatedcar.model.interfaces;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 
 /**
- * Provides an interfaces for the {@link World} object
+ * {@link World} objektumnak készített interface.
  */
 public interface IWorld {
     /**
-     * Gets the Width of a {@link World} object
-     * @return the width of the object
+     * {@link World} objektum szélességét adja vissza.
+     * @return Pálya szélessége.
      */
     int getWidth();
 
     /**
-     * Gets the Height of a {@link World} object
-     * @return the height of the object
+     * {@link World} objektum magasságát adja vissza.
+     * @return Pálya magassága.
      */
     int getHeight();
 
     /**
-     * Gets the color of a {@link World} object
-     * @return the color of the object
+     * {@link World} objektum színét adja vissza.
+     * @return Világ színe.
      */
     String getColor();
 }

@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.xml;
 
 
 import hu.oe.nik.szfmv.automatedcar.model.World;
+import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
@@ -11,8 +12,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Collections;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -20,17 +20,18 @@ import java.util.Properties;
 /**
  * XML feldolgozáshzo segéd osztály.
  */
-public class XmlParser
-{
+public class XmlParser {
     private static Logger logger = LogManager.getLogger();
 
     private static StopWatch stopWatch;
 
     /**
      * A JAXB instance létrehozás meglehetősen költséges folyamat, ezért nem hozunk létre újat minden objektum
-     * példányosításakor, hanem ebből a cache-ből dolgozunk. Ezt nyugodtan megtehetjük, mert a {@link JAXBContext} thread-safe.
+     * példányosításakor, hanem ebből a cache-ből dolgozunk. Ezt nyugodtan megtehetjük,
+     * mert a {@link JAXBContext} thread-safe.
      *
-     * Ugyanezt az {@link Unmarshaller}-el nem tehetjük meg (nem thread-safe). Szerencsére létrehozása kevésbé is költséges.
+     * Ugyanezt az {@link Unmarshaller}-el nem tehetjük meg (nem thread-safe).
+     * Szerencsére létrehozása kevésbé is költséges.
      */
     private static Map<Class<?>, JAXBContext> jaxbInstanceCache = new HashMap<>();
 
@@ -39,7 +40,7 @@ public class XmlParser
     }
 
     public static JAXBContext getJAXBContextFromCache(Class<?> neededClass) throws JAXBException {
-        if ( ! jaxbInstanceCache.containsKey(neededClass)) {
+        if (! jaxbInstanceCache.containsKey(neededClass)) {
             putJAXBContextToCache(neededClass);
         }
         return jaxbInstanceCache.get(neededClass);
@@ -78,20 +79,21 @@ public class XmlParser
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             world = (World) jaxbUnmarshaller.unmarshal(new File(ClassLoader.getSystemResource(xmlFileName).getFile()));
         } catch (NullPointerException e) {
-            logger.error("Hiba lépett fel feldolgozás közben, valószínűleg nem létezik a fájl!", e);
-            throw new NullPointerException("Valószínűleg nem létezik a fájl!");
+            logger.error(Consts.ERROR_IN_PROCESSING + " "
+                    + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST, e);
+            throw new NullPointerException(Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
         } catch (Exception ex) {
-            logger.error("Az XML parse-olása közben hiba lépett fel!", ex);
+            logger.error(Consts.ERROR_IN_XML_PARSING, ex);
         } finally {
             invalidateCache();
-            logger.info("Az XML feldolgozása " + getElapsedTimeAndResetStopWatch() + " ms-et vett igénybe.");
+            logger.info(MessageFormat.format(Consts.XML_MS_DURATION_MESSAGE, getElapsedTimeAndResetStopWatch()));
         }
         return world;
     }
 
     private static String getXmlNameWithExtension(String fileName) {
-        if ( ! StringUtils.endsWith(fileName, ".xml")) {
-            fileName += ".xml";
+        if (! StringUtils.endsWith(fileName, Consts.SUFFIX_XML)) {
+            fileName += Consts.SUFFIX_XML;
         }
         return fileName;
     }
