@@ -7,7 +7,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Shape;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -185,7 +186,12 @@ public class WorldObject implements IObject {
         return this.polygon;
     }
 
-    protected void initShape(){
-        this.polygon = new Rectangle(0,0, 0,0);
+    /**
+     * {@inheritDoc}
+     */
+    public void initShape(){
+        int x = 0 - (width / 2);
+        int y = 0 - (height / 2);
+        this.polygon = new Rectangle(x, y, this.width, this.height);
     }
 }
