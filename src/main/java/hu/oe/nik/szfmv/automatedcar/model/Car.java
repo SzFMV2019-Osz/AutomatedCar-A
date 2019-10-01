@@ -3,7 +3,6 @@ package hu.oe.nik.szfmv.automatedcar.model;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IDynamic;
 
-import java.awt.Shape;
 import java.awt.Rectangle;
 
 /**
@@ -12,6 +11,9 @@ import java.awt.Rectangle;
 public class Car extends WorldObject implements ICrashable, IDynamic {
 
     public Car() { }
+
+        private final int WIDTH_BORDER = 6;
+        private final int HEIGHT_BORDER = 1;
 
     /**
      * Konstruktor manuális létrehozáshoz.
@@ -34,8 +36,8 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
      */
     @Override
     public void initShape(){
-        int x = 0 - (width / 2 - 6);
-        int y = 0 - (height / 2 - 1);
-        this.polygon = new Rectangle(x, y, this.width - 12, this.height - 2);
+        int x = 0 - (this.width / 2 - WIDTH_BORDER);
+        int y = 0 - (this.height / 2 - HEIGHT_BORDER);
+        this.polygon = new Rectangle(x, y, this.width - WIDTH_BORDER * 2, this.height - HEIGHT_BORDER * 2);
     }
 }
