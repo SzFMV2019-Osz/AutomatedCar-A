@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +45,9 @@ public class WorldObject implements IObject {
     @XmlAttribute(name = "type", required = true)
     protected String imageFileName;
 
+    @XmlTransient
+    protected Shape polygon;
+
     public WorldObject() {
     }
 
@@ -58,6 +62,7 @@ public class WorldObject implements IObject {
         this.transform = new Transform();
         this.imageFileName = imageFileName;
         initImage();
+        initShape();
     }
 
     /** {@inheritDoc}
@@ -172,5 +177,15 @@ public class WorldObject implements IObject {
         } catch (Exception e) {
             LOGGER.error(Consts.ERROR_COULDNT_LOAD_IMG_FILE, e);
         }
+    }
+
+    /** {@inheritDoc}
+     */
+    public Shape getPolygon(){
+        return this.polygon;
+    }
+
+    protected void initShape(){
+        this.polygon = new Rectangle(0,0, 0,0);
     }
 }

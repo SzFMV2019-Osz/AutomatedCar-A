@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model.interfaces;
 
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 
 /**
@@ -46,4 +47,10 @@ public interface IObject {
      * @return megjelenítendő kép
      */
     BufferedImage getImage();
+
+    /**
+     * Visszadja az objektum alakját
+     * @return objektum alakja
+     */
+    Shape getPolygon();
 }
