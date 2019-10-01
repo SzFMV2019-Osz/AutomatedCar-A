@@ -38,6 +38,7 @@ public class World implements IWorld {
     @XmlAttribute(name = "color", required = false)
     private String color;
 
+    private List<IObject> objects = null;
 
     public World() {
     }
@@ -81,18 +82,36 @@ public class World implements IWorld {
     }
 
     /**
-     * Visszaadja a világban levő összes objektumot.
-     * @return Egy lista ami tartalmazza az összes világban levő objektumot.
+     * @deprecated Teszteléshez kell
      */
     public List<WorldObject> getWorldObjects() {
         return worldObjects;
     }
 
     /**
-     * Hozzáad egy objektumot a virtuális világhoz.
-     * @param o {@link IObject} amit hozzá kell adni a világhoz.
+     * @deprecated Teszteléshez kell
      */
     public void addObject(WorldObject o) {
         worldObjects.add(o);
+    }
+
+    /**
+     * Visszaadja a világban levő összes objektumot.
+     * @return Egy {@link IObject} lista ami tartalmazza az összes világban levő objektumot.
+     */
+    public List<IObject> getObjects() {
+        if (null == objects) {
+            objects = List.copyOf(worldObjects);
+        }
+
+        return objects;
+    }
+
+    /**
+     * Egy objektumot ad a listához.
+     * @param object Egy {@link IObject} ami a listába kerül.
+     */
+    public void addObject(IObject object) {
+        this.objects.add(object);
     }
 }

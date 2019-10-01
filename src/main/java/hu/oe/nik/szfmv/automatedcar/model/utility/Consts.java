@@ -2,6 +2,11 @@ package hu.oe.nik.szfmv.automatedcar.model.utility;
 
 public final class Consts {
 
+    // --- Values
+
+    public static final double MIN_DEGREE = 0;
+    public static final double MAX_DEGREE = 360;
+
     // --- Resources
 
     public static final String SUFFIX_IMAGE = ".png";

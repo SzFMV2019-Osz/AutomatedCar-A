@@ -32,6 +32,7 @@ public class Main {
 
     }
 
+    // TODO worldmanagert létrehozni world helyett
     private void init() {
         // create the world
         world = new World(5000, 3000);
