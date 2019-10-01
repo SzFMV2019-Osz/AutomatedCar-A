@@ -7,7 +7,7 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import java.util.List;
