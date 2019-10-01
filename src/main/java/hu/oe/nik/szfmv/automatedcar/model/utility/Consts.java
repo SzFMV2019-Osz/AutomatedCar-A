@@ -27,6 +27,7 @@ public final class Consts {
     public static final String ERROR_IN_PROCESSING = "Hiba lépett fel feldolgozás közben!";
     public static final String ERROR_FILE_LIKELY_DOESNT_EXIST = "Valószínűleg nem létezik a fájl!";
     public static final String ERROR_IN_XML_PARSING = "Az XML parse-olása közben hiba lépett fel!";
+    public static final String ERROR_XML_WRITING_NOT_ALLOWED = "XML manipuláció/kiírás nem engedélyezett!";
 
     // --- Messages
 
