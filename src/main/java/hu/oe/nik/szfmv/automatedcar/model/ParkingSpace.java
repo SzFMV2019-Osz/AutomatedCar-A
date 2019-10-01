@@ -31,13 +31,17 @@ public class ParkingSpace extends WorldObject implements IStatic, IBackground {
     public void initShape(){
         switch (this.imageFileName) {
             case "parking_space_parallel":
-                int parkingSpaceWidth = this.width - LEFT_BORDER - RIGHT_BORDER;
-                int parkingSpaceHeight = (this.height - TOP_BORDER - BOTTOM_BORDER) / 2;
-                this.polygon = new Rectangle(LEFT_BORDER, TOP_BORDER, parkingSpaceWidth, parkingSpaceHeight);
-                ((Rectangle) this.polygon).add(new Rectangle(parkingSpaceHeight + TOP_BORDER, LEFT_BORDER, parkingSpaceWidth, parkingSpaceHeight));
+                this.initParallelShape();
                 break;
             case "parking_90":
                 break;
         }
+    }
+
+    private void initParallelShape(){
+        int parkingSpaceWidth = this.width - LEFT_BORDER - RIGHT_BORDER;
+        int parkingSpaceHeight = (this.height - TOP_BORDER - BOTTOM_BORDER) / 2;
+        this.polygon = new Rectangle(LEFT_BORDER, TOP_BORDER, parkingSpaceWidth, parkingSpaceHeight);
+        ((Rectangle) this.polygon).add(new Rectangle(parkingSpaceHeight + TOP_BORDER, LEFT_BORDER, parkingSpaceWidth, parkingSpaceHeight));
     }
 }
