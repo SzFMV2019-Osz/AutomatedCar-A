@@ -1,14 +1,17 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
+import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDebugColorable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class WorldObject {
+public class WorldObject  {
 
     private static final Logger LOGGER = LogManager.getLogger();
     protected int x;
@@ -18,6 +21,8 @@ public class WorldObject {
     protected float rotation = 0f;
     protected String imageFileName;
     protected BufferedImage image;
+    protected Color debugColor = Color.GREEN;
+
 
     public WorldObject(int x, int y, String imageFileName) {
         this.x = x;
@@ -87,5 +92,4 @@ public class WorldObject {
             LOGGER.error(e.getMessage());
         }
     }
-
 }
