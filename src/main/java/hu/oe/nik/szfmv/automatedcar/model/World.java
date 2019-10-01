@@ -11,7 +11,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,19 +33,17 @@ public class World implements IWorld {
     @XmlElementWrapper(name = "Objects", required = true)
     @XmlElement(name = "Object")
     @XmlJavaTypeAdapter(ObjectConverter.class)
-    private List<WorldObject> worldObjects = new ArrayList<>();
+    private List<IObject> worldObjects = new ArrayList<>();
     
     @XmlAttribute(name = "color", required = false)
     private String color;
 
-    @XmlTransient
-    private List<IObject> objects = null;
-
     public World() {
+        // default konstruktor
     }
 
     /**
-     * @deprecated
+     * @deprecated XML beolvasás miatt nem kell
      */
     public World(int width, int height) {
         this.width = width;
@@ -58,6 +55,7 @@ public class World implements IWorld {
      * @param width Világ szélessége.
      * @param height Világ magassága.
      * @param color Világ alapszíne.
+     * @deprecated teszteléshez kell
      */
     public World(int width, int height, String color) {
         this.width = width;
@@ -84,36 +82,17 @@ public class World implements IWorld {
     }
 
     /**
-     * @deprecated Teszteléshez kell
+     * @return Visszaadja a világban található elemeket.
      */
-    public List<WorldObject> getWorldObjects() {
+    public List<IObject> getWorldObjects() {
         return worldObjects;
     }
 
     /**
-     * @deprecated Teszteléshez kell
+     * Hozzáadja a világ elemeihez az objektumot.
      */
-    public void addObject(WorldObject o) {
+    public void addObject(IObject o) {
         worldObjects.add(o);
     }
 
-    /**
-     * Visszaadja a világban levő összes objektumot.
-     * @return Egy {@link IObject} lista ami tartalmazza az összes világban levő objektumot.
-     */
-    public List<IObject> getObjects() {
-        if (null == objects) {
-            objects = List.copyOf(worldObjects);
-        }
-
-        return objects;
-    }
-
-    /**
-     * Egy objektumot ad a listához.
-     * @param object Egy {@link IObject} ami a listába kerül.
-     */
-    public void addObject(IObject object) {
-        this.objects.add(object);
-    }
 }
