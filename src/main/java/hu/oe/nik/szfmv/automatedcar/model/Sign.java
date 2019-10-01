@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.model;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
 
+import javax.xml.bind.Unmarshaller;
 import java.awt.geom.Ellipse2D;
 
 /**
@@ -13,6 +14,16 @@ public class Sign extends WorldObject implements IStatic, ICrashable {
     public double getWeight() {
         return 0;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void afterUnmarshal(Unmarshaller u, Object parent) {
+        super.afterUnmarshal(u, parent);
+        this.position.setZ(3);
+    }
+
 
     /**
      * {@inheritDoc}

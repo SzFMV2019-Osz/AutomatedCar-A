@@ -13,7 +13,7 @@ import java.awt.Rectangle;
 public class ParkingBollard extends WorldObject implements IStatic, ICrashable {
 
     /**
-     * Ennél az objektumnál már az objektum neve az XML-ben, mint a hozzá tartozó kép neve.
+     * Ennél az objektumnál más az objektum neve az XML-ben, mint a hozzá tartozó kép neve.
      * {@inheritDoc}
      */
     @Override
