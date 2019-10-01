@@ -31,8 +31,8 @@ public class WorldManager {
      * Hozzáad egy objektumot a világhoz.
      * @param object Akármilyen objektum ami implementálja az {@link IObject}et.
      */
-    public void addObjectToWorld(Class<? extends IObject> object) {
-        currentWorld.addObject(IObject.class.cast(object));
+    public void addObjectToWorld(IObject object) {
+        currentWorld.addObject(object);
     }
 
     /**
@@ -49,7 +49,7 @@ public class WorldManager {
      */
     public List<IObject> getAllObjects() {
 
-        return currentWorld.getObjects();
+        return currentWorld.getWorldObjects();
     }
 
     /**
@@ -63,7 +63,7 @@ public class WorldManager {
         List<IObject> inTriangle = new ArrayList<>();
 
         Position pos = new Position();
-        for (IObject obj : currentWorld.getObjects()) {
+        for (IObject obj : currentWorld.getWorldObjects()) {
             pos.setX(obj.getPosX());
             pos.setY(obj.getPosY());
             if (ModelCommonUtil.isPointInTriangle(pointA, pointB, pointC, pos)) {
@@ -82,7 +82,7 @@ public class WorldManager {
     public List<IObject> getAllObjectsOnPoint(Position point) {
         List<IObject> onPoint = new ArrayList<>();
 
-        for (IObject obj : currentWorld.getObjects()) {
+        for (IObject obj : currentWorld.getWorldObjects()) {
             if (obj.getPosX() == point.getX() && obj.getPosY() == point.getY()) {
                 onPoint.add(obj);
             }
@@ -108,7 +108,7 @@ public class WorldManager {
 
         List<IObject> inRectangle = new ArrayList<>();
 
-        for (IObject obj : currentWorld.getObjects()) {
+        for (IObject obj : currentWorld.getWorldObjects()) {
             if (rect.contains(obj.getPosX(), obj.getPosY())) {
                 inRectangle.add(obj);
             }
