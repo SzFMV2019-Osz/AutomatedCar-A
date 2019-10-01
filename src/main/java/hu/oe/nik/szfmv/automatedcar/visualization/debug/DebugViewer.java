@@ -11,7 +11,7 @@ import java.awt.*;
 public class DebugViewer {
 
     private Graphics2D graphics2D;
-    private DrawingInfo info = new DrawingInfo(Color.GREEN, 2);
+    private DrawingInfo info = new DrawingInfo(Color.RED, 2);
 
     /**
      * @return The information represening the color and borderline width of the object
