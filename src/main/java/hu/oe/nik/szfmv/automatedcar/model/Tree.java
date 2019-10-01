@@ -2,8 +2,6 @@ package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
-import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
-import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 
 import javax.xml.bind.Unmarshaller;
 import java.awt.geom.Ellipse2D;
