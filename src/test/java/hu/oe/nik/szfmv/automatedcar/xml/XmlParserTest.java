@@ -5,23 +5,24 @@ import hu.oe.nik.szfmv.automatedcar.model.Crosswalk;
 import hu.oe.nik.szfmv.automatedcar.model.ParkingBollard;
 import hu.oe.nik.szfmv.automatedcar.model.ParkingSpace;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
+import hu.oe.nik.szfmv.automatedcar.model.References;
 import hu.oe.nik.szfmv.automatedcar.model.Road;
 import hu.oe.nik.szfmv.automatedcar.model.Sign;
 import hu.oe.nik.szfmv.automatedcar.model.Tree;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
-import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import java.util.ArrayList;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class XmlParserTest {
 
@@ -32,14 +33,23 @@ public class XmlParserTest {
 
     private String notExistingFile;
 
-    private String[] existingFileNames;
+    private String[] existingFileNamesForWorldParser;
 
     private World expectedWorld;
+    
+    private String[] existingFileNameseForReferenceParser;
 
+    private List<Pair<String, Pair<Integer, Integer>>> expectedReferences;
+    
     @Before
     public void initVariables() {
         notExistingFile = "not_existing.xml";
-        existingFileNames = new String[] {"mini_world", "mini_world.xml"};
+        initWorldParserVariables();
+        initReferenceParserVariables();
+    }
+    
+    private void initWorldParserVariables() {
+        existingFileNamesForWorldParser = new String[] {"mini_world", "mini_world.xml"};
 
         expectedWorld = new World(5120, 3000, "#FFFFFF");
 
@@ -84,18 +94,34 @@ public class XmlParserTest {
         expectedWorld.getWorldObjects().add(wo);
     }
 
+    private void initReferenceParserVariables() {
+        existingFileNameseForReferenceParser = new String[] {"mini_reference", "mini_reference.xml"};
+        expectedReferences = new ArrayList<>();
+        expectedReferences.add(createReference("road_2lane_rotary.png", 234, 875));
+        expectedReferences.add(createReference("2_crossroad_1.png", 0, 875));
+        expectedReferences.add(createReference("road_2lane_90right.png", 349, 525));
+        expectedReferences.add(createReference("road_2lane_45left.png", 51, 371));
+        expectedReferences.add(createReference("car_2_red.png", 51, 104));
+    }
+    
+    private Pair createReference(String fileName, int x, int y) {
+        Pair refs = new ImmutablePair<>(x, y);
+        return new ImmutablePair<>(fileName, refs);
+    }
+    
     private Position createPosition(int x, int y) {
         return new Position(x, y);
     }
 
     @Test(expected = NullPointerException.class)
-    public void throwsNullPointerException_WhenCalledWith_NotExistingFileName() throws NullPointerException {
+    public void worldParser_ThrowsNullPointerException_WhenCalledWith_NotExistingFileName()
+                                                                throws NullPointerException {
         XmlParser.parseWorldObjects(notExistingFile);
     }
 
     @Test
-    public void loadAndCheckObjects_WhenCalledWith_ExistingFileName() {
-        for (String fileName : existingFileNames) {
+    public void worldParser_LoadAndCheckObjects_WhenCalledWith_ExistingFileName() {
+        for (String fileName : existingFileNamesForWorldParser) {
             try {
                 World world = XmlParser.parseWorldObjects(fileName);
                 assertWorld(world);
@@ -127,5 +153,26 @@ public class XmlParserTest {
         } else {
             assertNotNull(objFromXml.getImage());
         }
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void referenceParser_ThrowsNullPointerException_WhenCalledWith_NotExistingFileName() {
+        XmlParser.parseReferences(notExistingFile);
+    }
+    
+    @Test
+    public void referenceParser_LoadAndCheckReferencePoint_WhenCalledWith_ExistingFileName() {
+        for (String referenceXml : existingFileNameseForReferenceParser) {
+            References referencesFromXml = XmlParser.parseReferences(referenceXml);
+            for (Pair<String, Pair<Integer, Integer>> expectedReference : expectedReferences) {
+                String fileName = expectedReference.getKey();
+                assertReferences(expectedReference.getValue(), referencesFromXml.getReference(fileName));
+            }
+        }
+    }
+    
+    private void assertReferences(Pair<Integer, Integer> expected, Pair<Integer, Integer> objFromXml) {
+        assertEquals(expected.getKey(), objFromXml.getKey());
+        assertEquals(expected.getValue(), objFromXml.getValue());
     }
 }
