@@ -107,4 +107,36 @@ public class XmlParser {
         stopWatch.stop();
         return stopWatch.getTime();
     }
+
+    /**
+     * Beolvassa a kapott reference XML-t.
+     * 
+     * Eltárolja az értékeket egy {@link References} objektumban, melyhez a kulcs a képfájl neve.
+     * 
+     * @param xmlFileName Feldolgozandó fájl neve, kiterjesztés nélkül is megadható.
+     * @return Beolvasott referencia pontok
+     * @throws NullPointerException Ha nem található a megadott fájl.
+     */
+    public static References parseReferences(String xmlFileName) {
+        xmlFileName = getXmlNameWithExtension(xmlFileName);
+        References refs = null;
+        
+        try {
+            startStopWatch();
+
+            JAXBContext jaxbContext = createJAXBContext(References.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            refs = (References) jaxbUnmarshaller.unmarshal(new File(ClassLoader.getSystemResource(xmlFileName).getFile()));
+        } catch (NullPointerException e) {
+            logger.warn(Consts.ERROR_IN_PROCESSING + " " + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST, e);
+            throw new NullPointerException(Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
+        } catch (Exception ex) {
+            logger.error(MessageFormat.format(Consts.ERROR_IN_XML_PARSING, "references"), ex);
+        } finally {
+            invalidateCache();
+            logger.info(MessageFormat.format(Consts.XML_MS_DURATION_MESSAGE, getElapsedTimeAndResetStopWatch()));
+        }
+        return refs;
+    }
+
 }
