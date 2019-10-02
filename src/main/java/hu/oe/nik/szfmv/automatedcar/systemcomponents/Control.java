@@ -19,5 +19,4 @@ public class Control {
         if (currentValue - step >= rangeMin)
             currentValue -= step;
     }
-
 }
