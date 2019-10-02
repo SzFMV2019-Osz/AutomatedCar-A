@@ -14,6 +14,72 @@ public class Dashboard extends JPanel {
 
     Gui parent;
 
+    private JLabel gearShiftText = new JLabel("Gear:");
+    private JLabel gasPedalText = new JLabel("Gas Pedal");
+    private JLabel accMenuText = new JLabel("ACC opts:");
+    private JLabel breakPedalText = new JLabel("Break Pedal");
+    private JLabel xCoordText = new JLabel("X: ");
+    private JLabel yCoordText = new JLabel("Y: ");
+    private JLabel steeringWheelText = new JLabel("Steering Wheel:");
+    private JLabel speedLimitText = new JLabel("Speed Limit:");
+
+    private JLabel currentGearText = new JLabel("P");
+    private JLabel speedLimitValueText = new JLabel("30");
+    private JLabel steeringWheelValueText = new JLabel("0");
+    private JLabel xCoordValueText = new JLabel("0");
+    private JLabel yCoordValueText = new JLabel("0");
+
+    private JProgressBar gasProgressBar = new JProgressBar(0, 100);
+    private JProgressBar breakProgressBar = new JProgressBar(0, 100);
+
+
+    private void TextPlacing() {
+
+        gearShiftText.setBounds(100, 150, 40,   15);
+        currentGearText.setBounds(135, 150, 10, 15);
+        accMenuText.setBounds(10, 190, 60, 15);
+        gasPedalText.setBounds(10, 390, 100, 15);
+        breakPedalText.setBounds(10, 420, 100, 15);
+        speedLimitText.setBounds(10, 450, 80, 15);
+        speedLimitValueText.setBounds(90, 450, 30, 15);
+        steeringWheelText.setBounds(10, 580, 100, 15);
+        steeringWheelValueText.setBounds(110, 580, 20, 15);
+        xCoordText.setBounds(10, 600, 20, 15);
+        xCoordValueText.setBounds(30, 600, 10, 15);
+        yCoordText.setBounds(70, 600, 20, 15);
+        yCoordValueText.setBounds(90, 600, 10, 15);
+
+        add(gearShiftText);
+        add(currentGearText);
+        add(accMenuText);
+        add(gasPedalText);
+        add(breakPedalText);
+        add(speedLimitText);
+        add(speedLimitValueText);
+        add(steeringWheelText);
+        add(steeringWheelValueText);
+        add(xCoordText);
+        add(xCoordValueText);
+        add(yCoordText);
+        add(yCoordValueText);
+
+    }
+
+    private void ProgressBarPlacing() {
+        gasProgressBar.setBounds(10, 405, 200, 15);
+        breakProgressBar.setBounds(10, 435, 200, 15);
+        gasProgressBar.setStringPainted(true);
+        breakProgressBar.setStringPainted(true);
+        add(gasProgressBar);
+        add(breakProgressBar);
+    }
+
+
+    private void placeElements() {
+        ProgressBarPlacing();
+        TextPlacing();
+    }
+
     private Thread timer = new Thread() {
         int difference;
 
@@ -40,6 +106,7 @@ public class Dashboard extends JPanel {
 
         parent = pt;
 
+        placeElements();
         timer.start();
     }
 
