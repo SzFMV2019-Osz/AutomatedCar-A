@@ -34,7 +34,7 @@ public class Main {
 
     private void init() {
         // create the world
-        world = new World(5000, 3000);
+        //world = new World(5000, 3000);
         // create an automated car
         car = new AutomatedCar(20, 20, "car_2_white.png");
         world.addObject(car);
