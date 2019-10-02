@@ -99,9 +99,9 @@ public class XmlParserTest {
         expectedReferences = new ArrayList<>();
         expectedReferences.add(createReference("road_2lane_rotary.png", 234, 875));
         expectedReferences.add(createReference("2_crossroad_1.png", 0, 875));
-        expectedReferences.add(createReference("road_2lane_90right.png", 349, 525));
+        expectedReferences.add(createReference("road_2lane_90right", 349, 525));
         expectedReferences.add(createReference("road_2lane_45left.png", 51, 371));
-        expectedReferences.add(createReference("car_2_red.png", 51, 104));
+        expectedReferences.add(createReference("car_2_red", 51, 104));
     }
     
     private Pair createReference(String fileName, int x, int y) {
