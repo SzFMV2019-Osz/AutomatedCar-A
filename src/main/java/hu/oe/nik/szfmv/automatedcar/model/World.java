@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.xml.converter.IntegerConverter;
@@ -38,6 +39,7 @@ public class World implements IWorld {
     @XmlAttribute(name = "color", required = false)
     private String color;
 
+    private AutomatedCar automatedCar;
 
     public World() {
     }
@@ -94,5 +96,21 @@ public class World implements IWorld {
      */
     public void addObject(WorldObject o) {
         worldObjects.add(o);
+    }
+
+    /**
+     * Visszaadja az irányított autót
+     * @return {@link AutomatedCar} referencia az irányíott autóval
+     */
+    public AutomatedCar getAutomatedCar(){
+        return this.automatedCar;
+    }
+
+    /**
+     *  Beállítja az {@link AutomatedCar} referenciáját
+     * @param car Irányított autó objektuma
+     */
+    public void addAutomatedCar(AutomatedCar car){
+        this.automatedCar = car;
     }
 }

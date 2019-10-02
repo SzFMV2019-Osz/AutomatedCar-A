@@ -37,7 +37,7 @@ public class Main {
         //world = new World(5000, 3000);
         // create an automated car
         car = new AutomatedCar(20, 20, "car_2_white.png");
-        world.addObject(car);
+        world.addAutomatedCar(car);
 
         window = new Gui();
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());

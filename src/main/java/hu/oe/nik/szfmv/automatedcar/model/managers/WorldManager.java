@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model.managers;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
@@ -49,5 +50,13 @@ public class WorldManager {
     public List<IObject> getAllObjectsInTriangle(Position pointA, Position pointB, Position pointC) {
         // TODO
         return null;
+    }
+
+    /**
+     * Visszaadja az irányított autót
+     * @return {@link AutomatedCar} referencia az irányíott autóval
+     */
+    public AutomatedCar getAutomatedCar(){
+        return this.currentWorld.getAutomatedCar();
     }
 }
