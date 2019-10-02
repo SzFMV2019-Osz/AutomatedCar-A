@@ -1,20 +1,23 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 public class GearShift {
-    private char [] values = {'P', 'R', 'N', 'D'};
+    public enum POS {P, R, N, D}
+
     private int currValue = 0;
 
-    public void Increment(){
-        if(currValue <= values.length - 1)
+    public void Increment() {
+        POS[] arr = POS.values();
+        if (currValue < arr.length - 1)
             ++currValue;
     }
 
-    public void Decrement(){
-        if(currValue >= 0)
+    public void Decrement() {
+        if (currValue > 0)
             --currValue;
     }
 
-    public char GetCurrentState(){
-        return values[currValue];
+    public POS GetCurrentState() {
+        POS[] arr = POS.values();
+        return arr[currValue];
     }
 }
