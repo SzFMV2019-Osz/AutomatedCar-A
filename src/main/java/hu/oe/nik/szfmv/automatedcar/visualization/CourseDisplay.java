@@ -125,5 +125,7 @@ public class CourseDisplay extends JPanel {
             // todo: decide on how model will signal colors
             viewer.DrawPolygon(object.getX()+ offsets[0], object.getY() + offsets[1], object.getWidth(), object.getHeight());
         }
+        viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
+
     }
 }
