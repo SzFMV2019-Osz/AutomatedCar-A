@@ -46,7 +46,7 @@ public class ObjectConverter extends XmlAdapter<Object, IObject> {
             return (WorldObject) jaxBElement.getValue();
         } catch (Exception e) {
             // logolunk, mert a JAXB elnyeli az exceptiont és üres listával tér vissza
-            logger.error("A WorldObjectek parseolása közben hiba lépett fel!", e);
+            logger.error(Consts.ERROR_IN_WORLDOBJECT_PARSING, e);
             throw e;
         }
     }
@@ -73,8 +73,7 @@ public class ObjectConverter extends XmlAdapter<Object, IObject> {
     }
 
     @Override
-    public Object marshal(IObject v) throws Exception
-    {
+    public Object marshal(IObject v) throws Exception {
         throw new UnsupportedOperationException(Consts.ERROR_XML_WRITING_NOT_ALLOWED);
     }
 
