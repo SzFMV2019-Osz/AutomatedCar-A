@@ -34,14 +34,20 @@ public class ObjectConverter extends XmlAdapter<Object, WorldObject> {
 
     @Override
     public WorldObject unmarshal(Object element) throws Exception {
-        Node node = (Node)element;
-        String classType = node.getAttributes().getNamedItem(Consts.XML_ATTRIBUTE_TYPE).getNodeValue();
-        Class<?> clazz = getClassByString(classType);
+        try {
+            Node node = (Node)element;
+            String classType = node.getAttributes().getNamedItem(Consts.XML_ATTRIBUTE_TYPE).getNodeValue();
+            Class<?> clazz = getClassByString(classType);
 
-        JAXBContext jaxbContext = XmlParser.getJAXBContextFromCache(clazz);
-        Binder<Node> binder = jaxbContext.createBinder();
-        JAXBElement<?> jaxBElement = binder.unmarshal(node, clazz);
-        return (WorldObject) jaxBElement.getValue();
+            JAXBContext jaxbContext = XmlParser.getJAXBContextFromCache(clazz);
+            Binder<Node> binder = jaxbContext.createBinder();
+            JAXBElement<?> jaxBElement = binder.unmarshal(node, clazz);
+            return (WorldObject) jaxBElement.getValue();
+        } catch (Exception e) {
+            // logolunk, mert a JAXB elnyeli az exceptiont és üres listával tér vissza
+            logger.error("A WorldObjectek parseolása közben hiba lépett fel!", e);
+            throw e;
+        }
     }
 
     private Class<?> getClassByString(String classType) {
