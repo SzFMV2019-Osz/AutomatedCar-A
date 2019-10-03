@@ -13,7 +13,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 
@@ -33,7 +32,7 @@ public class References {
      */
     @XmlElement(name = "Image")
     @XmlJavaTypeAdapter(ReferenceConverter.class)
-    private List<Pair<String, Pair<Integer, Integer>>> temporaryRefs;
+    private List<Pair<String, Position>> temporaryRefs;
 
     /**
      * Az alkalmaás inicializálása után ebből szolgáljuk ki a hívó félt,
@@ -42,7 +41,7 @@ public class References {
      * Azért töltjük át map-be, hogy később kényelmesebben hozzáférhetőek legyenek a pontok.
      */
     @XmlTransient
-    private Map<String, Pair<Integer, Integer>> references = new HashMap<>();
+    private Map<String, Position> references = new HashMap<>();
 
     /**
      * Megmondja, hogy a kapott képet mely ponton kell forgatni.
@@ -50,14 +49,14 @@ public class References {
      * @param fileName forgatandó kép neve, kiterjesztést nem muszáj adni (garantálja a ".png" végződést)
      * @return Pair<Integer, Integer> X és Y pontok, itt kell forgatni a képet
      */
-    public Pair<Integer, Integer> getReference(String fileName) {
+    public Position getReference(String fileName) {
         if ( !StringUtils.endsWith(fileName, Consts.SUFFIX_IMAGE)) {
             fileName += Consts.SUFFIX_IMAGE;
         }
         if (this.references.containsKey(fileName)) {
             return this.references.get(fileName);
         } else {
-            return new ImmutablePair<>(0,0);
+            return new Position(0, 0);
         }
     }
     
@@ -69,7 +68,7 @@ public class References {
      * a listát pedig kinullázuk, mert nem lesz rá szükség többé.
      *
      * @param u unmarshaller
-     * @param parent {@link References}
+     * @param parent parent element
      */
     public void afterUnmarshal(Unmarshaller u, Object parent) {
         temporaryRefs.forEach((pair) -> {

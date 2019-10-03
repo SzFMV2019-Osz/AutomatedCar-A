@@ -39,7 +39,7 @@ public class XmlParserTest {
     
     private String[] existingFileNameseForReferenceParser;
 
-    private List<Pair<String, Pair<Integer, Integer>>> expectedReferences;
+    private List<Pair<String, Position>> expectedReferences;
     
     @Before
     public void initVariables() {
@@ -105,7 +105,7 @@ public class XmlParserTest {
     }
     
     private Pair createReference(String fileName, int x, int y) {
-        Pair refs = new ImmutablePair<>(x, y);
+        Position refs = createPosition(x, y);
         return new ImmutablePair<>(fileName, refs);
     }
     
@@ -164,15 +164,15 @@ public class XmlParserTest {
     public void referenceParser_LoadAndCheckReferencePoint_WhenCalledWith_ExistingFileName() {
         for (String referenceXml : existingFileNameseForReferenceParser) {
             References referencesFromXml = XmlParser.parseReferences(referenceXml);
-            for (Pair<String, Pair<Integer, Integer>> expectedReference : expectedReferences) {
+            for (Pair<String, Position> expectedReference : expectedReferences) {
                 String fileName = expectedReference.getKey();
                 assertReferences(expectedReference.getValue(), referencesFromXml.getReference(fileName));
             }
         }
     }
     
-    private void assertReferences(Pair<Integer, Integer> expected, Pair<Integer, Integer> objFromXml) {
-        assertEquals(expected.getKey(), objFromXml.getKey());
-        assertEquals(expected.getValue(), objFromXml.getValue());
+    private void assertReferences(Position expected, Position objFromXml) {
+        assertEquals(expected.getX(), objFromXml.getX());
+        assertEquals(expected.getY(), objFromXml.getY());
     }
 }

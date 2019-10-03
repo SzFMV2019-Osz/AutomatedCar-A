@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.xml.converter;
 
+import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
@@ -18,11 +19,11 @@ import org.w3c.dom.Node;
  * Mivel nem lett volna szép 2 objektumot létrehozni 3 változó tárolására, ezért itt
  * került implementálásra a parseolás.
  */
-public class ReferenceConverter extends XmlAdapter<Object, Pair<String, Pair<Integer, Integer>>> {
+public class ReferenceConverter extends XmlAdapter<Object, Pair<String, Position>> {
     
 
     @Override
-    public Pair<String, Pair<Integer, Integer>> unmarshal(Object element) throws Exception {
+    public Pair<String, Position> unmarshal(Object element) throws Exception {
         
         Node imageNode = (Node)element;
         Node refPointsNode = imageNode.getFirstChild();
@@ -31,12 +32,13 @@ public class ReferenceConverter extends XmlAdapter<Object, Pair<String, Pair<Int
         String xRef = refPointsNode.getAttributes().getNamedItem(Consts.XML_ATTRIBUTE_X).getNodeValue();
         String yRef = refPointsNode.getAttributes().getNamedItem(Consts.XML_ATTRIBUTE_Y).getNodeValue();
 
-        Pair<Integer, Integer> refPair = new ImmutablePair<>(Integer.parseInt(xRef), Integer.parseInt(yRef));
-        return new ImmutablePair<>(imageName, refPair);
+        Position refPos = new Position(Integer.parseInt(xRef), Integer.parseInt(yRef));
+        refPos.setZ(-1); // nem szükséges a forgatáshoz
+        return new ImmutablePair<>(imageName, refPos);
     }
 
     @Override
-    public Object marshal(Pair<String, Pair<Integer, Integer>> pair) throws Exception {
+    public Object marshal(Pair<String, Position> pair) throws Exception {
         throw new UnsupportedOperationException("Not allowed.");
     }
 
