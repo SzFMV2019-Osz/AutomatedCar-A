@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.World;
+import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 import org.apache.logging.log4j.LogManager;
@@ -33,11 +34,10 @@ public class Main {
     }
 
     private void init() {
-        // create the world
-        world = new World(5000, 3000);
         // create an automated car
         car = new AutomatedCar(20, 20, "car_2_white.png");
-        world.addObject(car);
+        WorldManager manager = new WorldManager("test_world");
+        manager.setAutomatedCar(car);
 
         window = new Gui();
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());

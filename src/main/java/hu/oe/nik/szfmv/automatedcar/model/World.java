@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.xml.converter.IntegerConverter;
@@ -37,7 +38,6 @@ public class World implements IWorld {
     
     @XmlAttribute(name = "color", required = false)
     private String color;
-
 
     public World() {
     }
