@@ -123,9 +123,9 @@ public class XmlParserTest {
     public void worldParser_LoadAndCheckObjects_WhenCalledWith_ExistingFileName() {
         World world = XmlParser.parseWorldObjects(existingFileNameForWorldParser);
         assertWorld(world);
-        List<WorldObject> result = world.getWorldObjects();
+        List<WorldObject> result = expectedWorld.getWorldObjects();
         for (int i = 0; i < result.size(); i++) {
-            assertPositionsAndType(result.get(i), expectedWorld.getWorldObjects().get(i));
+            assertPositionsAndType(world.getWorldObjects().get(i), expectedWorld.getWorldObjects().get(i));
         }
     }
 
