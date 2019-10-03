@@ -46,15 +46,6 @@ public class WorldManager {
     }
 
     /**
-     * Visszaadja a világban levő összes objektumot.
-     * @return {@link IObject} lista amiben minden a világban levő object benne van.
-     */
-    public List<IObject> getAllObjects() {
-
-        return currentWorld.getWorldObjects();
-    }
-
-    /**
      * Visszaadja az összes objektumot a három pont között. TODO majd változni fog poligonok definiálása után
      * @param pointA Első pont.
      * @param pointB Második pont.
