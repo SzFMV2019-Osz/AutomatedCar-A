@@ -45,6 +45,7 @@ public class WorldObject implements IObject {
     protected String imageFileName;
 
     public WorldObject() {
+        this.transform = new Transform();
     }
 
     /**
