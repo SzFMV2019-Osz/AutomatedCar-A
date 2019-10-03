@@ -1,12 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.xml.converter;
 
 import hu.oe.nik.szfmv.automatedcar.model.Position;
-import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
-import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
-import javax.xml.bind.Binder;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;

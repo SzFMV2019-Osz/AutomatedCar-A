@@ -29,15 +29,15 @@ public class XmlParserTest {
     /**
      * Mivel a double kalkulált érték, meg kell adni egy tűréshatárt, amit még elfogadunk.
      */
-    private Double maxDelta = 1e-10;
+    private final Double maxDelta = 1e-10;
 
     private String notExistingFile;
 
-    private String[] existingFileNamesForWorldParser;
+    private String existingFileNameForWorldParser;
 
-    private World expectedWorld;
+    private String existingFileNameForReferenceParser;
     
-    private String[] existingFileNameseForReferenceParser;
+    private World expectedWorld;
 
     private List<Pair<String, Position>> expectedReferences;
     
@@ -49,7 +49,7 @@ public class XmlParserTest {
     }
     
     private void initWorldParserVariables() {
-        existingFileNamesForWorldParser = new String[] {"mini_world", "mini_world.xml"};
+        existingFileNameForWorldParser = "mini_world";
 
         expectedWorld = new World(5120, 3000, "#FFFFFF");
 
@@ -95,7 +95,7 @@ public class XmlParserTest {
     }
 
     private void initReferenceParserVariables() {
-        existingFileNameseForReferenceParser = new String[] {"mini_reference", "mini_reference.xml"};
+        existingFileNameForReferenceParser = "mini_reference";
         expectedReferences = new ArrayList<>();
         expectedReferences.add(createReference("road_2lane_rotary.png", 234, 875));
         expectedReferences.add(createReference("2_crossroad_1.png", 0, 875));
@@ -121,17 +121,11 @@ public class XmlParserTest {
 
     @Test
     public void worldParser_LoadAndCheckObjects_WhenCalledWith_ExistingFileName() {
-        for (String fileName : existingFileNamesForWorldParser) {
-            try {
-                World world = XmlParser.parseWorldObjects(fileName);
-                assertWorld(world);
-                List<WorldObject> result = world.getWorldObjects();
-                for (int i = 0; i < result.size(); i++) {
-                    assertPositionsAndType(result.get(i), expectedWorld.getWorldObjects().get(i));
-                }
-            } catch (NullPointerException e) {
-                // handle exception
-            }
+        World world = XmlParser.parseWorldObjects(existingFileNameForWorldParser);
+        assertWorld(world);
+        List<WorldObject> result = world.getWorldObjects();
+        for (int i = 0; i < result.size(); i++) {
+            assertPositionsAndType(result.get(i), expectedWorld.getWorldObjects().get(i));
         }
     }
 
@@ -162,12 +156,10 @@ public class XmlParserTest {
     
     @Test
     public void referenceParser_LoadAndCheckReferencePoint_WhenCalledWith_ExistingFileName() {
-        for (String referenceXml : existingFileNameseForReferenceParser) {
-            References referencesFromXml = XmlParser.parseReferences(referenceXml);
-            for (Pair<String, Position> expectedReference : expectedReferences) {
-                String fileName = expectedReference.getKey();
-                assertReferences(expectedReference.getValue(), referencesFromXml.getReference(fileName));
-            }
+        References referencesFromXml = XmlParser.parseReferences(existingFileNameForReferenceParser);
+        for (Pair<String, Position> expectedReference : expectedReferences) {
+            String fileName = expectedReference.getKey();
+            assertReferences(expectedReference.getValue(), referencesFromXml.getReference(fileName));
         }
     }
     
