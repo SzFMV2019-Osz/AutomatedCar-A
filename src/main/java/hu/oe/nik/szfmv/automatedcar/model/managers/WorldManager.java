@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model.managers;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
@@ -18,6 +19,8 @@ import java.util.List;
 public class WorldManager {
 
     private World currentWorld;
+
+    private AutomatedCar automatedCar;
 
     /**
      * Inicializálja a jelenlegi világot egy xml file alapján.
@@ -115,5 +118,21 @@ public class WorldManager {
         }
 
         return inRectangle;
+    }
+
+    /**
+     * Visszaadja az irányított autót
+     * @return {@link AutomatedCar} referencia az irányíott autóval
+     */
+    public AutomatedCar getAutomatedCar(){
+        return this.automatedCar;
+    }
+
+    /**
+     *  Beállítja az {@link AutomatedCar} referenciáját
+     * @param car Irányított autó objektuma
+     */
+    public void setAutomatedCar(AutomatedCar car){
+        this.automatedCar = car;
     }
 }
