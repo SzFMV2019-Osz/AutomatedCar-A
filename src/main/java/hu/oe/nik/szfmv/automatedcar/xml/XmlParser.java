@@ -78,6 +78,7 @@ public class XmlParser {
             JAXBContext jaxbContext = createJAXBContext(World.class); // nem cacheljük, mert elég belőle egy instance
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
             world = (World) jaxbUnmarshaller.unmarshal(new File(ClassLoader.getSystemResource(xmlFileName).getFile()));
+            logger.debug("Beolvasott WorldObjectek száma: " + world.getWorldObjects().size());
         } catch (NullPointerException e) {
             logger.error(Consts.ERROR_IN_PROCESSING + " "
                     + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);

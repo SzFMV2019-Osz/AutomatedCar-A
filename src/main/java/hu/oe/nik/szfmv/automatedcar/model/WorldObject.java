@@ -171,7 +171,7 @@ public class WorldObject implements IObject {
         try {
             image = ModelCommonUtil.loadObjectImage(getImageFileName());
         } catch (Exception e) {
-            LOGGER.error(Consts.ERROR_COULDNT_LOAD_IMG_FILE, e);
+            LOGGER.error(Consts.ERROR_COULDNT_LOAD_IMG_FILE + ". fájl neve: " + getImageFileName());
         }
     }
 }
