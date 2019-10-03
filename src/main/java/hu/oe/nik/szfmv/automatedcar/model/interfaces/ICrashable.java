@@ -1,12 +1,12 @@
 package hu.oe.nik.szfmv.automatedcar.model.interfaces;
 
 /**
- * Foreground objects that can crash
+ * Objektum amivel lehet ütközni.
  */
 public interface ICrashable {
 
     /**
-     * @return objektum tömege
+     * @return Objektum tömege.
      */
     double getWeight();
 }

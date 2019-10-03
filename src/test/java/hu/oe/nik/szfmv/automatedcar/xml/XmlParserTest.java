@@ -10,6 +10,7 @@ import hu.oe.nik.szfmv.automatedcar.model.Sign;
 import hu.oe.nik.szfmv.automatedcar.model.Tree;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class XmlParserTest {
 
@@ -98,8 +100,9 @@ public class XmlParserTest {
                 World world = XmlParser.parseWorldObjects(fileName);
                 assertWorld(world);
                 List<WorldObject> result = world.getWorldObjects();
-                for (int i = 0; i < result.size(); i++)
+                for (int i = 0; i < result.size(); i++) {
                     assertPositionsAndType(result.get(i), expectedWorld.getWorldObjects().get(i));
+                }
             } catch (NullPointerException e) {
                 // handle exception
             }

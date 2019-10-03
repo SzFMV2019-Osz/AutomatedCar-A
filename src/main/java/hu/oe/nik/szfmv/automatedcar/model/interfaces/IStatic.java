@@ -1,7 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model.interfaces;
 
 /**
- * Static objects that do not move
+ * Objektum ami nem mozog.
  */
 public interface IStatic {
 }

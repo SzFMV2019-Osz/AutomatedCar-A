@@ -24,7 +24,7 @@ public class Main {
     public void run() {
         try {
             world = XmlParser.parseWorldObjects("test_world");
-        } catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             // handle exception
         }
         init();
@@ -37,7 +37,7 @@ public class Main {
         world = new World(5000, 3000);
         // create an automated car
         car = new AutomatedCar(20, 20, "car_2_white.png");
-        world.addObjectToWorld(car);
+        world.addObject(car);
 
         window = new Gui();
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());

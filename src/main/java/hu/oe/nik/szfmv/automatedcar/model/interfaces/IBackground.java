@@ -1,7 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model.interfaces;
 
 /**
- * Background objects that cannot crash
+ * Objektum amivel nem lehet ütközni.
  */
 public interface IBackground {
 }

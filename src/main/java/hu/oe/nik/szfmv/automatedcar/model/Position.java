@@ -9,6 +9,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+/**
+ * Osztály ami tartalmazza az objektum pozíciójával kapcsolatos információkat.
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Position")
 public class Position {
@@ -27,18 +30,16 @@ public class Position {
     public Position(int x, int y) {
         this.x = x;
         this.y = y;
-        this.z = 0;
     }
 
     public Position() {
         this.x = 0;
         this.y = 0;
-        this.z = 0;
     }
 
     /**
-     * Gets the X position of the object
-     * @return x position of the object
+     * Visszaadja az X pozícióját az objektumnak (vízszintes elhelyezkedés, balra jobbra növekvő).
+     * @return X pozíció int-ként.
      */
     public int getX() {
         return  this.x;
@@ -49,8 +50,8 @@ public class Position {
     }
 
     /**
-     * Gets the Y position of the object
-     * @return y position of the object
+     * Visszaadja az Y pozícióját az objektumnak (függőleges elhelyezkedés, fentről lefele növekvő).
+     * @return Y pozíció int-ként.
      */
     public int getY() {
         return this.y;
@@ -61,8 +62,8 @@ public class Position {
     }
 
     /**
-     * Gets the Z position of the object
-     * @return z position of the object
+     * Visszaadja a Z pozícióját az objektumnak (minél magasabb az érték, annál később/fentebbre kell rajzolni).
+     * @return Z pozíció int-ként.
      */
     public int getZ() {
         return z;

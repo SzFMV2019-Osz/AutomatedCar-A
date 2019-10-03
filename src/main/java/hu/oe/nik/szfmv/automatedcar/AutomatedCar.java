@@ -36,16 +36,16 @@ public class AutomatedCar extends Car {
 
         switch (virtualFunctionBus.samplePacket.getKey()) {
             case 0:
-                this.setY(this.getPosY() - 5);
+                this.setPosY(this.getPosY() - 5);
                 break;
             case 1:
-                this.setX(this.getPosX() + 5);
+                this.setPosX(this.getPosX() + 5);
                 break;
             case 2:
-                this.setY(this.getPosY() + 5);
+                this.setPosY(this.getPosY() + 5);
                 break;
             case 3:
-                this.setX(this.getPosX() - 5);
+                this.setPosX(this.getPosX() - 5);
                 break;
             default:
                 break;
