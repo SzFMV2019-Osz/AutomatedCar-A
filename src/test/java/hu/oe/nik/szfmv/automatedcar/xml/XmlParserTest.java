@@ -92,17 +92,13 @@ public class XmlParserTest {
     }
 
     @Test
-    public void loadAndCheckObjects_WhenCalledWith_ExistingFileName() {
-        for (String fileName : existingFileNames) {
-            try {
-                World world = XmlParser.parseWorldObjects(fileName);
-                assertWorld(world);
-                List<IObject> result = world.getWorldObjects();
-                for (int i = 0; i < result.size(); i++) {
-                    assertPositionsAndType(result.get(i), expectedWorld.getWorldObjects().get(i));
-                }
-            } catch (NullPointerException e) {
-                // handle exception
+    public void worldParser_LoadAndCheckObjects_WhenCalledWith_ExistingFileName() {
+        for (String existingFileName : existingFileNames) {
+            World world = XmlParser.parseWorldObjects(existingFileName);
+            assertWorld(world);
+            List<IObject> result = expectedWorld.getWorldObjects();
+            for (int i = 0; i < result.size(); i++) {
+                assertPositionsAndType(world.getWorldObjects().get(i), expectedWorld.getWorldObjects().get(i));
             }
         }
     }
