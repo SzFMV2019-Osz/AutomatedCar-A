@@ -19,7 +19,6 @@ import java.util.List;
 public class WorldManager {
 
     private World currentWorld;
-
     private AutomatedCar automatedCar;
 
     /**
@@ -124,15 +123,15 @@ public class WorldManager {
      * Visszaadja az irányított autót
      * @return {@link AutomatedCar} referencia az irányíott autóval
      */
-    public AutomatedCar getAutomatedCar(){
+    public AutomatedCar getAutomatedCar() {
         return this.automatedCar;
     }
 
     /**
-     *  Beállítja az {@link AutomatedCar} referenciáját
+     * Beállítja az {@link AutomatedCar} referenciáját
      * @param car Irányított autó objektuma
      */
-    public void setAutomatedCar(AutomatedCar car){
+    public void setAutomatedCar(AutomatedCar car) {
         this.automatedCar = car;
     }
 }
