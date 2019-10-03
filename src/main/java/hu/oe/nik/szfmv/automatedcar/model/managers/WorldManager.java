@@ -16,6 +16,8 @@ public class WorldManager {
 
     private World currentWorld;
 
+    private AutomatedCar automatedCar;
+
     /**
      * Inicializálja a jelenlegi világot egy xml file alapján.
      * @param filepath Neve a világ fájlnak (pl.: test_world.xml).
@@ -57,6 +59,14 @@ public class WorldManager {
      * @return {@link AutomatedCar} referencia az irányíott autóval
      */
     public AutomatedCar getAutomatedCar(){
-        return this.currentWorld.getAutomatedCar();
+        return this.automatedCar;
+    }
+
+    /**
+     *  Beállítja az {@link AutomatedCar} referenciáját
+     * @param car Irányított autó objektuma
+     */
+    public void setAutomatedCar(AutomatedCar car){
+        this.automatedCar = car;
     }
 }
