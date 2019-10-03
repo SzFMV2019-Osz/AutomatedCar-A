@@ -35,7 +35,8 @@ public class Main {
 
     private void init() {
         // create the world
-        world = new World(5000, 3000);
+        world = new World(5000, 3000,"FF0000");
+        //world = XmlParser.parseWorldObjects("test_world.xml");
         // create an automated car
         world.addObject(new WorldObject(0, 0, "road_2lane_straight.png"));
         world.addObject(new WorldObject(0, -500, "road_2lane_90right.png"));

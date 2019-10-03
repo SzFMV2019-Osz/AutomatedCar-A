@@ -20,7 +20,7 @@ public class CourseDisplay extends JPanel {
 
     private final int width = 770;
     private final int height = 700;
-    private final int backgroundColor = 0xEEEEEE;
+    private int backgroundColor = -1;
     private Gui parent;
 
 
@@ -73,7 +73,10 @@ public class CourseDisplay extends JPanel {
      */
     public void drawWorld(World world) {
         paintComponent(getGraphics(), world);
-
+        if( backgroundColor==-1 ){
+            // TODO optimálissabban?
+            backgroundColor = Integer.decode(String.format("0x%s",world.getColor()));
+        }
     }
 
     /**
