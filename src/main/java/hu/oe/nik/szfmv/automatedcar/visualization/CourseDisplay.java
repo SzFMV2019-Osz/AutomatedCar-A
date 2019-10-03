@@ -4,8 +4,8 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
-import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,8 +84,8 @@ public class CourseDisplay extends JPanel {
     private int[] getCarOffset(AutomatedCar car) {
         int[] offset = new int[2];
 
-        offset[0] = (this.width / 2) - (car.getX() + (car.getWidth() / 2));
-        offset[1] = (this.height / 2) - (car.getY() + (car.getHeight() / 2));
+        offset[0] = (this.width / 2) - (car.getPosX() + (car.getWidth() / 2));
+        offset[1] = (this.height / 2) - (car.getPosY() + (car.getHeight() / 2));
 
         return offset;
     }
@@ -120,11 +120,12 @@ public class CourseDisplay extends JPanel {
 
         for (IObject object : world.getWorldObjects()) {
             AffineTransform t = new AffineTransform();
-            t.translate(object.getX() + offsets[0], object.getY() + offsets[1]);
+            t.translate(object.getPosX() + offsets[0], object.getPosY() + offsets[1]);
             g2d.drawImage(object.getImage(), t, this);
-
-            // todo: decide on how model will signal colors
-            viewer.DrawPolygon(object.getX()+ offsets[0], object.getY() + offsets[1], object.getWidth(), object.getHeight());
+            if (object.getPosZ() != 0) {
+                // todo: decide on how model will signal colors
+                viewer.DrawPolygon(object.getPosX() + offsets[0], object.getPosY() + offsets[1], object.getWidth(), object.getHeight());
+            }
         }
     }
 }

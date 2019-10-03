@@ -1,7 +1,5 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
-import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
-import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDebugColorable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
@@ -9,18 +7,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Object")
@@ -48,11 +40,7 @@ public class WorldObject implements IObject {
     @XmlTransient
     protected BufferedImage image;
     protected Color debugColor = Color.GREEN;
-
-
-    @XmlAttribute(name = "type", required = true)
-    protected String imageFileName;
-
+    
     public WorldObject() {
     }
 
