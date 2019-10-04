@@ -43,7 +43,7 @@ public class XmlParser {
          * csak nagyjából + 0,5 sec lenne a beolvasás ideje.
          */
         Properties props = System.getProperties();
-        props.setProperty("com.sun.xml.bind.v2.bytecode.ClassTailor.noOptimize", "true");
+        props.setProperty(Consts.PROP_KEY_XML_NO_OPTIMIZE, Consts.PROP_VALUE_XML_NO_OPTIMIZE);
     }
     
     /**
@@ -122,7 +122,9 @@ public class XmlParser {
 
     private static long getElapsedTimeAndResetStopWatch() {
         stopWatch.stop();
-        return stopWatch.getTime();
+        long elapsedTime = stopWatch.getTime();
+        stopWatch.reset();
+        return elapsedTime;
     }
     
     private static File getFileByName(String xmlFileName)

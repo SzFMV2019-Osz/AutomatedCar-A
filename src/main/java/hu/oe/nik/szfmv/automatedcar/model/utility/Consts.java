@@ -38,4 +38,9 @@ public final class Consts {
     public static final String XML_MS_DURATION_MESSAGE = "Az XML feldolgozása {0} ms-et vett igénybe.";
     public static final String XML_UNKNOWN_TYPE = "Ismeretlen típus található az XML-ben: {0}";
     public static final String XML_WORLD_OBJECT_NUMBER = "Beolvasott WorldObjectek száma: {0}";
+    
+    
+    // --- Properties
+    public static final String PROP_KEY_XML_NO_OPTIMIZE = "com.sun.xml.bind.v2.bytecode.ClassTailor.noOptimize";
+    public static final String PROP_VALUE_XML_NO_OPTIMIZE = "true";
 }
