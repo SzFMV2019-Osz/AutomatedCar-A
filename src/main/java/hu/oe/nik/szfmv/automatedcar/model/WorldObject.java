@@ -30,6 +30,12 @@ public class WorldObject implements IObject {
     @XmlElement(name = "Position", required = true)
     protected Position position;
     
+    /**
+     * Forgatási pontot tárol, külön XML-ből jön, ezért tranziens.
+     */
+    @XmlTransient
+    protected Position referencePosition;
+    
     @XmlElement(name = "Transform", required = true)
     protected Transform transform;
     
@@ -150,6 +156,28 @@ public class WorldObject implements IObject {
     public BufferedImage getImage() {
         return this.image;
     }
+
+    @Override
+    public int getReferenceX()
+    {
+        return this.referencePosition.getX();
+    }
+
+    @Override
+    public int getReferenceY()
+    {
+        return this.referencePosition.getY();
+    }
+
+    /**
+     * Teszthez kell csak, nem használható!
+     */
+    public void setReferencePosition(Position referencePosition)
+    {
+        this.referencePosition = referencePosition;
+    }
+    
+    
 
     public void initImage() {
         try {
