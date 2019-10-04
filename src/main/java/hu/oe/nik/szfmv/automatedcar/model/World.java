@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * World objektum ami tartalmazza a világ modeljét.
+ * World objektum, ami tartalmazza a világ modelljét.
  */
 @XmlRootElement(name = "Scene")
 @XmlAccessorType(XmlAccessType.FIELD)

@@ -34,6 +34,9 @@ public class XmlParser {
      *
      * Ugyanezt az {@link Unmarshaller}-el nem tehetjük meg (nem thread-safe).
      * Szerencsére létrehozása kevésbé is költséges.
+     * 
+     * @TODO: elgondolkozni és utánanézni, hogy érdemes-e hardcode-olni az instanceokat
+     *       (sebesség vs memóriagazdálkodás? esetleg a beolvasás végén invalidálni?)
      */
     private static Map<Class<?>, JAXBContext> jaxbInstanceCache = new HashMap<>();
 
@@ -109,7 +112,7 @@ public class XmlParser {
     }
 
     private static String getXmlNameWithExtension(String fileName) {
-        if (! StringUtils.endsWith(fileName, Consts.SUFFIX_XML)) {
+        if ( !StringUtils.endsWith(fileName, Consts.SUFFIX_XML)) {
             fileName += Consts.SUFFIX_XML;
         }
         return fileName;
@@ -127,8 +130,8 @@ public class XmlParser {
         return elapsedTime;
     }
     
-    private static File getFileByName(String xmlFileName)
-    {
+    private static File getFileByName(String xmlFileName) {
+        // @TODO: Fájl betöltést kiemelni a ModelCommonUtilba
         return new File(ClassLoader.getSystemResource(xmlFileName).getFile());
     }
 

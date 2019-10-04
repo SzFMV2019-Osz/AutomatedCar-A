@@ -66,6 +66,8 @@ public class References {
      * Akkor hívódik meg, ha már az összes Image-t beolvastuk az XML-ből.
      * Híváskor átpakoljuk az elemeket egy map-be, mert azzal később kényelmesebb lesz dolgozni,
      * a listát pedig kinullázuk, mert nem lesz rá szükség többé.
+     * 
+     * @TODO: megmondani a JAXB-nek, hogy map-be töltse be az objektumokat
      *
      * @param u unmarshaller
      * @param parent parent element

@@ -61,6 +61,7 @@ public class WorldObject implements IObject {
      * @param y Objektum Y pozíciója.
      * @param imageFileName Objektum fájlneve.
      */
+    @Deprecated
     public WorldObject(int x, int y, String imageFileName) {
         this.position = new Position(x, y);
         this.transform = new Transform();
@@ -174,8 +175,7 @@ public class WorldObject implements IObject {
         this.referencePosition = referencePosition;
     }
     
-    
-
+    @Deprecated
     public void initImage() {
         try {
             image = ImageIO.read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));
