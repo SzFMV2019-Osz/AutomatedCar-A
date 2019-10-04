@@ -169,9 +169,6 @@ public class WorldObject implements IObject {
         return this.referencePosition.getY();
     }
 
-    /**
-     * Teszthez kell csak, nem használható!
-     */
     public void setReferencePosition(Position referencePosition)
     {
         this.referencePosition = referencePosition;
