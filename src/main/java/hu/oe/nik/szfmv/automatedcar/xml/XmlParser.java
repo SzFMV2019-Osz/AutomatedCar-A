@@ -72,7 +72,7 @@ public class XmlParser {
             logger.warn(Consts.ERROR_IN_PROCESSING + " " + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
             throw new NullPointerException(Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
         } catch (Exception ex) {
-            logger.error(MessageFormat.format(Consts.ERROR_IN_XML_PARSING, "world"), ex);
+            logger.error(MessageFormat.format(Consts.ERROR_IN_XML_PARSING, xmlFileName), ex);
         } finally {
             invalidateCache();
             logger.info(MessageFormat.format(Consts.XML_MS_DURATION_MESSAGE, getElapsedTimeAndResetStopWatch()));
@@ -103,7 +103,7 @@ public class XmlParser {
             logger.warn(Consts.ERROR_IN_PROCESSING + " " + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
             throw new NullPointerException(Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
         } catch (Exception ex) {
-            logger.error(MessageFormat.format(Consts.ERROR_IN_XML_PARSING, "references"), ex);
+            logger.error(MessageFormat.format(Consts.ERROR_IN_XML_PARSING, xmlFileName), ex);
         } finally {
             invalidateCache();
             logger.info(MessageFormat.format(Consts.XML_MS_DURATION_MESSAGE, getElapsedTimeAndResetStopWatch()));

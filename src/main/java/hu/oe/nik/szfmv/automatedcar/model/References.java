@@ -19,7 +19,7 @@ import org.apache.commons.lang3.tuple.Pair;
 /**
  * Referenciapontokat tároló objektum.
  * 
- * Arra szolgál, hogy a {@link World} objektumaihoz be tudjuk állítani a forgatási pontokat.
+ * Arra szolgál, hogy a {@link WorldObject}nek be tudjuk állítani a forgatási pontokat.
  * A referencia pontok és az objektumok közötti kapcsolatot a fájlnév határozza meg.
  */
 @XmlRootElement(name = "Images")

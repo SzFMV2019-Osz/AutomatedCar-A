@@ -22,7 +22,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class WorldManager {
 
-    private static final Logger logger = LogManager.getLogger();
     private World currentWorld;
     private AutomatedCar automatedCar;
 
@@ -37,12 +36,11 @@ public class WorldManager {
         currentWorld = XmlParser.parseWorldObjects(worldFileName);
         References refs = XmlParser.parseReferences(referenceFileName);
         
-        if (currentWorld != null && currentWorld.getWorldObjects() != null) {
+        if (currentWorld != null && currentWorld.getWorldObjects() != null && refs != null) {
             for (IObject iObject : currentWorld.getWorldObjects()) {
                 WorldObject wo = ((WorldObject)iObject);
                 Position pos = refs.getReference(wo.getImageFileName());
                 wo.setReferencePosition(pos);
-                logger.trace(wo.getImageFileName() + " -> X: " + pos.getX() + " | Y: " + pos.getY());
             }
         }
     }
