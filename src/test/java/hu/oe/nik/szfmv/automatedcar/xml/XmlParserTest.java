@@ -11,17 +11,16 @@ import hu.oe.nik.szfmv.automatedcar.model.Tree;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 public class XmlParserTest {
 
@@ -46,41 +45,49 @@ public class XmlParserTest {
         Road road = new Road();
         road.setPosition(createPosition(1700, 144));
         road.setZ(0);
+        road.setRotation(ModelCommonUtil.getRotationValue(0, 1, -1, 0));
         expectedWorld.getWorldObjects().add(road);
 
         ParkingSpace ps = new ParkingSpace();
         ps.setPosition(createPosition(470, 766));
         ps.setZ(0);
+        ps.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
         expectedWorld.getWorldObjects().add(ps);
 
         Crosswalk cw = new Crosswalk();
         cw.setPosition(createPosition(1495, 486));
         cw.setZ(0);
+        cw.setRotation(ModelCommonUtil.getRotationValue(0, -1, 1, 0));
         expectedWorld.getWorldObjects().add(cw);
 
         Sign sign = new Sign();
         sign.setPosition(createPosition(4039, 1431));
         sign.setZ(0);
+        sign.setRotation(ModelCommonUtil.getRotationValue(0, -1, 1, 0));
         expectedWorld.getWorldObjects().add(sign);
 
         Tree tree = new Tree();
         tree.setPosition(createPosition(169, 2454));
         tree.setZ(0);
+        tree.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
         expectedWorld.getWorldObjects().add(tree);
 
         Car car = new Car();
         car.setPosition(createPosition(356,1648));
         car.setZ(0);
+        car.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
         expectedWorld.getWorldObjects().add(car);
 
         ParkingBollard pb = new ParkingBollard();
         pb.setPosition(createPosition(581, 844));
         pb.setZ(0);
+        pb.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
         expectedWorld.getWorldObjects().add(pb);
 
         WorldObject wo = new WorldObject();
         wo.setPosition(createPosition(581, 844));
         wo.setZ(0);
+        wo.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
         expectedWorld.getWorldObjects().add(wo);
     }
 
@@ -94,17 +101,13 @@ public class XmlParserTest {
     }
 
     @Test
-    public void loadAndCheckObjects_WhenCalledWith_ExistingFileName() {
-        for (String fileName : existingFileNames) {
-            try {
-                World world = XmlParser.parseWorldObjects(fileName);
-                assertWorld(world);
-                List<WorldObject> result = world.getWorldObjects();
-                for (int i = 0; i < result.size(); i++) {
-                    assertPositionsAndType(result.get(i), expectedWorld.getWorldObjects().get(i));
-                }
-            } catch (NullPointerException e) {
-                // handle exception
+    public void worldParser_LoadAndCheckObjects_WhenCalledWith_ExistingFileName() {
+        for (String existingFileName : existingFileNames) {
+            World world = XmlParser.parseWorldObjects(existingFileName);
+            assertWorld(world);
+            List<IObject> result = expectedWorld.getWorldObjects();
+            for (int i = 0; i < result.size(); i++) {
+                assertPositionsAndType(world.getWorldObjects().get(i), expectedWorld.getWorldObjects().get(i));
             }
         }
     }
@@ -116,13 +119,13 @@ public class XmlParserTest {
         assertEquals(expectedWorld.getHeight(), world.getHeight());
     }
 
-    private void assertPositionsAndType(WorldObject objFromXml, WorldObject expected) {
+    private void assertPositionsAndType(IObject objFromXml, IObject expected) {
         assertEquals(expected.getClass().toString(), objFromXml.getClass().toString());
         assertEquals(expected.getPosX(), objFromXml.getPosX());
         assertEquals(expected.getPosY(), objFromXml.getPosY());
         assertEquals(expected.getPosZ(), objFromXml.getPosZ());
         assertEquals(expected.getRotation(), objFromXml.getRotation(), maxDelta);
-        if (StringUtils.equals(objFromXml.getImageFileName(), "unknown_type")) {
+        if (StringUtils.equals(((WorldObject)objFromXml).getImageFileName(), "unknown_type")) {
             assertNull(objFromXml.getImage());
         } else {
             assertNotNull(objFromXml.getImage());

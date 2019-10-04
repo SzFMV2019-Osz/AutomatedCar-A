@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -45,6 +46,7 @@ public class WorldObject implements IObject {
     protected String imageFileName;
 
     public WorldObject() {
+        this.transform = new Transform();
     }
 
     /**
@@ -170,7 +172,7 @@ public class WorldObject implements IObject {
         try {
             image = ModelCommonUtil.loadObjectImage(getImageFileName());
         } catch (Exception e) {
-            LOGGER.error(Consts.ERROR_COULDNT_LOAD_IMG_FILE, e);
+            LOGGER.error(MessageFormat.format(Consts.ERROR_COULDNT_LOAD_IMG_FILE, getImageFileName()));
         }
     }
 }

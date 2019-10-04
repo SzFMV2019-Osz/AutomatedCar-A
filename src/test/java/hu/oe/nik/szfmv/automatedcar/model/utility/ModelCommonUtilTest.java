@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
+import hu.oe.nik.szfmv.automatedcar.model.Position;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,6 +12,20 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class ModelCommonUtilTest {
+
+    Position pointA;
+    Position pointB;
+    Position pointC;
+    Position pointD;
+
+    @Before
+    public void init() {
+        pointA = new Position(-1,0);
+        pointB = new Position(1,-1);
+        pointC = new Position( 0, 1);
+        pointD = new Position(0,0);
+
+    }
 
     @Test
     public void matrixShouldRotate0Degrees() {
@@ -56,5 +72,43 @@ public class ModelCommonUtilTest {
     @Test
     public void loadNotExistingImage() {
         assertThrows(NullPointerException.class, () -> ModelCommonUtil.loadObjectImage("car_2"));
+    }
+
+    @Test
+    public void pointInTriangle() {
+        assertEquals(true, ModelCommonUtil.isPointInTriangle(pointA, pointB, pointC, pointD));
+    }
+
+    @Test
+    public void pointNotInTriangle() {
+        assertEquals(false, ModelCommonUtil.isPointInTriangle(pointA, pointC, pointD, pointB));
+    }
+
+    @Test
+    public void existingTopLeftPoint() {
+        Position point = ModelCommonUtil.getTopLeftPoint(pointC, pointD);
+        assertEquals(pointD.getX(), point.getX());
+        assertEquals(pointD.getY(), point.getY());
+    }
+
+    @Test
+    public void newTopLeftPoint() {
+        Position point = ModelCommonUtil.getTopLeftPoint(pointA, pointB);
+        assertEquals(-1, point.getX());
+        assertEquals(-1, point.getY());
+    }
+
+    @Test
+    public void existingBottomRightPoint() {
+        Position point = ModelCommonUtil.getBottomRightPoint(pointC, pointA);
+        assertEquals(pointC.getX(), point.getX());
+        assertEquals(pointC.getY(), point.getY());
+    }
+
+    @Test
+    public void newBottomRightPoint() {
+        Position point = ModelCommonUtil.getBottomRightPoint(pointB, pointC);
+        assertEquals(1, point.getX());
+        assertEquals(1, point.getY());
     }
 }

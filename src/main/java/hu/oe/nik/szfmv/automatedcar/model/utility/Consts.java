@@ -2,6 +2,11 @@ package hu.oe.nik.szfmv.automatedcar.model.utility;
 
 public final class Consts {
 
+    // --- Values
+
+    public static final double MIN_DEGREE = 0;
+    public static final double MAX_DEGREE = 360;
+
     // --- Resources
 
     public static final String SUFFIX_IMAGE = ".png";
@@ -18,13 +23,16 @@ public final class Consts {
 
     // --- Errors
 
-    public static final String ERROR_COULDNT_LOAD_IMG_FILE = "Nem sikerült a képfájl betöltése!";
+    public static final String ERROR_COULDNT_LOAD_IMG_FILE = "Nem sikerült a képfájl betöltése! Fájl neve: {0}";
     public static final String ERROR_IN_PROCESSING = "Hiba lépett fel feldolgozás közben!";
     public static final String ERROR_FILE_LIKELY_DOESNT_EXIST = "Valószínűleg nem létezik a fájl!";
     public static final String ERROR_IN_XML_PARSING = "Az XML parse-olása közben hiba lépett fel!";
+    public static final String ERROR_XML_WRITING_NOT_ALLOWED = "XML manipuláció/kiírás nem engedélyezett!";
+    public static final String ERROR_IN_WORLDOBJECT_PARSING = "A WorldObjectek parseolása közben hiba lépett fel!";
 
     // --- Messages
 
     public static final String XML_MS_DURATION_MESSAGE = "Az XML feldolgozása {0} ms-et vett igénybe.";
     public static final String XML_UNKNOWN_TYPE = "Ismeretlen típus található az XML-ben: {0}";
+    public static final String XML_WORLD_OBJECT_NUMBER = "Beolvasott WorldObjectek száma: {0}";
 }
