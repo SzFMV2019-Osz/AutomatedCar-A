@@ -45,9 +45,10 @@ public class References {
 
     /**
      * Megmondja, hogy a kapott képet mely ponton kell forgatni.
+     * XML-ből jön, számolást nem végzünk rajta.
      * 
      * @param fileName forgatandó kép neve, kiterjesztést nem muszáj adni (garantálja a ".png" végződést)
-     * @return Pair<Integer, Integer> X és Y pontok, itt kell forgatni a képet
+     * @return {@link Position} - X és Y pontok, itt kell forgatni a képet
      */
     public Position getReference(String fileName) {
         if ( !StringUtils.endsWith(fileName, Consts.SUFFIX_IMAGE)) {
