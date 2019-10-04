@@ -13,18 +13,22 @@ import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import java.util.ArrayList;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Properties;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class XmlParserTest {
 
@@ -114,6 +118,7 @@ public class XmlParserTest {
         expectedReferences.add(createReference("car_2_red", 51, 104));
     }
     
+    
     private Pair createReference(String fileName, int x, int y) {
         Position refs = createPosition(x, y);
         return new ImmutablePair<>(fileName, refs);
@@ -170,6 +175,18 @@ public class XmlParserTest {
         for (Pair<String, Position> expectedReference : expectedReferences) {
             String fileName = expectedReference.getKey();
             assertReferences(expectedReference.getValue(), referencesFromXml.getReference(fileName));
+        }
+    }
+    
+    @Test
+    public void xmlParserSettedProperty_NoOptimize_ToExpectedConstantValue_After_Parsing() {
+        Properties prop = System.getProperties();
+        String noOptProp = prop.getProperty(Consts.PROP_KEY_XML_NO_OPTIMIZE);
+        assertTrue("The no optimize property is null.", StringUtils.isNotBlank(noOptProp));
+        if (Boolean.parseBoolean(Consts.PROP_VALUE_XML_NO_OPTIMIZE)) {
+            assertTrue("The no optimize property is false.", Boolean.parseBoolean(noOptProp));
+        } else {
+            assertFalse("The no optimize property is true.", Boolean.parseBoolean(noOptProp));
         }
     }
     
