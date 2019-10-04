@@ -6,6 +6,7 @@ public final class Consts {
 
     public static final double MIN_DEGREE = 0;
     public static final double MAX_DEGREE = 360;
+    public static final String DEFAULT_VALUE_FOR_REFERENCE = "0";
 
     // --- Resources
 
