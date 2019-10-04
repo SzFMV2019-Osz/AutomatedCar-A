@@ -11,8 +11,9 @@ import hu.oe.nik.szfmv.automatedcar.model.Sign;
 import hu.oe.nik.szfmv.automatedcar.model.Tree;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
-import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import java.util.ArrayList;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -132,7 +133,7 @@ public class XmlParserTest {
     public void worldParser_LoadAndCheckObjects_WhenCalledWith_ExistingFileName() {
         World world = XmlParser.parseWorldObjects(existingFileNameForWorldParser);
         assertWorld(world);
-        List<WorldObject> result = expectedWorld.getWorldObjects();
+        List<IObject> result = expectedWorld.getWorldObjects();
         for (int i = 0; i < result.size(); i++) {
             assertPositionsAndType(world.getWorldObjects().get(i), expectedWorld.getWorldObjects().get(i));
         }
@@ -145,13 +146,13 @@ public class XmlParserTest {
         assertEquals(expectedWorld.getHeight(), world.getHeight());
     }
 
-    private void assertPositionsAndType(WorldObject objFromXml, WorldObject expected) {
+    private void assertPositionsAndType(IObject objFromXml, IObject expected) {
         assertEquals(expected.getClass().toString(), objFromXml.getClass().toString());
         assertEquals(expected.getPosX(), objFromXml.getPosX());
         assertEquals(expected.getPosY(), objFromXml.getPosY());
         assertEquals(expected.getPosZ(), objFromXml.getPosZ());
         assertEquals(expected.getRotation(), objFromXml.getRotation(), maxDelta);
-        if (StringUtils.equals(objFromXml.getImageFileName(), "unknown_type")) {
+        if (StringUtils.equals(((WorldObject)objFromXml).getImageFileName(), "unknown_type")) {
             assertNull(objFromXml.getImage());
         } else {
             assertNotNull(objFromXml.getImage());
