@@ -1,5 +1,8 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
+import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
+import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,6 +16,9 @@ public class Dashboard extends JPanel {
     private final int backgroundColor = 0x888888;
 
     Gui parent;
+
+    private Turn_Signal left_Turn_Signal;
+    private Turn_Signal right_Turn_Signal;
 
     private JLabel gearShiftText = new JLabel("Gear:");
     private JLabel gasPedalText = new JLabel("Gas Pedal");
@@ -32,10 +38,37 @@ public class Dashboard extends JPanel {
     private JProgressBar gasProgressBar = new JProgressBar(0, 100);
     private JProgressBar breakProgressBar = new JProgressBar(0, 100);
 
+    private OMeter speedoMeter;
+    private OMeter RPMmeter;
+
+    private void CreateSpeedometer() {
+
+        speedoMeter = new OMeter();
+        speedoMeter.setPosition(new Point(0, 0));
+        speedoMeter.setSize(new Point(100, 100));
+        speedoMeter.setPerf_Percentage(0);
+        speedoMeter.setBounds(10, 15, 130, 130);
+    }
+
+    private void CreateRPMmeter() {
+        RPMmeter = new OMeter();
+        RPMmeter.setPosition(new Point(0, 0));
+        RPMmeter.setSize(new Point(80, 80));
+        RPMmeter.setPerf_Percentage(0);
+        RPMmeter.setBounds(120, 25, 130, 130);
+    }
+
+    private void OMeterPlacing() {
+        CreateRPMmeter();
+        CreateSpeedometer();
+
+        add(speedoMeter);
+        add(RPMmeter);
+    }
 
     private void TextPlacing() {
 
-        gearShiftText.setBounds(100, 150, 40,   15);
+        gearShiftText.setBounds(100, 150, 40, 15);
         currentGearText.setBounds(135, 150, 10, 15);
         accMenuText.setBounds(10, 190, 60, 15);
         gasPedalText.setBounds(10, 390, 100, 15);
@@ -65,19 +98,30 @@ public class Dashboard extends JPanel {
 
     }
 
+    private void Turn_SignalPlacing() {
+        left_Turn_Signal = new Turn_Signal(10, 140, true);
+        right_Turn_Signal = new Turn_Signal(190, 140, false);
+
+        add(left_Turn_Signal);
+        add(right_Turn_Signal);
+    }
+
     private void ProgressBarPlacing() {
         gasProgressBar.setBounds(10, 405, 200, 15);
         breakProgressBar.setBounds(10, 435, 200, 15);
         gasProgressBar.setStringPainted(true);
         breakProgressBar.setStringPainted(true);
+
         add(gasProgressBar);
         add(breakProgressBar);
     }
 
 
     private void placeElements() {
+        Turn_SignalPlacing();
         ProgressBarPlacing();
         TextPlacing();
+        OMeterPlacing();
     }
 
     private Thread timer = new Thread() {
@@ -105,7 +149,6 @@ public class Dashboard extends JPanel {
         setBounds(770, 0, width, height);
 
         parent = pt;
-
         placeElements();
         timer.start();
     }
