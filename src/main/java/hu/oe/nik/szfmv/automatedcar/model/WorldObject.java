@@ -205,12 +205,11 @@ public class WorldObject implements IObject {
             image = ModelCommonUtil.loadObjectImage(getImageFileName());
             this.width = image.getWidth();
             this.height = image.getHeight();
-
-            initShape();
-
         } catch (Exception e) {
             LOGGER.error(MessageFormat.format(Consts.ERROR_COULDNT_LOAD_IMG_FILE, getImageFileName()));
         }
+
+        initShape();
     }
 
     /** {@inheritDoc}
@@ -220,10 +219,9 @@ public class WorldObject implements IObject {
     }
 
     private AffineTransform getShapeTransfrom(){
-        //TODO: kiegészíteni referencia koordinátákkal
         AffineTransform shapeTransform = new AffineTransform();
         shapeTransform.rotate(this.getRotation());
-        shapeTransform.translate(this.getPosX(), this.getPosX());
+        shapeTransform.translate(this.getPosX() + this.getReferenceX(), this.getPosX() + this.getReferenceY());
 
         return shapeTransform;
     }
@@ -231,7 +229,7 @@ public class WorldObject implements IObject {
     /**
      * {@inheritDoc}
      */
-    public void initShape(){
+    public void initShape() {
         int x = 0 - (width / 2);
         int y = 0 - (height / 2);
         this.polygon = new Rectangle(x, y, this.width, this.height);
