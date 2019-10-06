@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IBackground;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
+import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 
 import javax.xml.bind.Unmarshaller;
 import java.awt.Rectangle;
@@ -30,10 +31,10 @@ public class ParkingSpace extends WorldObject implements IStatic, IBackground {
     @Override
     public void initShape() {
         switch (this.imageFileName) {
-            case "parking_space_parallel":
+            case Consts.RES_IDENTIFIER_PARKINGSPACE_PARALLEL:
                 this.initParallelShape();
                 break;
-            case "parking_90":
+            case Consts.RES_IDENTIFIER_PARKINGSPACE_90:
                 break;
         }
     }

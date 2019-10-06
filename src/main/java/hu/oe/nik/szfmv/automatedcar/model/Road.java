@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IBackground;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
+import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 
 import java.awt.Shape;
 import java.awt.Rectangle;
@@ -22,25 +23,25 @@ public class Road extends WorldObject implements IStatic, IBackground {
     @Override
     public void initShape() {
         switch (this.imageFileName) {
-            case "road_2lane_straight":
+            case Consts.RES_IDENTIFIER_ROAD_STRAIGHT:
                 this.RoadShapeStraight();
                 break;
-            case "road_2lane_90left":
+            case Consts.RES_IDENTIFIER_ROAD_90_LEFT:
                 this.RoadShape90Left();
                 break;
-            case "road_2lane_90right":
+            case Consts.RES_IDENTIFIER_ROAD_90_RIGHT:
                 this.RoadShape90Right();
                 break;
-            case "road_2lane_45left":
+            case Consts.RES_IDENTIFIER_ROAD_45_LEFT:
                 this.RoadShape45Left();
                 break;
-            case "road_2lane_45right":
+            case Consts.RES_IDENTIFIER_ROAD_45_RIGHT:
                 this.RoadShape45Right();
                 break;
-            case "road_2lane_tjunctionleft":
+            case Consts.RES_IDENTIFIER_ROAD_T_JUNCTION_LEFT:
                 this.RoadShapeTJunctionLeft();
                 break;
-            case "road_2lane_tjunctionright":
+            case Consts.RES_IDENTIFIER_ROAD_T_JUNCTION_RIGHT:
                 this.RoadShapeTJunctionRight();
                 break;
             default:
