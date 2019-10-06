@@ -15,11 +15,12 @@ import java.awt.geom.Area;
 public class Road extends WorldObject implements IStatic, IBackground {
 
     private final int BORDER = 10;
+    private final int ROAD_WIDTH = 325;
     /**
      * {@inheritDoc}
      */
     @Override
-    public void initShape(){
+    public void initShape() {
         switch (this.imageFileName) {
             case "road_2lane_straight":
                 this.RoadShapeStraight();
@@ -36,19 +37,25 @@ public class Road extends WorldObject implements IStatic, IBackground {
             case "road_2lane_45right":
                 this.RoadShape45Right();
                 break;
+            case "road_2lane_tjunctionleft":
+                this.RoadShapeTJunctionLeft();
+                break;
+            case "road_2lane_tjunctionright":
+                this.RoadShapeTJunctionRight();
+                break;
             default:
                 this.RoadShapeStraight();
                 break;
         }
     }
 
-    private void RoadShapeStraight(){
+    private void RoadShapeStraight() {
         this.polygon = new Rectangle(BORDER, 0, this.width - BORDER, this.height);
         Rectangle line = new Rectangle(this.width / 2 - 1, 0, 2, this.height);
         ((Rectangle)this.polygon).add(line);
     }
 
-    private void RoadShape90Left(){
+    private void RoadShape90Left() {
         Polygon smallArc = this.CreateSmall90Arc();
         Polygon middleArc = this.CreateMiddle90Arc();
         Polygon bigArc = this.CreateBig90Arc();
@@ -58,12 +65,12 @@ public class Road extends WorldObject implements IStatic, IBackground {
         ((Area) this.polygon).add(new Area(smallArc));
     }
 
-    private void RoadShape90Right(){
+    private void RoadShape90Right() {
         this.RoadShape90Left();
         this.polygon = MirrorAlongX(525, this.polygon);
     }
 
-    private void RoadShape45Left(){
+    private void RoadShape45Left() {
         Polygon smallArc = this.CreateSmall45Arc();
         Polygon middleArc = this.CreateMiddle45Arc();
         Polygon bigArc = this.CreateBig45Arc();
@@ -73,37 +80,50 @@ public class Road extends WorldObject implements IStatic, IBackground {
         ((Area) this.polygon).add(new Area(smallArc));
     }
 
-    private void RoadShape45Right(){
+    private void RoadShape45Right() {
         this.RoadShape45Left();
-        this.polygon = MirrorAlongX(525, this.polygon);
+        this.polygon = MirrorAlongX(401, this.polygon);
     }
 
-    private Polygon CreateSmall90Arc(){
+    private Polygon CreateSmall90Arc() {
         return new Polygon(new int[]{0, -27, -80, -187}, new int[]{0, -100, -150, -187}, 4);
     }
 
-    private Polygon CreateMiddle90Arc(){
+    private Polygon CreateMiddle90Arc() {
         return new Polygon(new int[]{163, 138, 68, -41, -187}, new int[]{0, -135, -240, -320, -350}, 5);
     }
 
-    private Polygon CreateBig90Arc(){
+    private Polygon CreateBig90Arc() {
         return new Polygon(new int[]{323, 303, 233, 126, -26, -187}, new int[]{0, -157, -293, -407, -487, -512}, 6);
     }
 
-    private Polygon CreateSmall45Arc(){
+    private Polygon CreateSmall45Arc() {
         return new Polygon(new int[]{12, 0, -41}, new int[]{0, -73, -131}, 3);
     }
 
-    private Polygon CreateMiddle45Arc(){
+    private Polygon CreateMiddle45Arc() {
         return new Polygon(new int[]{176, 162, 132, 74}, new int[]{0, -97, -169, -247}, 4);
     }
 
-    private Polygon CreateBig45Arc(){
+    private Polygon CreateBig45Arc() {
         return new Polygon(new int[]{338, 321, 275, 189}, new int[]{0, -131, -247, -360}, 4);
     }
 
-    private static Shape MirrorAlongX(double x, Shape shape)
-    {
+    private void RoadShapeTJunctionRight() {
+        this.polygon = new Rectangle(BORDER, 0, ROAD_WIDTH, this.height);
+        Rectangle line = new Rectangle(this.width / 2 - 1, 0, 2, this.height);
+        Rectangle secondRoad = new Rectangle(BORDER + ROAD_WIDTH, (this.height / 2) - (ROAD_WIDTH / 2), this.width - (BORDER + ROAD_WIDTH), ROAD_WIDTH);
+        ((Rectangle)this.polygon).add(line);
+        ((Rectangle)this.polygon).add((secondRoad));
+    }
+
+    private void RoadShapeTJunctionLeft() {
+        this.RoadShapeTJunctionLeft();
+        this.polygon = MirrorAlongX(875, this.polygon);
+    }
+
+
+    private static Shape MirrorAlongX(double x, Shape shape) {
         AffineTransform at = new AffineTransform();
         at.translate(x, 0);
         at.scale(-1, 1);
