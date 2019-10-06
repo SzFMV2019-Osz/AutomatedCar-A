@@ -127,7 +127,8 @@ public class CourseDisplay extends JPanel {
                 refPoint = new Point(0,0);
             }
             AffineTransform t = new AffineTransform();
-            t.translate(object.getX() + offsets[0], object.getY() + offsets[1]);
+            t.translate(object.getPosX() - refPoint.getX() + offsets[0], object.getPosY() - refPoint.getY()+ offsets[1]);
+            t.rotate(Math.toRadians(-object.getRotation()),refPoint.getX(),refPoint.getY());
             g2d.drawImage(object.getImage(), t, this);
 
             // todo: decide on how model will signal colors
