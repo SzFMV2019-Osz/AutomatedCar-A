@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Powertrain extends SystemComponent implements IPowertrain {
+    private static final int RPM_CONSTANT = 60;
     private static final Vec2f NULL_VECTOR = Vec2f.constant(0, 0);
     private static final Vec2f FORWARD_VECTOR = Vec2f.constant(0, 1);
     private static final Vec2f BACKWARD_VECTOR = Vec2f.constant(0, -1);
@@ -57,5 +58,11 @@ public class Powertrain extends SystemComponent implements IPowertrain {
                 virtualFunctionBus.powertrainPacket.setRPM((int) INSIDE_GEAR_SHIFT_LIMITS.get(currentInsideGearShift).getKey());
             }
         }
+    }
+
+    public void calculateRPM(int throttle, GearShift gearShift) {
+        getCurrentInsideGearShift(gearShift);
+        virtualFunctionBus.powertrainPacket.setRPM((int) (throttle * RPM_CONSTANT * GEAR_RATIOS.get(currentInsideGearShift)));
+        getCurrentInsideGearShift(gearShift);
     }
 }
