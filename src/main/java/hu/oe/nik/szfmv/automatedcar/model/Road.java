@@ -17,6 +17,7 @@ public class Road extends WorldObject implements IStatic, IBackground {
 
     private final int BORDER = 10;
     private final int ROAD_WIDTH = 325;
+
     /**
      * {@inheritDoc}
      */
@@ -44,6 +45,7 @@ public class Road extends WorldObject implements IStatic, IBackground {
             case Consts.RES_IDENTIFIER_ROAD_T_JUNCTION_RIGHT:
                 this.RoadShapeTJunctionRight();
                 break;
+                // TODO: implement other road shapes
             default:
                 this.RoadShapeStraight();
                 break;
