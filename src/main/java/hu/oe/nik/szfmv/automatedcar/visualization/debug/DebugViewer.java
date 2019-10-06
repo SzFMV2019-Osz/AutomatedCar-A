@@ -69,4 +69,14 @@ public class DebugViewer {
             graphics2D.drawRect(x, y, width, height);
         }
     }
+
+
+    public void DrawSensorTriangle(int aX, int aY, int bX, int bY, int cX, int cY, Color color){
+        if (debuggerSwitchedOn){
+            graphics2D.setColor(color);
+            graphics2D.drawLine(aX, aY, bX, bY);
+            graphics2D.drawLine(aX, aY, cX, cY);
+            graphics2D.drawLine(bX, bY, cX, cY);
+        }
+    }
 }
