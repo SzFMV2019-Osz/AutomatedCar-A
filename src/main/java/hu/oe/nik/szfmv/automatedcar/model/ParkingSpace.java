@@ -35,7 +35,9 @@ public class ParkingSpace extends WorldObject implements IStatic, IBackground {
                 this.initParallelShape();
                 break;
             case Consts.RES_IDENTIFIER_PARKINGSPACE_90:
-                break;
+                // TODO: implement parking space 90
+                throw new UnsupportedOperationException("Not implemented yet");
+                //break;
         }
     }
 
