@@ -29,25 +29,25 @@ import javax.xml.bind.annotation.XmlType;
 public class WorldObject implements IObject {
 
     private static final Logger LOGGER = LogManager.getLogger();
-    
+
     @XmlElement(name = "Position", required = true)
     protected Position position;
-    
+
     /**
      * Forgatási pontot tárol, külön XML-ből jön, ezért tranziens.
      */
     @XmlTransient
     protected Position referencePosition;
-    
+
     @XmlElement(name = "Transform", required = true)
     protected Transform transform;
-    
+
     @XmlTransient
     protected int width;
-    
+
     @XmlTransient
     protected int height;
-    
+
     @XmlTransient
     protected BufferedImage image;
 
@@ -63,8 +63,9 @@ public class WorldObject implements IObject {
 
     /**
      * Konstruktor manuális létrehozáshoz.
-     * @param x Objektum X pozíciója.
-     * @param y Objektum Y pozíciója.
+     *
+     * @param x             Objektum X pozíciója.
+     * @param y             Objektum Y pozíciója.
      * @param imageFileName Objektum fájlneve.
      */
     @Deprecated
@@ -72,36 +73,44 @@ public class WorldObject implements IObject {
         this.position = new Position(x, y);
         this.transform = new Transform();
         this.imageFileName = imageFileName;
-        initImage();
-        initShape();
+        this.initImage();
+        this.initShape();
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public int getPosX() {
         return this.position.getX();
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      */
     public void setPosX(int x) {
         this.position.setX(x);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public int getPosY() {
         return this.position.getY();
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      */
     public void setPosY(int y) {
         this.position.setY(y);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public int getPosZ() {
         return this.position.getZ();
     }
@@ -110,27 +119,32 @@ public class WorldObject implements IObject {
         this.position.setZ(z);
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public int getWidth() {
-        return width;
+        return this.width;
     }
 
     public void setWidth(int width) {
         this.width = width;
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      */
+    @Override
     public int getHeight() {
-        return height;
+        return this.height;
     }
 
     public void setHeight(int height) {
         this.height = height;
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      */
     @Override
     public double getRotation() {
@@ -139,6 +153,7 @@ public class WorldObject implements IObject {
 
     /**
      * <b>Nem használható, csak Unit tesztelés miatt kell!<b/>
+     *
      * @param rotation rotation of the object
      */
     public void setRotation(double rotation) {
@@ -147,6 +162,7 @@ public class WorldObject implements IObject {
 
     /**
      * <b>Nem használható, csak Unit tesztelés miatt kell!<b/>
+     *
      * @param position of the object
      */
     public void setPosition(Position position) {
@@ -154,40 +170,38 @@ public class WorldObject implements IObject {
     }
 
     public String getImageFileName() {
-        return imageFileName;
+        return this.imageFileName;
     }
 
     public void setImageFileName(String imageFileName) {
         this.imageFileName = imageFileName;
     }
 
+    @Override
     public BufferedImage getImage() {
         return this.image;
     }
 
     @Override
-    public int getReferenceX()
-    {
+    public int getReferenceX() {
         return this.referencePosition.getX();
     }
 
     @Override
-    public int getReferenceY()
-    {
+    public int getReferenceY() {
         return this.referencePosition.getY();
     }
 
-    public void setReferencePosition(Position referencePosition)
-    {
+    public void setReferencePosition(Position referencePosition) {
         this.referencePosition = referencePosition;
     }
-    
+
     @Deprecated
     public void initImage() {
         try {
-            image = ImageIO.read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));
-            this.width = image.getWidth();
-            this.height = image.getHeight();
+            this.image = ImageIO.read(new File(ClassLoader.getSystemResource(this.imageFileName).getFile()));
+            this.width = this.image.getWidth();
+            this.height = this.image.getHeight();
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         }
@@ -197,28 +211,30 @@ public class WorldObject implements IObject {
      * JAXB unmarshaller event listenerje.
      * Az objektum felépítése után hívódik meg, a kép betöltéséért felel.
      *
-     * @param u unmarshaller
+     * @param u      unmarshaller
      * @param parent JAXBElement
      */
     public void afterUnmarshal(Unmarshaller u, Object parent) {
         try {
-            image = ModelCommonUtil.loadObjectImage(getImageFileName());
-            this.width = image.getWidth();
-            this.height = image.getHeight();
+            this.image = ModelCommonUtil.loadObjectImage(this.getImageFileName());
+            this.width = this.image.getWidth();
+            this.height = this.image.getHeight();
         } catch (Exception e) {
-            LOGGER.error(MessageFormat.format(Consts.ERROR_COULDNT_LOAD_IMG_FILE, getImageFileName()));
+            LOGGER.error(MessageFormat.format(Consts.ERROR_COULDNT_LOAD_IMG_FILE, this.getImageFileName()));
         }
 
-        initShape();
+        this.initShape();
     }
 
-    /** {@inheritDoc}
+    /**
+     * {@inheritDoc}
      */
-    public Shape getPolygon(){
+    @Override
+    public Shape getPolygon() {
         return this.getShapeTransfrom().createTransformedShape(this.polygon);
     }
 
-    private AffineTransform getShapeTransfrom(){
+    private AffineTransform getShapeTransfrom() {
         AffineTransform shapeTransform = new AffineTransform();
         shapeTransform.rotate(this.getRotation());
         shapeTransform.translate(this.getPosX() + this.getReferenceX(), this.getPosX() + this.getReferenceY());
@@ -230,8 +246,8 @@ public class WorldObject implements IObject {
      * {@inheritDoc}
      */
     public void initShape() {
-        int x = 0 - (width / 2);
-        int y = 0 - (height / 2);
+        int x = 0 - (this.width / 2);
+        int y = 0 - (this.height / 2);
         this.polygon = new Rectangle(x, y, this.width, this.height);
     }
 }

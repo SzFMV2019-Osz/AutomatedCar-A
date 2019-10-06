@@ -24,7 +24,6 @@ public class Sign extends WorldObject implements IStatic, ICrashable {
         this.position.setZ(3);
     }
 
-
     /**
      * {@inheritDoc}
      */
