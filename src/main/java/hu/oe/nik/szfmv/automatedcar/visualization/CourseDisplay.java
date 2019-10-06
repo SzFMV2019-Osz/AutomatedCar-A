@@ -116,8 +116,16 @@ public class CourseDisplay extends JPanel {
         int[] offsets = getCarOffset(getCarObject(world.getWorldObjects()));
 
         DebugViewer viewer = new DebugViewer(g2d);
-
-        for (WorldObject object : world.getWorldObjects()) {
+        AutomatedCar car = world.getAutomatedCar();
+        for (IObject object : world.getAllObjectsInRectangle(
+                new Position(0,0),
+                new Position(this.world.getWidth(),this.world.getHeight()))) {
+            Point2D refPoint;
+            try {
+                refPoint = new Point(object.getReferenceX(), object.getReferenceY());
+            } catch (NullPointerException e){
+                refPoint = new Point(0,0);
+            }
             AffineTransform t = new AffineTransform();
             t.translate(object.getX() + offsets[0], object.getY() + offsets[1]);
             g2d.drawImage(object.getImage(), t, this);
@@ -125,6 +133,13 @@ public class CourseDisplay extends JPanel {
             // todo: decide on how model will signal colors
             viewer.DrawPolygon(object.getX()+ offsets[0], object.getY() + offsets[1], object.getWidth(), object.getHeight());
         }
+
+        // Draw car
+
+        AffineTransform t1 = new AffineTransform();
+        t1.translate(car.getPosX()+ offsets[0], car.getPosY()+ offsets[1]);
+        g2d.drawImage(car.getImage(), t1, this);
+        t1.rotate(Math.toRadians(car.getRotation()));
         viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
 
     }
