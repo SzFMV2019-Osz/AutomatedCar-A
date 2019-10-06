@@ -19,8 +19,9 @@ public class CourseDisplay extends JPanel {
 
     private final int width = 770;
     private final int height = 700;
-    private final int backgroundColor = 0xEEEEEE;
+    private int backgroundColor = 0xEEEEEE;
     private Gui parent;
+    private IWorld world;
 
 
     /**
@@ -43,7 +44,7 @@ public class CourseDisplay extends JPanel {
      * @param g     {@link Graphics} object that can draw to the canvas
      * @param world {@link World} object that describes the virtual world
      */
-    private void paintComponent(Graphics g, World world) {
+    private void paintComponent(Graphics g, WorldManager world) {
 
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
     }
@@ -54,8 +55,8 @@ public class CourseDisplay extends JPanel {
      * @param world {@link World} object that describes the virtual world
      * @return the ready to render doubleBufferedScreen
      */
-    private BufferedImage renderDoubleBufferedScreen(World world) {
-        BufferedImage doubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    private BufferedImage renderDoubleBufferedScreen(WorldManager world) {
+        BufferedImage doubleBufferedScreen = new BufferedImage(this.world.getWidth(), this.world.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) doubleBufferedScreen.getGraphics();
         Rectangle r = new Rectangle(0, 0, width, height);
         g2d.setPaint(new Color(backgroundColor));
@@ -70,7 +71,9 @@ public class CourseDisplay extends JPanel {
      * Draw objects from the world.
      * @param world World object.
      */
-    public void drawWorld(World world) {
+    public void drawWorld(WorldManager world) {
+        this.world = world.getWorld();
+        this.backgroundColor = Integer.valueOf(this.world.getColor().replace("#","").toUpperCase(),16);
         paintComponent(getGraphics(), world);
 
     }
@@ -112,8 +115,8 @@ public class CourseDisplay extends JPanel {
      * @param g2d Buffered image.
      * @param world World object which will be drawn.
      */
-    private void drawObjects(Graphics2D g2d, World world) {
-        int[] offsets = getCarOffset(getCarObject(world.getWorldObjects()));
+    private void drawObjects(Graphics2D g2d, WorldManager world) {
+        int[] offsets = getCarOffset(world.getAutomatedCar());
 
         DebugViewer viewer = new DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
@@ -140,7 +143,7 @@ public class CourseDisplay extends JPanel {
         AffineTransform t1 = new AffineTransform();
         t1.translate(car.getPosX()+ offsets[0], car.getPosY()+ offsets[1]);
         g2d.drawImage(car.getImage(), t1, this);
-        t1.rotate(Math.toRadians(car.getRotation()));
+        t1.rotate(Math.toRadians(car.getRotation()),offsets[0],offsets[1]);
         viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
 
     }
