@@ -118,7 +118,7 @@ public class Road extends WorldObject implements IStatic, IBackground {
     }
 
     private void RoadShapeTJunctionLeft() {
-        this.RoadShapeTJunctionLeft();
+        this.RoadShapeTJunctionRight();
         this.polygon = MirrorAlongX(875, this.polygon);
     }
 
