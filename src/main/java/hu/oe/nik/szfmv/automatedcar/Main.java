@@ -40,9 +40,10 @@ public class Main {
     private void loop() {
         while (true) {
             try {
-                car.drive();
-                window.getCourseDisplay().drawWorld(world);
-//                window.getCourseDisplay().refreshFrame();
+                worldManager.getAutomatedCar().drive();
+                // TODO IWorld-öt használjon a drawWorld
+                window.getCourseDisplay().drawWorld(worldManager);
+                // TODO window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
                 LOGGER.error(e.getMessage());
