@@ -9,11 +9,12 @@ public class OMeter extends JPanel {
     int perf_percentage;
     Point position;
     Point size;
+    Color Background=new Color(0x888888);
 
     public void setPerf_Percentage(int perf_Percentage) {
         this.perf_percentage = perf_Percentage;
+        repaint();
     }
-
     public void setSize(Point size) {
         this.size = size;
     }
@@ -25,6 +26,10 @@ public class OMeter extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
+
+        super.paintComponent(g);
+        g.setColor(Background);
+        g.fillRect(0,0,110,110);
 
         g.drawOval(position.x, position.y, size.x, size.y);
         g.setColor(Color.WHITE);

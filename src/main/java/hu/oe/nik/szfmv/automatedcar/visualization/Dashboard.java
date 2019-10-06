@@ -56,7 +56,7 @@ public class Dashboard extends JPanel {
         speedoMeter.setPosition(new Point(0, 0));
         speedoMeter.setSize(new Point(100, 100));
         speedoMeter.setPerf_Percentage(0);
-        speedoMeter.setBounds(10, 15, 130, 130);
+        speedoMeter.setBounds(10, 15, 110, 110);
     }
 
     private void CreateRPMmeter() {
@@ -64,7 +64,7 @@ public class Dashboard extends JPanel {
         RPMmeter.setPosition(new Point(0, 0));
         RPMmeter.setSize(new Point(80, 80));
         RPMmeter.setPerf_Percentage(0);
-        RPMmeter.setBounds(120, 25, 130, 130);
+        RPMmeter.setBounds(120, 25, 110, 110);
     }
 
     private void OMeterPlacing() {
@@ -161,6 +161,7 @@ public class Dashboard extends JPanel {
             while (true) {
 
                 try {
+                    EventHandling();
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {
                 }
@@ -168,6 +169,18 @@ public class Dashboard extends JPanel {
             }
         }
     };
+
+    private void inputEventHandling() {
+
+    }
+
+    private void OtherEventHandling() {
+    }
+
+    private void EventHandling() {
+        inputEventHandling();
+        OtherEventHandling();
+    }
 
     /**
      * Initialize the dashboard
