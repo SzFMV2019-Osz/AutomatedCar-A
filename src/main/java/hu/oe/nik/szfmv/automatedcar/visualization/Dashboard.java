@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
+import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
 
 import javax.swing.*;
@@ -40,9 +41,17 @@ public class Dashboard extends JPanel {
 
     private OMeter speedoMeter;
     private OMeter RPMmeter;
+    private StatusIndicator AccIndicator;
+    private StatusIndicator PPIndicator;
+    private StatusIndicator LKAIndicator;
+    private StatusIndicator LKWARNIndicator;
+    private StatusIndicator AEBWARNIndicator;
+    private StatusIndicator RRWARNIndicator;
+    private StatusIndicator LastRoadSignIndicator;
+    private StatusIndicator TimeGapIndicator;
+    private StatusIndicator ReferenceSpeedIndicator;
 
     private void CreateSpeedometer() {
-
         speedoMeter = new OMeter();
         speedoMeter.setPosition(new Point(0, 0));
         speedoMeter.setSize(new Point(100, 100));
@@ -66,8 +75,28 @@ public class Dashboard extends JPanel {
         add(RPMmeter);
     }
 
-    private void TextPlacing() {
+    private void IndicatorPlacing() {
+        ReferenceSpeedIndicator = new StatusIndicator(10, 205,50,40,"0.0");
+        TimeGapIndicator = new StatusIndicator(60, 205,50,40,"0.8");
+        AccIndicator = new StatusIndicator(10, 250,50,40,"ACC");
+        PPIndicator = new StatusIndicator(60, 250,50,40,"PP");
+        LKAIndicator = new StatusIndicator(10, 300,50,40,"LKA");
+        LKWARNIndicator = new StatusIndicator(10, 350,100,40,"LKA WARN");
+        LastRoadSignIndicator = new StatusIndicator(120, 205,100,40,"STOP");
+        AEBWARNIndicator = new StatusIndicator(120, 310,100,40,"AEB WARN");
+        RRWARNIndicator = new StatusIndicator(120, 350,100,40,"RR WARN");
 
+        add(AccIndicator);
+        add(PPIndicator);
+        add(LKAIndicator);
+        add(LKWARNIndicator);
+        add(AEBWARNIndicator);
+        add(RRWARNIndicator);
+        add(LastRoadSignIndicator);
+        add(TimeGapIndicator);
+        add(ReferenceSpeedIndicator);
+    }
+    private void TextPlacing() {
         gearShiftText.setBounds(100, 150, 40, 15);
         currentGearText.setBounds(135, 150, 10, 15);
         accMenuText.setBounds(10, 190, 60, 15);
@@ -122,6 +151,7 @@ public class Dashboard extends JPanel {
         ProgressBarPlacing();
         TextPlacing();
         OMeterPlacing();
+        IndicatorPlacing();
     }
 
     private Thread timer = new Thread() {
