@@ -9,6 +9,8 @@ import java.util.List;
 
 public class Powertrain extends SystemComponent implements IPowertrain {
     private static final int RPM_CONSTANT = 60;
+    private static final int BRAKE_CONSTANT = 60;
+    private static final int RESIST_FORCE_CONSTANT = 100;
     private static final Vec2f NULL_VECTOR = Vec2f.constant(0, 0);
     private static final Vec2f FORWARD_VECTOR = Vec2f.constant(0, 1);
     private static final Vec2f BACKWARD_VECTOR = Vec2f.constant(0, -1);
@@ -60,9 +62,26 @@ public class Powertrain extends SystemComponent implements IPowertrain {
         }
     }
 
-    public void calculateRPM(int throttle, GearShift gearShift) {
+    private void calculateRPM(int throttle, GearShift gearShift) {
         getCurrentInsideGearShift(gearShift);
         virtualFunctionBus.powertrainPacket.setRPM((int) (throttle * RPM_CONSTANT * GEAR_RATIOS.get(currentInsideGearShift)));
         getCurrentInsideGearShift(gearShift);
+    }
+
+    private Vec2f calculateBrakeForceVector(int brake, GearShift gearShift) {
+        return getDirectionUnitVector(gearShift).scale(-1).scale(brake).scale(BRAKE_CONSTANT);
+    }
+
+    private Vec2f calculateTractionForceVector(int throttle, GearShift gearShift) {
+        calculateRPM(throttle, gearShift);
+        return getDirectionUnitVector(gearShift).scale(virtualFunctionBus.powertrainPacket.getRPM());
+    }
+
+    private Vec2f calculateSummaryForceVector(int throttle, int brake, GearShift gearShift) {
+        return calculateTractionForceVector(throttle, gearShift).plus(calculateBrakeForceVector(brake, gearShift)).plus(calculateResistForceVector(gearShift));
+    }
+
+    private Vec2f calculateResistForceVector(GearShift gearShift) {
+        return (getDirectionUnitVector(gearShift).scale(-1).scale(RESIST_FORCE_CONSTANT)).scale(getDirectionUnitVector(gearShift).scale(virtualFunctionBus.powertrainPacket.getVelocityVector()));
     }
 }
