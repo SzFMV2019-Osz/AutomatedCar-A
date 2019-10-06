@@ -19,19 +19,19 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Transform {
     
     @XmlAttribute(name = "m11", required = true)
-    @XmlJavaTypeAdapter(DoubleConverter.class)
+    @XmlJavaTypeAdapter(value = DoubleConverter.class, type = double.class)
     private double m11;
 
     @XmlAttribute(name = "m12", required = true)
-    @XmlJavaTypeAdapter(DoubleConverter.class)
+    @XmlJavaTypeAdapter(value = DoubleConverter.class, type = double.class)
     private double m12;
 
     @XmlAttribute(name = "m21", required = true)
-    @XmlJavaTypeAdapter(DoubleConverter.class)
+    @XmlJavaTypeAdapter(value = DoubleConverter.class, type = double.class)
     private double m21;
 
     @XmlAttribute(name = "m22", required = true)
-    @XmlJavaTypeAdapter(DoubleConverter.class)
+    @XmlJavaTypeAdapter(value = DoubleConverter.class, type = double.class)
     private double m22;
 
     @XmlTransient

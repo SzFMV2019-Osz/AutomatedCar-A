@@ -13,6 +13,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "Object")
@@ -23,6 +32,12 @@ public class WorldObject implements IObject {
 
     @XmlElement(name = "Position", required = true)
     protected Position position;
+
+    /**
+     * Forgatási pontot tárol, külön XML-ből jön, ezért tranziens.
+     */
+    @XmlTransient
+    protected Position referencePosition;
 
     @XmlElement(name = "Transform", required = true)
     protected Transform transform;
@@ -40,8 +55,9 @@ public class WorldObject implements IObject {
     @XmlTransient
     protected BufferedImage image;
     protected Color debugColor = Color.GREEN;
-    
+
     public WorldObject() {
+        this.transform = new Transform();
     }
 
     /**
@@ -50,6 +66,7 @@ public class WorldObject implements IObject {
      * @param y Objektum Y pozíciója.
      * @param imageFileName Objektum fájlneve.
      */
+    @Deprecated
     public WorldObject(int x, int y, String imageFileName) {
         this.position = new Position(x, y);
         this.transform = new Transform();
@@ -146,6 +163,24 @@ public class WorldObject implements IObject {
         return this.image;
     }
 
+    @Override
+    public int getReferenceX()
+    {
+        return this.referencePosition.getX();
+    }
+
+    @Override
+    public int getReferenceY()
+    {
+        return this.referencePosition.getY();
+    }
+
+    public void setReferencePosition(Position referencePosition)
+    {
+        this.referencePosition = referencePosition;
+    }
+
+    @Deprecated
     public void initImage() {
         try {
             image = ImageIO.read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));
@@ -167,7 +202,7 @@ public class WorldObject implements IObject {
         try {
             image = ModelCommonUtil.loadObjectImage(getImageFileName());
         } catch (Exception e) {
-            LOGGER.error(Consts.ERROR_COULDNT_LOAD_IMG_FILE, e);
+            LOGGER.error(MessageFormat.format(Consts.ERROR_COULDNT_LOAD_IMG_FILE, getImageFileName()));
         }
     }
 }

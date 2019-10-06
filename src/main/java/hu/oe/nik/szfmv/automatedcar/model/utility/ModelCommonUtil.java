@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
+import hu.oe.nik.szfmv.automatedcar.model.Position;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -10,9 +12,6 @@ import java.io.IOException;
  */
 public final class ModelCommonUtil {
 
-    private static final double MIN_DEGREE = 0;
-    private static final double MAX_DEGREE = 360;
-
     /**
      * Betölt egy képet a nyersanyagok közül.
      * @param name Kép neve kiterjesztés nélkül (pl. bycicle).
@@ -20,6 +19,7 @@ public final class ModelCommonUtil {
      * @throws IOException Ha nem olvasható a fájl/mappa, pl. jogosultságok hiányában.
      */
     public static BufferedImage loadObjectImage(String name) throws IOException {
+        // @TODO: Fájl betöltést kiemelni külön függvénybe
         return ImageIO.read(new File(ClassLoader.getSystemResource((name + Consts.SUFFIX_IMAGE))
                 .getFile()));
     }
@@ -35,8 +35,8 @@ public final class ModelCommonUtil {
     public static double getRotationValue(double m11, double m12, double m21, double m22) {
         double angle = calculateRotationFromMatrix(m11, m12, m21, m22);
 
-        if (angle < MIN_DEGREE) {
-            return (angle + MAX_DEGREE);
+        if (angle < Consts.MIN_DEGREE) {
+            return (angle + Consts.MAX_DEGREE);
         }
         return angle;
     }
@@ -52,5 +52,69 @@ public final class ModelCommonUtil {
     private static double calculateRotationFromMatrix(double m11, double m12, double m21, double m22) {
         double angle = Math.atan2(m21, m11); // http://nghiaho.com/?page_id=846
         return Math.toDegrees(angle);
+    }
+
+    /**
+     * Visszaadja, hogy az adott pont a háromszögön belül van-e.
+     * @param triangleA Háromszög első pontja.
+     * @param triangleB Háromszög második pontja.
+     * @param triangleC Háromszög harmadik pontja.
+     * @param point Lekérdezett pont.
+     * @return Benne van? logikai kifejezés értéke.
+     */
+    public static boolean isPointInTriangle (Position triangleA, Position triangleB, Position triangleC,
+                                             Position point) {
+        double a = calculateAreaOfTriangle(triangleA, triangleB, triangleC);
+        double b = calculateAreaOfTriangle(point, triangleB, triangleC);
+        double c = calculateAreaOfTriangle(triangleA, point, triangleC);
+        double d = calculateAreaOfTriangle(triangleA, triangleB, point);
+
+        return (a == (b + c + d));
+    }
+
+    /**
+     * Egy háromszög területét adja vissza.
+     * @param a Háromszög első pontja.
+     * @param b Háromszög második pontja.
+     * @param c Háromszög harmadik pontja.
+     * @return A háromszög területe.
+     */
+    private static double calculateAreaOfTriangle(Position a, Position b, Position c) {
+        return Math.abs((a.getX() * (b.getY() - c.getY()) + b.getX() * (c.getY() - a.getY())
+                + c.getX() * (a.getY() - b.getY())) / 2.0);
+    }
+
+    /**
+     * Visszaadja, hogy a pontok közül melyik a bal felső pont.
+     * @param points A pontok amik közül a bal felsőt keressük.
+     * @return A bal felső pont.
+     */
+    public static Position getTopLeftPoint(Position... points) {
+        Position p = new Position(Integer.MAX_VALUE, Integer.MAX_VALUE);
+
+        for (Position point : points) {
+            if (point.getX() <= p.getX() && point.getY() <= p.getY()) {
+                p = point;
+            }
+        }
+
+        return p;
+    }
+
+    /**
+     * Visszaadja, hogy a pontok közül melyik a jobb alsó pont.
+     * @param points A pontok amik közül a jobb alsót keressük.
+     * @return A jobb alsó pont.
+     */
+    public static Position getBottomRightPoint(Position... points) {
+        Position p = new Position(Integer.MIN_VALUE, Integer.MIN_VALUE);
+
+        for (Position point : points) {
+            if (point.getX() >= p.getX() && point.getY() >= p.getY()) {
+                p = point;
+            }
+        }
+
+        return p;
     }
 }
