@@ -12,6 +12,8 @@ public class Powertrain extends SystemComponent implements IPowertrain {
     private static final int BRAKE_CONSTANT = 60;
     private static final int RESIST_FORCE_CONSTANT = 100;
     private static final int CAR_MASS = 1000;
+    private static final int WHEELBASE = 130;
+    private static final int CAR_WIDTH = 90;
     private static final Vec2f NULL_VECTOR = Vec2f.constant(0, 0);
     private static final Vec2f FORWARD_VECTOR = Vec2f.constant(0, 1);
     private static final Vec2f BACKWARD_VECTOR = Vec2f.constant(0, -1);
@@ -101,5 +103,22 @@ public class Powertrain extends SystemComponent implements IPowertrain {
             velocityVector = NULL_VECTOR;
         }
         virtualFunctionBus.powertrainPacket.setVelocityVector(velocityVector);
+    }
+
+    private double calculateSteeringLimitation(double steering) {
+        return (steering / 100) * 60;
+    }
+
+    private int calculateTurningCircle(int steering) {
+        if (steering == 0) {
+            return 0;
+        }
+        var limitedSteering = calculateSteeringLimitation(steering);
+        var radian = convertDegreeToRadian(limitedSteering);
+        return (int) (WHEELBASE / Math.tan(radian) + CAR_WIDTH);
+    }
+
+    private double convertDegreeToRadian(double degree) {
+        return (degree * Math.PI) / 180;
     }
 }
