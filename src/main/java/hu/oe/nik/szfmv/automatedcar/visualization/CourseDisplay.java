@@ -121,8 +121,10 @@ public class CourseDisplay extends JPanel {
     private void drawObjects(Graphics2D g2d, WorldManager world) {
         int[] offsets = getCarOffset(world.getAutomatedCar());
         DebugViewer viewer = new DebugViewer(g2d);
-
-        for (IObject object : world.getWorld().getWorldObjects()) {
+        AutomatedCar car = world.getAutomatedCar();
+        for (IObject object : world.getAllObjectsInRectangle(
+                new Position(0,0),
+                new Position(this.world.getWidth(),this.world.getHeight()))) {
             Point2D refPoint;
             try {
                 refPoint = new Point(object.getReferenceX(), object.getReferenceY());
@@ -139,7 +141,7 @@ public class CourseDisplay extends JPanel {
         }
 
         // Draw car
-        AutomatedCar car = world.getAutomatedCar();
+
         AffineTransform t1 = new AffineTransform();
         t1.translate(car.getPosX()+ offsets[0], car.getPosY()+ offsets[1]);
         g2d.drawImage(car.getImage(), t1, this);
