@@ -28,7 +28,13 @@ public class Road extends WorldObject implements IStatic, IBackground {
                 this.RoadShape90Left();
                 break;
             case "road_2lane_90right":
-                RoadShape90Right();
+                this.RoadShape90Right();
+                break;
+            case "road_2lane_45left":
+                this.RoadShape45Left();
+                break;
+            case "road_2lane_45right":
+                this.RoadShape45Right();
                 break;
             default:
                 this.RoadShapeStraight();
@@ -54,7 +60,22 @@ public class Road extends WorldObject implements IStatic, IBackground {
 
     private void RoadShape90Right(){
         this.RoadShape90Left();
-        this.polygon = mirrorAlongX(525, this.polygon);
+        this.polygon = MirrorAlongX(525, this.polygon);
+    }
+
+    private void RoadShape45Left(){
+        Polygon smallArc = this.CreateSmall45Arc();
+        Polygon middleArc = this.CreateMiddle45Arc();
+        Polygon bigArc = this.CreateBig45Arc();
+
+        this.polygon = new Area(bigArc);
+        ((Area) this.polygon).add(new Area(middleArc));
+        ((Area) this.polygon).add(new Area(smallArc));
+    }
+
+    private void RoadShape45Right(){
+        this.RoadShape45Left();
+        this.polygon = MirrorAlongX(525, this.polygon);
     }
 
     private Polygon CreateSmall90Arc(){
@@ -69,7 +90,19 @@ public class Road extends WorldObject implements IStatic, IBackground {
         return new Polygon(new int[]{323, 303, 233, 126, -26, -187}, new int[]{0, -157, -293, -407, -487, -512}, 6);
     }
 
-    private static Shape mirrorAlongX(double x, Shape shape)
+    private Polygon CreateSmall45Arc(){
+        return new Polygon(new int[]{12, 0, -41}, new int[]{0, -73, -131}, 3);
+    }
+
+    private Polygon CreateMiddle45Arc(){
+        return new Polygon(new int[]{176, 162, 132, 74}, new int[]{0, -97, -169, -247}, 4);
+    }
+
+    private Polygon CreateBig45Arc(){
+        return new Polygon(new int[]{338, 321, 275, 189}, new int[]{0, -131, -247, -360}, 4);
+    }
+
+    private static Shape MirrorAlongX(double x, Shape shape)
     {
         AffineTransform at = new AffineTransform();
         at.translate(x, 0);
