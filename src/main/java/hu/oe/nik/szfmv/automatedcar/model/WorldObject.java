@@ -30,6 +30,12 @@ public class WorldObject implements IObject {
     @XmlElement(name = "Position", required = true)
     protected Position position;
     
+    /**
+     * Forgatási pontot tárol, külön XML-ből jön, ezért tranziens.
+     */
+    @XmlTransient
+    protected Position referencePosition;
+    
     @XmlElement(name = "Transform", required = true)
     protected Transform transform;
     
@@ -55,6 +61,7 @@ public class WorldObject implements IObject {
      * @param y Objektum Y pozíciója.
      * @param imageFileName Objektum fájlneve.
      */
+    @Deprecated
     public WorldObject(int x, int y, String imageFileName) {
         this.position = new Position(x, y);
         this.transform = new Transform();
@@ -151,6 +158,24 @@ public class WorldObject implements IObject {
         return this.image;
     }
 
+    @Override
+    public int getReferenceX()
+    {
+        return this.referencePosition.getX();
+    }
+
+    @Override
+    public int getReferenceY()
+    {
+        return this.referencePosition.getY();
+    }
+
+    public void setReferencePosition(Position referencePosition)
+    {
+        this.referencePosition = referencePosition;
+    }
+    
+    @Deprecated
     public void initImage() {
         try {
             image = ImageIO.read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));

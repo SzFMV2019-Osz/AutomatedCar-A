@@ -19,6 +19,7 @@ public final class ModelCommonUtil {
      * @throws IOException Ha nem olvasható a fájl/mappa, pl. jogosultságok hiányában.
      */
     public static BufferedImage loadObjectImage(String name) throws IOException {
+        // @TODO: Fájl betöltést kiemelni külön függvénybe
         return ImageIO.read(new File(ClassLoader.getSystemResource((name + Consts.SUFFIX_IMAGE))
                 .getFile()));
     }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Images>
+    <Image name="road_2lane_rotary.png">
+        <Refpoint x="234" y="875"/>
+    </Image>
+    <Image name="2_crossroad_1.png">
+        <Refpoint x="0" y="875"/>
+    </Image>
+    <Image name="road_2lane_90right.png">
+        <Refpoint x="349" y="525"/>
+    </Image>
+    <Image name="road_2lane_45left.png">
+        <Refpoint x="51" y="371"/>
+    </Image>
+    <Image name="car_2_red.png">
+        <Refpoint x="51" y="104"/>
+    </Image>
+</Images>

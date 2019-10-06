@@ -41,6 +41,16 @@ public interface IObject {
      * @return elfordulás szögben megadva. Tartomány: 0 - 359
      */
     double getRotation();
+    
+    /**
+     * @return Forgatási pont X koordinátája.
+     */
+    int getReferenceX();
+    
+    /**
+     * @return Forgatási pont Y koordinátája.
+     */
+    int getReferenceY();
 
     /**
      * @return megjelenítendő kép

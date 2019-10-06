@@ -2,7 +2,9 @@ package hu.oe.nik.szfmv.automatedcar.model.managers;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
+import hu.oe.nik.szfmv.automatedcar.model.References;
 import hu.oe.nik.szfmv.automatedcar.model.World;
+import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
@@ -12,6 +14,8 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * {@link World}-el dolgozó manager, ezen keresztül lehet lekérdezni az abban levő objektumokat.
@@ -22,11 +26,23 @@ public class WorldManager {
     private AutomatedCar automatedCar;
 
     /**
-     * Inicializálja a jelenlegi világot egy xml file alapján.
-     * @param filepath Neve a világ fájlnak (pl.: test_world.xml).
+     * Inicializálja a világot a kapott file-ok alapján.
+     * 
+     * @param worldFileName Feldolgozandó world fájl neve, kiterjesztés nélkül is megadható.
+     * @param referenceFileName Feldolgozandó referencia fájl neve, kiterjesztés nélkül is megadható.
+     * @throws NullPointerException Ha valamelyik fájl nem található.
      */
-    public WorldManager(String filepath) {
-        currentWorld = XmlParser.parseWorldObjects(filepath);
+    public WorldManager(String worldFileName, String referenceFileName) {
+        currentWorld = XmlParser.parseWorldObjects(worldFileName);
+        References refs = XmlParser.parseReferences(referenceFileName);
+        
+        if (currentWorld != null && currentWorld.getWorldObjects() != null && refs != null) {
+            for (IObject iObject : currentWorld.getWorldObjects()) {
+                WorldObject wo = ((WorldObject)iObject);
+                Position pos = refs.getReference(wo.getImageFileName());
+                wo.setReferencePosition(pos);
+            }
+        }
     }
 
     /**
@@ -91,6 +107,7 @@ public class WorldManager {
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a négyzeten belül vannak.
      */
     public List<IObject> getAllObjectsInRectangle(Position pointA, Position pointB) {
+        // @TODO: rectangle létrehozást kiemelni a ModelCommonUtilba
         Position pointC = new Position(pointA.getX(), pointB.getY());
         Position pointD = new Position(pointB.getX(), pointA.getY());
 
@@ -125,4 +142,5 @@ public class WorldManager {
     public void setAutomatedCar(AutomatedCar car) {
         this.automatedCar = car;
     }
+
 }

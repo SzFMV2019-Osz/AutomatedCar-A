@@ -5,40 +5,57 @@ import hu.oe.nik.szfmv.automatedcar.model.Crosswalk;
 import hu.oe.nik.szfmv.automatedcar.model.ParkingBollard;
 import hu.oe.nik.szfmv.automatedcar.model.ParkingSpace;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
+import hu.oe.nik.szfmv.automatedcar.model.References;
 import hu.oe.nik.szfmv.automatedcar.model.Road;
 import hu.oe.nik.szfmv.automatedcar.model.Sign;
 import hu.oe.nik.szfmv.automatedcar.model.Tree;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import java.util.ArrayList;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Properties;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class XmlParserTest {
 
     /**
      * Mivel a double kalkulált érték, meg kell adni egy tűréshatárt, amit még elfogadunk.
      */
-    private Double maxDelta = 1e-10;
+    private final Double maxDelta = 1e-10;
 
     private String notExistingFile;
 
-    private String[] existingFileNames;
+    private String existingFileNameForWorldParser;
 
+    private String existingFileNameForReferenceParser;
+    
     private World expectedWorld;
 
+    private List<Pair<String, Position>> expectedReferences;
+    
     @Before
     public void initVariables() {
         notExistingFile = "not_existing.xml";
-        existingFileNames = new String[] {"mini_world", "mini_world.xml"};
+        initWorldParserVariables();
+        initReferenceParserVariables();
+    }
+    
+    private void initWorldParserVariables() {
+        existingFileNameForWorldParser = "mini_world";
 
         expectedWorld = new World(5120, 3000, "#FFFFFF");
 
@@ -91,24 +108,39 @@ public class XmlParserTest {
         expectedWorld.getWorldObjects().add(wo);
     }
 
+    private void initReferenceParserVariables() {
+        existingFileNameForReferenceParser = "mini_reference";
+        expectedReferences = new ArrayList<>();
+        expectedReferences.add(createReference("road_2lane_rotary.png", 234, 875));
+        expectedReferences.add(createReference("2_crossroad_1.png", 0, 875));
+        expectedReferences.add(createReference("road_2lane_90right", 349, 525));
+        expectedReferences.add(createReference("road_2lane_45left.png", 51, 371));
+        expectedReferences.add(createReference("car_2_red", 51, 104));
+    }
+    
+    
+    private Pair createReference(String fileName, int x, int y) {
+        Position refs = createPosition(x, y);
+        return new ImmutablePair<>(fileName, refs);
+    }
+    
     private Position createPosition(int x, int y) {
         return new Position(x, y);
     }
 
     @Test(expected = NullPointerException.class)
-    public void throwsNullPointerException_WhenCalledWith_NotExistingFileName() throws NullPointerException {
+    public void worldParser_ThrowsNullPointerException_WhenCalledWith_NotExistingFileName()
+                                                                throws NullPointerException {
         XmlParser.parseWorldObjects(notExistingFile);
     }
 
     @Test
     public void worldParser_LoadAndCheckObjects_WhenCalledWith_ExistingFileName() {
-        for (String existingFileName : existingFileNames) {
-            World world = XmlParser.parseWorldObjects(existingFileName);
-            assertWorld(world);
-            List<IObject> result = expectedWorld.getWorldObjects();
-            for (int i = 0; i < result.size(); i++) {
-                assertPositionsAndType(world.getWorldObjects().get(i), expectedWorld.getWorldObjects().get(i));
-            }
+        World world = XmlParser.parseWorldObjects(existingFileNameForWorldParser);
+        assertWorld(world);
+        List<IObject> result = expectedWorld.getWorldObjects();
+        for (int i = 0; i < result.size(); i++) {
+            assertPositionsAndType(world.getWorldObjects().get(i), expectedWorld.getWorldObjects().get(i));
         }
     }
 
@@ -130,5 +162,36 @@ public class XmlParserTest {
         } else {
             assertNotNull(objFromXml.getImage());
         }
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void referenceParser_ThrowsNullPointerException_WhenCalledWith_NotExistingFileName() {
+        XmlParser.parseReferences(notExistingFile);
+    }
+    
+    @Test
+    public void referenceParser_LoadAndCheckReferencePoint_WhenCalledWith_ExistingFileName() {
+        References referencesFromXml = XmlParser.parseReferences(existingFileNameForReferenceParser);
+        for (Pair<String, Position> expectedReference : expectedReferences) {
+            String fileName = expectedReference.getKey();
+            assertReferences(expectedReference.getValue(), referencesFromXml.getReference(fileName));
+        }
+    }
+    
+    @Test
+    public void xmlParserSettedProperty_NoOptimize_ToExpectedConstantValue_After_Parsing() {
+        Properties prop = System.getProperties();
+        String noOptProp = prop.getProperty(Consts.PROP_KEY_XML_NO_OPTIMIZE);
+        assertTrue("The no optimize property is null.", StringUtils.isNotBlank(noOptProp));
+        if (Boolean.parseBoolean(Consts.PROP_VALUE_XML_NO_OPTIMIZE)) {
+            assertTrue("The no optimize property is false.", Boolean.parseBoolean(noOptProp));
+        } else {
+            assertFalse("The no optimize property is true.", Boolean.parseBoolean(noOptProp));
+        }
+    }
+    
+    private void assertReferences(Position expected, Position objFromXml) {
+        assertEquals(expected.getX(), objFromXml.getX());
+        assertEquals(expected.getY(), objFromXml.getY());
     }
 }
