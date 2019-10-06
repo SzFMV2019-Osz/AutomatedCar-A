@@ -28,7 +28,7 @@ public class ParkingSpace extends WorldObject implements IStatic, IBackground {
      * {@inheritDoc}
      */
     @Override
-    public void initShape(){
+    public void initShape() {
         switch (this.imageFileName) {
             case "parking_space_parallel":
                 this.initParallelShape();
@@ -38,7 +38,7 @@ public class ParkingSpace extends WorldObject implements IStatic, IBackground {
         }
     }
 
-    private void initParallelShape(){
+    private void initParallelShape() {
         int parkingSpaceWidth = this.width - LEFT_BORDER - RIGHT_BORDER;
         int parkingSpaceHeight = (this.height - TOP_BORDER - BOTTOM_BORDER) / 2;
         this.polygon = new Rectangle(LEFT_BORDER, TOP_BORDER, parkingSpaceWidth, parkingSpaceHeight);

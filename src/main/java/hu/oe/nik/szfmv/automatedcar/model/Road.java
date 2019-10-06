@@ -122,7 +122,6 @@ public class Road extends WorldObject implements IStatic, IBackground {
         this.polygon = MirrorAlongX(875, this.polygon);
     }
 
-
     private static Shape MirrorAlongX(double x, Shape shape) {
         AffineTransform at = new AffineTransform();
         at.translate(x, 0);

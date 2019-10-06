@@ -29,7 +29,7 @@ public class Tree extends WorldObject implements IStatic, ICrashable {
      * {@inheritDoc}
      */
     @Override
-    public void initShape(){
+    public void initShape() {
         //TODO: fix magic numbers
         int x = 0 - (15 / 2);
         int y = 0 - (15 / 2 - 1);

@@ -29,8 +29,7 @@ public class Sign extends WorldObject implements IStatic, ICrashable {
      * {@inheritDoc}
      */
     @Override
-    public void initShape(){
-        //TODO: fix magic numbers
+    public void initShape() {
         this.polygon = new Ellipse2D.Float(-5, -5, 10, 10);
     }
 }

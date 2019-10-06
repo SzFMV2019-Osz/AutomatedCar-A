@@ -32,7 +32,7 @@ public class ParkingBollard extends WorldObject implements IStatic, ICrashable {
      * {@inheritDoc}
      */
     @Override
-    public void initShape(){
+    public void initShape() {
         int y = (this.height / 2);
         this.polygon = new Rectangle(0, y, this.width, this.height / 2);
     }

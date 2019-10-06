@@ -10,10 +10,10 @@ import java.awt.Rectangle;
  */
 public class Car extends WorldObject implements ICrashable, IDynamic {
 
-    public Car() { }
+    private final int WIDTH_BORDER = 6;
+    private final int HEIGHT_BORDER = 1;
 
-        private final int WIDTH_BORDER = 6;
-        private final int HEIGHT_BORDER = 1;
+    public Car() { }
 
     /**
      * Konstruktor manuális létrehozáshoz.
@@ -35,7 +35,7 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
      * {@inheritDoc}
      */
     @Override
-    public void initShape(){
+    public void initShape() {
         int x = 0 - (this.width / 2 - WIDTH_BORDER);
         int y = 0 - (this.height / 2 - HEIGHT_BORDER);
         this.polygon = new Rectangle(x, y, this.width - WIDTH_BORDER * 2, this.height - HEIGHT_BORDER * 2);
