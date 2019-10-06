@@ -2,14 +2,18 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
+import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
-import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
+import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -20,9 +24,9 @@ public class CourseDisplay extends JPanel {
 
     private final int width = 770;
     private final int height = 700;
-    private int backgroundColor = -1;
+    private int backgroundColor = 0xEEEEEE;
     private Gui parent;
-
+    private IWorld world;
 
     /**
      * Initialize the course display
@@ -44,7 +48,7 @@ public class CourseDisplay extends JPanel {
      * @param g     {@link Graphics} object that can draw to the canvas
      * @param world {@link World} object that describes the virtual world
      */
-    private void paintComponent(Graphics g, World world) {
+    private void paintComponent(Graphics g, WorldManager world) {
 
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
     }
@@ -55,8 +59,8 @@ public class CourseDisplay extends JPanel {
      * @param world {@link World} object that describes the virtual world
      * @return the ready to render doubleBufferedScreen
      */
-    private BufferedImage renderDoubleBufferedScreen(World world) {
-        BufferedImage doubleBufferedScreen = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    private BufferedImage renderDoubleBufferedScreen(WorldManager world) {
+        BufferedImage doubleBufferedScreen = new BufferedImage(this.world.getWidth(), this.world.getHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) doubleBufferedScreen.getGraphics();
         Rectangle r = new Rectangle(0, 0, width, height);
         g2d.setPaint(new Color(backgroundColor));
@@ -71,12 +75,10 @@ public class CourseDisplay extends JPanel {
      * Draw objects from the world.
      * @param world World object.
      */
-    public void drawWorld(World world) {
+    public void drawWorld(WorldManager world) {
+        this.world = world.getWorld();
+        this.backgroundColor = Integer.valueOf(this.world.getColor().replace("#","").toUpperCase(),16);
         paintComponent(getGraphics(), world);
-        if( backgroundColor==-1 ){
-            // TODO optimálissabban?
-            backgroundColor = Integer.decode(String.format("0x%s",world.getColor()));
-        }
     }
 
     /**
@@ -116,20 +118,32 @@ public class CourseDisplay extends JPanel {
      * @param g2d Buffered image.
      * @param world World object which will be drawn.
      */
-    private void drawObjects(Graphics2D g2d, World world) {
-        int[] offsets = getCarOffset(getCarObject(world.getWorldObjects()));
-
+    private void drawObjects(Graphics2D g2d, WorldManager world) {
+        int[] offsets = getCarOffset(world.getAutomatedCar());
         DebugViewer viewer = new DebugViewer(g2d);
 
-        for (IObject object : world.getWorldObjects()) {
-            AffineTransform t = new AffineTransform();
-            t.translate(object.getPosX() + offsets[0], object.getPosY() + offsets[1]);
-            g2d.drawImage(object.getImage(), t, this);
-            if (object.getPosZ() != 0) {
-                // todo: decide on how model will signal colors
-                viewer.DrawPolygon(object.getPosX() + offsets[0], object.getPosY() + offsets[1], object.getWidth(), object.getHeight());
+        for (IObject object : world.getWorld().getWorldObjects()) {
+            Point2D refPoint;
+            try {
+                refPoint = new Point(object.getReferenceX(), object.getReferenceY());
+            } catch (NullPointerException e){
+                refPoint = new Point(0,0);
             }
+            AffineTransform t = new AffineTransform();
+            t.translate(object.getPosX() - refPoint.getX()+ offsets[0], object.getPosY() - refPoint.getY()+ offsets[1]);
+            t.rotate(Math.toRadians(-object.getRotation()));
+            g2d.drawImage(object.getImage(), t, this);
+
+            // todo: decide on how model will signal colors
+            viewer.DrawPolygon(object.getPosX() + offsets[0], object.getPosY() + offsets[1], object.getWidth(), object.getHeight());
         }
+
+        // Draw car
+        AutomatedCar car = world.getAutomatedCar();
+        AffineTransform t1 = new AffineTransform();
+        t1.translate(car.getPosX()+ offsets[0], car.getPosY()+ offsets[1]);
+        g2d.drawImage(car.getImage(), t1, this);
+        t1.rotate(Math.toRadians(car.getRotation()));
         viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
 
     }

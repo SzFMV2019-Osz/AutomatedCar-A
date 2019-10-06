@@ -57,7 +57,7 @@ public class WorldManager {
      * Visszaadja a jelenlegi világot.
      * @return Jelenlegi világ {@link IWorld}-ként.
      */
-    public IWorld getWorld() {
+    public World getWorld() {
         return currentWorld;
     }
 
