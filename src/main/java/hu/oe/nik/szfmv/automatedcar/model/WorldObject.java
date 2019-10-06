@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import javax.imageio.ImageIO;
 import java.awt.Shape;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -188,7 +189,16 @@ public class WorldObject implements IObject {
     /** {@inheritDoc}
      */
     public Shape getPolygon(){
-        return this.polygon;
+        return this.getShapeTransfrom().createTransformedShape(this.polygon);
+    }
+
+    private AffineTransform getShapeTransfrom(){
+        //TODO: kiegészíteni referencia koordinátákkal
+        AffineTransform shapeTransform = new AffineTransform();
+        shapeTransform.rotate(this.getRotation());
+        shapeTransform.translate(this.getPosX(), this.getPosX());
+
+        return shapeTransform;
     }
 
     /**
