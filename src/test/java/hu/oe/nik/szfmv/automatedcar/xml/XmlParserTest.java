@@ -67,25 +67,25 @@ public class XmlParserTest {
 
         ParkingSpace ps = new ParkingSpace();
         ps.setPosition(createPosition(470, 766));
-        ps.setZ(0);
+        ps.setZ(1);
         ps.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
         expectedWorld.getWorldObjects().add(ps);
 
         Crosswalk cw = new Crosswalk();
         cw.setPosition(createPosition(1495, 486));
-        cw.setZ(0);
+        cw.setZ(1);
         cw.setRotation(ModelCommonUtil.getRotationValue(0, -1, 1, 0));
         expectedWorld.getWorldObjects().add(cw);
 
         Sign sign = new Sign();
         sign.setPosition(createPosition(4039, 1431));
-        sign.setZ(0);
+        sign.setZ(3);
         sign.setRotation(ModelCommonUtil.getRotationValue(0, -1, 1, 0));
         expectedWorld.getWorldObjects().add(sign);
 
         Tree tree = new Tree();
         tree.setPosition(createPosition(169, 2454));
-        tree.setZ(0);
+        tree.setZ(4);
         tree.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
         expectedWorld.getWorldObjects().add(tree);
 
@@ -97,7 +97,7 @@ public class XmlParserTest {
 
         ParkingBollard pb = new ParkingBollard();
         pb.setPosition(createPosition(581, 844));
-        pb.setZ(0);
+        pb.setZ(2);
         pb.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
         expectedWorld.getWorldObjects().add(pb);
 
