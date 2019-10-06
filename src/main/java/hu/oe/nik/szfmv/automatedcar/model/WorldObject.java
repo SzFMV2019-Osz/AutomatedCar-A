@@ -13,6 +13,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -31,6 +32,12 @@ public class WorldObject implements IObject {
     
     @XmlElement(name = "Position", required = true)
     protected Position position;
+    
+    /**
+     * Forgatási pontot tárol, külön XML-ből jön, ezért tranziens.
+     */
+    @XmlTransient
+    protected Position referencePosition;
     
     @XmlElement(name = "Transform", required = true)
     protected Transform transform;
@@ -51,6 +58,7 @@ public class WorldObject implements IObject {
     protected Shape polygon;
 
     public WorldObject() {
+        this.transform = new Transform();
     }
 
     /**
@@ -59,6 +67,7 @@ public class WorldObject implements IObject {
      * @param y Objektum Y pozíciója.
      * @param imageFileName Objektum fájlneve.
      */
+    @Deprecated
     public WorldObject(int x, int y, String imageFileName) {
         this.position = new Position(x, y);
         this.transform = new Transform();
@@ -156,6 +165,24 @@ public class WorldObject implements IObject {
         return this.image;
     }
 
+    @Override
+    public int getReferenceX()
+    {
+        return this.referencePosition.getX();
+    }
+
+    @Override
+    public int getReferenceY()
+    {
+        return this.referencePosition.getY();
+    }
+
+    public void setReferencePosition(Position referencePosition)
+    {
+        this.referencePosition = referencePosition;
+    }
+    
+    @Deprecated
     public void initImage() {
         try {
             image = ImageIO.read(new File(ClassLoader.getSystemResource(imageFileName).getFile()));
@@ -182,7 +209,7 @@ public class WorldObject implements IObject {
             initShape();
 
         } catch (Exception e) {
-            LOGGER.error(Consts.ERROR_COULDNT_LOAD_IMG_FILE, e);
+            LOGGER.error(MessageFormat.format(Consts.ERROR_COULDNT_LOAD_IMG_FILE, getImageFileName()));
         }
     }
 

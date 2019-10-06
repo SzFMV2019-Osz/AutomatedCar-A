@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.xml;
 
 
+import hu.oe.nik.szfmv.automatedcar.model.References;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import org.apache.commons.lang3.StringUtils;
@@ -18,9 +19,10 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * XML feldolgozáshzo segéd osztály.
+ * XML feldolgozáshoz segéd osztály.
  */
 public class XmlParser {
+    
     private static Logger logger = LogManager.getLogger();
 
     private static StopWatch stopWatch;
@@ -32,8 +34,106 @@ public class XmlParser {
      *
      * Ugyanezt az {@link Unmarshaller}-el nem tehetjük meg (nem thread-safe).
      * Szerencsére létrehozása kevésbé is költséges.
+     * 
+     * @TODO: elgondolkozni és utánanézni, hogy érdemes-e hardcode-olni az instanceokat
+     *       (sebesség vs memóriagazdálkodás? esetleg a beolvasás végén invalidálni?)
      */
     private static Map<Class<?>, JAXBContext> jaxbInstanceCache = new HashMap<>();
+
+    static {
+        /* Van egy kis hiba JDK 9-től az xml bind-ban, a 2.4-es verzióban lesz majd javítva,
+         * addig be kell állítani a lenti propertyt. Ha bekapcsolva maradna, akkor se okozna gondot,
+         * csak nagyjából + 0,5 sec lenne a beolvasás ideje.
+         */
+        Properties props = System.getProperties();
+        props.setProperty(Consts.PROP_KEY_XML_NO_OPTIMIZE, Consts.PROP_VALUE_XML_NO_OPTIMIZE);
+    }
+    
+    /**
+     * Beolvassa a kapott XML fájlt, majd felépíti belőle a world-öt és a benne elhelyezkedő objektumokat.
+     * <b>Ha a feldolgozás közben hiba lépne fel, kezeli és logolja, majd null-al tér vissza!</b>
+     *
+     * @param xmlFileName Feldolgozandó fájl neve, kiterjesztés nélkül is megadható.
+     * @return Felépített világ a betöltött képekkel.
+     * @throws NullPointerException Ha nem található a megadott fájl.
+     */
+    public static World parseWorldObjects(String xmlFileName) throws NullPointerException {
+        World world = null;
+        xmlFileName = getXmlNameWithExtension(xmlFileName);
+
+        try {
+            startStopWatch();
+
+            JAXBContext jaxbContext = createJAXBContext(World.class); // nem cacheljük, mert elég belőle egy instance
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            world = (World) jaxbUnmarshaller.unmarshal(getFileByName(xmlFileName));
+            logger.debug(MessageFormat.format(Consts.XML_WORLD_OBJECT_NUMBER, world.getWorldObjects().size()));
+        } catch (NullPointerException e) {
+            logger.warn(Consts.ERROR_IN_PROCESSING + " " + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
+            throw new NullPointerException(Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
+        } catch (Exception ex) {
+            logger.error(MessageFormat.format(Consts.ERROR_IN_XML_PARSING, xmlFileName), ex);
+        } finally {
+            invalidateCache();
+            logger.info(MessageFormat.format(Consts.XML_MS_DURATION_MESSAGE, getElapsedTimeAndResetStopWatch()));
+        }
+        return world;
+    }
+    
+    /**
+     * Beolvassa a kapott reference XML-t.
+     * 
+     * Eltárolja az értékeket egy {@link References} objektumban, melyhez a kulcs a képfájl neve.
+     * 
+     * @param xmlFileName Feldolgozandó fájl neve, kiterjesztés nélkül is megadható.
+     * @return Beolvasott referencia pontok
+     * @throws NullPointerException Ha nem található a megadott fájl.
+     */
+    public static References parseReferences(String xmlFileName) {
+        xmlFileName = getXmlNameWithExtension(xmlFileName);
+        References refs = null;
+        
+        try {
+            startStopWatch();
+
+            JAXBContext jaxbContext = createJAXBContext(References.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            refs = (References) jaxbUnmarshaller.unmarshal(getFileByName(xmlFileName));
+        } catch (NullPointerException e) {
+            logger.warn(Consts.ERROR_IN_PROCESSING + " " + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
+            throw new NullPointerException(Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
+        } catch (Exception ex) {
+            logger.error(MessageFormat.format(Consts.ERROR_IN_XML_PARSING, xmlFileName), ex);
+        } finally {
+            invalidateCache();
+            logger.info(MessageFormat.format(Consts.XML_MS_DURATION_MESSAGE, getElapsedTimeAndResetStopWatch()));
+        }
+        return refs;
+    }
+
+    private static String getXmlNameWithExtension(String fileName) {
+        if ( !StringUtils.endsWith(fileName, Consts.SUFFIX_XML)) {
+            fileName += Consts.SUFFIX_XML;
+        }
+        return fileName;
+    }
+
+    private static void startStopWatch() {
+        stopWatch = new StopWatch();
+        stopWatch.start();
+    }
+
+    private static long getElapsedTimeAndResetStopWatch() {
+        stopWatch.stop();
+        long elapsedTime = stopWatch.getTime();
+        stopWatch.reset();
+        return elapsedTime;
+    }
+    
+    private static File getFileByName(String xmlFileName) {
+        // @TODO: Fájl betöltést kiemelni a ModelCommonUtilba
+        return new File(ClassLoader.getSystemResource(xmlFileName).getFile());
+    }
 
     private static JAXBContext createJAXBContext(Class<?> newClass) throws JAXBException {
         return JAXBContext.newInstance(newClass);
@@ -51,60 +151,6 @@ public class XmlParser {
     }
 
     private static void invalidateCache() {
-        jaxbInstanceCache = new HashMap<>();
-    }
-
-    /**
-     * Beolvassa a kapott XML fájlt, majd felépíti belőle a world-öt és a benne elhelyezkedő objektumokat.
-     * <b>Ha a feldolgozás közben hiba lépne fel, kezeli és logolja, majd null-al tér vissza!</b>
-     *
-     * @param xmlFileName Feldolgozandó fájl neve, kiterjesztés nélkül is megadható.
-     * @return Felépített világ a betöltött képekkel.
-     * @throws NullPointerException Ha nem található a megadott fájl.
-     */
-    public static World parseWorldObjects(String xmlFileName) throws NullPointerException {
-        World world = null;
-        xmlFileName = getXmlNameWithExtension(xmlFileName);
-
-        try {
-            startStopWatch();
-            /* Van egy kis hiba JDK 9-től az xml bind-ban, a 2.4-es verzióban lesz majd javítva,
-             * addig be kell állítani a lenti propertyt. Ha bekapcsolva maradna, akkor se okozna gondot,
-             * csak nagyjából + 0,5 sec lenne a beolvasás ideje.
-             */
-            Properties props = System.getProperties();
-            props.setProperty("com.sun.xml.bind.v2.bytecode.ClassTailor.noOptimize", "true");
-
-            JAXBContext jaxbContext = createJAXBContext(World.class); // nem cacheljük, mert elég belőle egy instance
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            world = (World) jaxbUnmarshaller.unmarshal(new File(ClassLoader.getSystemResource(xmlFileName).getFile()));
-        } catch (NullPointerException e) {
-            logger.error(Consts.ERROR_IN_PROCESSING + " "
-                    + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST, e);
-            throw new NullPointerException(Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
-        } catch (Exception ex) {
-            logger.error(Consts.ERROR_IN_XML_PARSING, ex);
-        } finally {
-            invalidateCache();
-            logger.info(MessageFormat.format(Consts.XML_MS_DURATION_MESSAGE, getElapsedTimeAndResetStopWatch()));
-        }
-        return world;
-    }
-
-    private static String getXmlNameWithExtension(String fileName) {
-        if (! StringUtils.endsWith(fileName, Consts.SUFFIX_XML)) {
-            fileName += Consts.SUFFIX_XML;
-        }
-        return fileName;
-    }
-
-    private static void startStopWatch() {
-        stopWatch = new StopWatch();
-        stopWatch.start();
-    }
-
-    private static long getElapsedTimeAndResetStopWatch() {
-        stopWatch.stop();
-        return stopWatch.getTime();
+        jaxbInstanceCache.clear();
     }
 }

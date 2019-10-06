@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * World objektum ami tartalmazza a világ modeljét.
+ * World objektum, ami tartalmazza a világ modelljét.
  */
 @XmlRootElement(name = "Scene")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -33,17 +33,17 @@ public class World implements IWorld {
     @XmlElementWrapper(name = "Objects", required = true)
     @XmlElement(name = "Object")
     @XmlJavaTypeAdapter(ObjectConverter.class)
-    private List<WorldObject> worldObjects = new ArrayList<>();
+    private List<IObject> worldObjects = new ArrayList<>();
     
     @XmlAttribute(name = "color", required = false)
     private String color;
 
-
     public World() {
+        // default konstruktor
     }
 
     /**
-     * @deprecated
+     * @deprecated XML beolvasás miatt nem kell
      */
     public World(int width, int height) {
         this.width = width;
@@ -55,6 +55,7 @@ public class World implements IWorld {
      * @param width Világ szélessége.
      * @param height Világ magassága.
      * @param color Világ alapszíne.
+     * @deprecated teszteléshez kell
      */
     public World(int width, int height, String color) {
         this.width = width;
@@ -81,18 +82,16 @@ public class World implements IWorld {
     }
 
     /**
-     * Visszaadja a világban levő összes objektumot.
-     * @return Egy lista ami tartalmazza az összes világban levő objektumot.
+     * @return Visszaadja a világban található elemeket.
      */
-    public List<WorldObject> getWorldObjects() {
+    public List<IObject> getWorldObjects() {
         return worldObjects;
     }
 
     /**
-     * Hozzáad egy objektumot a virtuális világhoz.
-     * @param o {@link IObject} amit hozzá kell adni a világhoz.
+     * Hozzáadja a világ elemeihez az objektumot.
      */
-    public void addObject(WorldObject o) {
+    public void addObject(IObject o) {
         worldObjects.add(o);
     }
 }
