@@ -36,7 +36,9 @@ public class Powertrain extends SystemComponent implements IPowertrain {
     }
 
     @Override
-    public void calculateMovingVector() {
+    public void calculateMovingVector(int throttle, int brake, GearShift gearShift) {
+        calculateVelocityVector(throttle, brake, gearShift);
+        virtualFunctionBus.powertrainPacket.setMovingVector(virtualFunctionBus.powertrainPacket.getVelocityVector());
     }
 
     @Override
