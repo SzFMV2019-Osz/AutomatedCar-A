@@ -11,6 +11,7 @@ public class Powertrain extends SystemComponent implements IPowertrain {
     private static final int RPM_CONSTANT = 60;
     private static final int BRAKE_CONSTANT = 60;
     private static final int RESIST_FORCE_CONSTANT = 100;
+    private static final int CAR_MASS = 1000;
     private static final Vec2f NULL_VECTOR = Vec2f.constant(0, 0);
     private static final Vec2f FORWARD_VECTOR = Vec2f.constant(0, 1);
     private static final Vec2f BACKWARD_VECTOR = Vec2f.constant(0, -1);
@@ -83,5 +84,10 @@ public class Powertrain extends SystemComponent implements IPowertrain {
 
     private Vec2f calculateResistForceVector(GearShift gearShift) {
         return (getDirectionUnitVector(gearShift).scale(-1).scale(RESIST_FORCE_CONSTANT)).scale(getDirectionUnitVector(gearShift).scale(virtualFunctionBus.powertrainPacket.getVelocityVector()));
+    }
+
+    private Vec2f calculateAccelerationVector(int throttle, int brake, GearShift gearShift) {
+        Vec2f summaryForce = calculateSummaryForceVector(throttle, brake, gearShift);
+        return Vec2f.of(summaryForce.getX() * CAR_MASS, summaryForce.getY() * CAR_MASS);
     }
 }
