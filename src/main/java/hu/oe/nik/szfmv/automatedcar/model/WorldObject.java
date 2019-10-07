@@ -226,8 +226,9 @@ public class WorldObject implements IObject {
     }
 
     private AffineTransform getShapeTransfrom() {
+        double theta = Math.toRadians(this.getRotation());
         AffineTransform shapeTransform = new AffineTransform();
-        shapeTransform.rotate(this.getRotation());
+        shapeTransform.rotate(theta);
         shapeTransform.translate(this.getPosX() + this.getReferenceX(), this.getPosX() + this.getReferenceY());
 
         return shapeTransform;
