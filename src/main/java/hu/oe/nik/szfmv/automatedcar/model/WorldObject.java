@@ -196,14 +196,13 @@ public class WorldObject implements IObject {
         this.referencePosition = referencePosition;
     }
 
-    @Deprecated
     public void initImage() {
         try {
-            this.image = ImageIO.read(new File(ClassLoader.getSystemResource(this.imageFileName).getFile()));
+            this.image = ModelCommonUtil.loadObjectImage(this.getImageFileName());
             this.width = this.image.getWidth();
             this.height = this.image.getHeight();
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error(MessageFormat.format(Consts.ERROR_COULDNT_LOAD_IMG_FILE, this.getImageFileName()));
         }
     }
 
@@ -215,14 +214,7 @@ public class WorldObject implements IObject {
      * @param parent JAXBElement
      */
     public void afterUnmarshal(Unmarshaller u, Object parent) {
-        try {
-            this.image = ModelCommonUtil.loadObjectImage(this.getImageFileName());
-            this.width = this.image.getWidth();
-            this.height = this.image.getHeight();
-        } catch (Exception e) {
-            LOGGER.error(MessageFormat.format(Consts.ERROR_COULDNT_LOAD_IMG_FILE, this.getImageFileName()));
-        }
-
+        this.initImage();
         this.initShape();
     }
 
