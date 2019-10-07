@@ -29,7 +29,7 @@ public class Powertrain extends SystemComponent implements IPowertrain {
     private int currentInsideGearShift = 0;
     private int refreshRate = 0;
 
-    protected Powertrain(VirtualFunctionBus virtualFunctionBus, int refreshRate) {
+    public Powertrain(VirtualFunctionBus virtualFunctionBus, int refreshRate) {
         super(virtualFunctionBus);
 
         this.refreshRate = refreshRate;
