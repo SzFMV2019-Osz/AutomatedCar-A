@@ -54,7 +54,7 @@ public class Road extends WorldObject implements IStatic, IBackground {
     }
 
     private void roadShapeStraight() {
-        this.polygon = new Rectangle(this.BORDER, 0, this.width - this.BORDER, this.height);
+        this.polygon = new Rectangle(this.BORDER, 0, this.width - (this.BORDER * 2), this.height);
         Rectangle line = new Rectangle(this.width / 2 - 1, 0, 2, this.height);
         ((Rectangle) this.polygon).add(line);
     }
@@ -98,7 +98,7 @@ public class Road extends WorldObject implements IStatic, IBackground {
     }
 
     private Polygon createBig90Arc() {
-        return new Polygon(new int[]{323, 303, 233, 126, -26, -187}, new int[]{0, -157, -293, -407, -487, -512}, 6);
+        return new Polygon(new int[]{323, 303, 233, 126, -26, -187}, new int[]{0, -157, -293, -407, -487, -510}, 6);
     }
 
     private Polygon createSmall45Arc() {
@@ -110,7 +110,7 @@ public class Road extends WorldObject implements IStatic, IBackground {
     }
 
     private Polygon createBig45Arc() {
-        return new Polygon(new int[]{338, 321, 275, 189}, new int[]{0, -131, -247, -360}, 4);
+        return new Polygon(new int[]{339, 321, 275, 189}, new int[]{0, -131, -247, -360}, 4);
     }
 
     private void roadShapeTJunctionRight() {
