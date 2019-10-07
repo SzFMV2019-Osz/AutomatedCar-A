@@ -4,6 +4,7 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IBackground;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 
+import javax.xml.bind.Unmarshaller;
 import java.awt.Shape;
 import java.awt.Rectangle;
 import java.awt.Polygon;
@@ -132,5 +133,14 @@ public class Road extends WorldObject implements IStatic, IBackground {
         at.scale(-1, 1);
         at.translate(-x, 0);
         return at.createTransformedShape(shape);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void afterUnmarshal(Unmarshaller u, Object parent) {
+        super.afterUnmarshal(u, parent);
+        this.position.setZ(Consts.Z_ROAD);
     }
 }
