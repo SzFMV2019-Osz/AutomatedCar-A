@@ -12,6 +12,8 @@ public class Powertrain extends SystemComponent implements IPowertrain {
     private static final int BRAKE_CONSTANT = 60;
     private static final int RESIST_FORCE_CONSTANT = 100;
     private static final int CAR_MASS = 1000;
+    private static final int WHEELBASE = 130;
+    private static final int CAR_WIDTH = 90;
     private static final Vec2f NULL_VECTOR = Vec2f.constant(0, 0);
     private static final Vec2f FORWARD_VECTOR = Vec2f.constant(0, 1);
     private static final Vec2f BACKWARD_VECTOR = Vec2f.constant(0, -1);
@@ -25,9 +27,12 @@ public class Powertrain extends SystemComponent implements IPowertrain {
     );
 
     private int currentInsideGearShift = 0;
+    private int refreshRate = 0;
 
-    protected Powertrain(VirtualFunctionBus virtualFunctionBus) {
+    protected Powertrain(VirtualFunctionBus virtualFunctionBus, int refreshRate) {
         super(virtualFunctionBus);
+
+        this.refreshRate = refreshRate;
     }
 
     @Override
@@ -89,5 +94,31 @@ public class Powertrain extends SystemComponent implements IPowertrain {
     private Vec2f calculateAccelerationVector(int throttle, int brake, GearShift gearShift) {
         Vec2f summaryForce = calculateSummaryForceVector(throttle, brake, gearShift);
         return Vec2f.of(summaryForce.getX() * CAR_MASS, summaryForce.getY() * CAR_MASS);
+    }
+
+    private void calculateVelocityVector(int throttle, int brake, GearShift gearShift) {
+        var accelerationVector = calculateAccelerationVector(throttle, brake, gearShift);
+        var velocityVector = virtualFunctionBus.powertrainPacket.getVelocityVector().plus(Vec2f.of(accelerationVector.getX() * refreshRate, accelerationVector.getY() * refreshRate));
+        if (velocityVector.getY() * getDirectionUnitVector(gearShift).getY() <= 0) {
+            velocityVector = NULL_VECTOR;
+        }
+        virtualFunctionBus.powertrainPacket.setVelocityVector(velocityVector);
+    }
+
+    private double calculateSteeringLimitation(double steering) {
+        return (steering / 100) * 60;
+    }
+
+    private int calculateTurningCircle(int steering) {
+        if (steering == 0) {
+            return 0;
+        }
+        var limitedSteering = calculateSteeringLimitation(steering);
+        var radian = convertDegreeToRadian(limitedSteering);
+        return (int) (WHEELBASE / Math.tan(radian) + CAR_WIDTH);
+    }
+
+    private double convertDegreeToRadian(double degree) {
+        return (degree * Math.PI) / 180;
     }
 }
