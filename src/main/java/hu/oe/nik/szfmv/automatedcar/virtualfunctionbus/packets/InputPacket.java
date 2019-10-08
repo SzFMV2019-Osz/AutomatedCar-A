@@ -11,6 +11,8 @@ public class InputPacket implements OutgoingInputPacket {
     private POS gearShift;
     private boolean rightSignValue = false;
     private boolean leftSignValue = false;
+    private double accTimegap;
+    private int accSpeed;
 
     public void setGasPedalValue(int value) {
         gasPedalValue = value;
@@ -55,6 +57,24 @@ public class InputPacket implements OutgoingInputPacket {
     @Override
     public POS getGearShiftValue() {
         return gearShift;
+    }
+
+    public void setAccSpeed(int value) {
+        accSpeed = value;
+    }
+
+    @Override
+    public int getAccSpeed() {
+        return accSpeed;
+    }
+
+    public void setAccTimegap(double value) {
+        accTimegap = value;
+    }
+
+    @Override
+    public double getAccTimeGap() {
+        return accTimegap;
     }
 
     public void setLeftSignValue(boolean value) {

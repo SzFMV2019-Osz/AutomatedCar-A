@@ -14,6 +14,7 @@ public class InputManager extends SystemComponent{
     private GearShift gearShift;
     private ACC acc;
     private int step = 4;
+    private int brakeStep = step * 2;
     private InputPacket inputPacket;
 
     public InputManager(VirtualFunctionBus virtualFunctionBus) {
@@ -21,7 +22,7 @@ public class InputManager extends SystemComponent{
         inputPacket = new InputPacket();
         virtualFunctionBus.inputPacket = inputPacket;
         gasPedal = new Control(step);
-        breakPedal = new Control(step);
+        breakPedal = new Control(brakeStep);
         rightSteering = new Control(step);
         leftSteering = new Control(step);
         gearShift = new GearShift();
@@ -68,14 +69,17 @@ public class InputManager extends SystemComponent{
         {
             case KeyEvent.VK_T :
                 acc.TimeGapSetter();
+                inputPacket.setAccTimegap(acc.ReturnTimeGap());
                 break;
 
             case KeyEvent.VK_PLUS:
                 acc.Plus();
+                inputPacket.setAccSpeed(acc.getReferenceSpeed());
                 break;
 
             case KeyEvent.VK_MINUS:
                 acc.Minus();
+                inputPacket.setAccSpeed(acc.getReferenceSpeed());
                 break;
 
             case KeyEvent.VK_P:

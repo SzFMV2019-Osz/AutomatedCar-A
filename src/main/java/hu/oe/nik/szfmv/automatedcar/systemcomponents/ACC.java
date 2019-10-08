@@ -42,5 +42,6 @@ public class ACC {
     public double ReturnTimeGap() {
         return timeGap[index];
     }
+    public int getReferenceSpeed() {return referenceSpeed;}
 
 }

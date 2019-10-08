@@ -12,6 +12,10 @@ public interface OutgoingInputPacket {
 
     POS getGearShiftValue();
 
+    int getAccSpeed();
+
+    double getAccTimeGap();
+
     boolean getLeftSignalValue();
 
     boolean getRightSignalValue();
