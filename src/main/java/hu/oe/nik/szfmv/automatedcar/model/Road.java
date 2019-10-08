@@ -10,6 +10,7 @@ import java.awt.Rectangle;
 import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
 
 /**
  * Út alaposztály.
@@ -18,6 +19,7 @@ public class Road extends WorldObject implements IStatic, IBackground {
 
     private final int BORDER = 10;
     private final int ROAD_WIDTH = 325;
+    private final int SMALL_CIRCLE_DIAMETER = 350;
 
     /**
      * {@inheritDoc}
@@ -49,6 +51,9 @@ public class Road extends WorldObject implements IStatic, IBackground {
             case Consts.RES_IDENTIFIER_ROAD_CROSSROAD_1:
             case Consts.RES_IDENTIFIER_ROAD_CROSSROAD_2:
                 this.roadShapeCrossroad();
+                break;
+            case Consts.RES_IDENTIFIER_ROAD_ROTARY:
+                this.roadShapeRotary();
                 break;
             default:
                 this.roadShapeStraight();
@@ -132,12 +137,47 @@ public class Road extends WorldObject implements IStatic, IBackground {
 
     private void roadShapeCrossroad() {
         this.polygon = new Rectangle(0, -this.BORDER, this.width, -this.ROAD_WIDTH);
+        ((Rectangle) this.polygon).add(this.createCrossroadRoad());
+    }
 
+    private void roadShapeRotary() {
+        this.polygon = new Rectangle(0, -this.BORDER, this.width, -this.ROAD_WIDTH);
+
+        ((Rectangle) this.polygon).add(this.createCrossroadRoad());
+        ((Area) this.polygon).add(this.createEllipses());
+    }
+
+    private Rectangle createCrossroadRoad() {
         int x = (this.width + this.ROAD_WIDTH) / 2 - this.ROAD_WIDTH;
         int y = (this.height + this.ROAD_WIDTH) / 2;
-        Rectangle road = new Rectangle(x, -y, this.ROAD_WIDTH, this.height);
-        ((Rectangle) this.polygon).add(road);
+
+        return new Rectangle(x, -y, this.ROAD_WIDTH, this.height);
     }
+
+    private Area createEllipses() {
+        Ellipse2D.Float bigEllipse = this.createBigEllipse();
+        Ellipse2D.Float smallEllipse = this.createSmallEllipse();
+
+        Area shape = new Area(bigEllipse);
+        shape.subtract(new Area(smallEllipse));
+
+        return shape;
+    }
+
+    private Ellipse2D.Float createBigEllipse() {
+        int x = this.width / 2 - this.SMALL_CIRCLE_DIAMETER;
+        int y = 0 - this.ROAD_WIDTH / 2 - this.SMALL_CIRCLE_DIAMETER;
+
+        return new Ellipse2D.Float(x, y, this.SMALL_CIRCLE_DIAMETER * 2, this.SMALL_CIRCLE_DIAMETER * 2);
+    }
+
+    private Ellipse2D.Float createSmallEllipse() {
+        int x = this.width / 2 - this.SMALL_CIRCLE_DIAMETER / 2;
+        int y = 0 - this.ROAD_WIDTH / 2 - this.SMALL_CIRCLE_DIAMETER / 2;
+
+        return new Ellipse2D.Float(x, y, this.SMALL_CIRCLE_DIAMETER, this.SMALL_CIRCLE_DIAMETER);
+    }
+
 
     private static Shape mirrorAlongX(double x, Shape shape) {
         AffineTransform at = new AffineTransform();
