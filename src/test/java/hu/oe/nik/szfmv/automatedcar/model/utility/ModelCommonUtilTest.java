@@ -1,7 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
 import hu.oe.nik.szfmv.automatedcar.model.Position;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,12 +18,12 @@ public class ModelCommonUtilTest {
     Position pointC;
     Position pointD;
 
-    @Before
+    @BeforeEach
     public void init() {
-        pointA = new Position(-1,0);
-        pointB = new Position(1,-1);
-        pointC = new Position( 0, 1);
-        pointD = new Position(0,0);
+        this.pointA = new Position(-1, 0);
+        this.pointB = new Position(1, -1);
+        this.pointC = new Position(0, 1);
+        this.pointD = new Position(0, 0);
 
     }
 
@@ -76,38 +76,38 @@ public class ModelCommonUtilTest {
 
     @Test
     public void pointInTriangle() {
-        assertEquals(true, ModelCommonUtil.isPointInTriangle(pointA, pointB, pointC, pointD));
+        assertEquals(true, ModelCommonUtil.isPointInTriangle(this.pointA, this.pointB, this.pointC, this.pointD));
     }
 
     @Test
     public void pointNotInTriangle() {
-        assertEquals(false, ModelCommonUtil.isPointInTriangle(pointA, pointC, pointD, pointB));
+        assertEquals(false, ModelCommonUtil.isPointInTriangle(this.pointA, this.pointC, this.pointD, this.pointB));
     }
 
     @Test
     public void existingTopLeftPoint() {
-        Position point = ModelCommonUtil.getTopLeftPoint(pointC, pointD);
-        assertEquals(pointD.getX(), point.getX());
-        assertEquals(pointD.getY(), point.getY());
+        Position point = ModelCommonUtil.getTopLeftPoint(this.pointC, this.pointD);
+        assertEquals(this.pointD.getX(), point.getX());
+        assertEquals(this.pointD.getY(), point.getY());
     }
 
     @Test
     public void newTopLeftPoint() {
-        Position point = ModelCommonUtil.getTopLeftPoint(pointA, pointB);
+        Position point = ModelCommonUtil.getTopLeftPoint(this.pointA, this.pointB);
         assertEquals(-1, point.getX());
         assertEquals(-1, point.getY());
     }
 
     @Test
     public void existingBottomRightPoint() {
-        Position point = ModelCommonUtil.getBottomRightPoint(pointC, pointA);
-        assertEquals(pointC.getX(), point.getX());
-        assertEquals(pointC.getY(), point.getY());
+        Position point = ModelCommonUtil.getBottomRightPoint(this.pointC, this.pointA);
+        assertEquals(this.pointC.getX(), point.getX());
+        assertEquals(this.pointC.getY(), point.getY());
     }
 
     @Test
     public void newBottomRightPoint() {
-        Position point = ModelCommonUtil.getBottomRightPoint(pointB, pointC);
+        Position point = ModelCommonUtil.getBottomRightPoint(this.pointB, this.pointC);
         assertEquals(1, point.getX());
         assertEquals(1, point.getY());
     }
