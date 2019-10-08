@@ -214,7 +214,12 @@ public class WorldObject implements IObject {
      */
     public void afterUnmarshal(Unmarshaller u, Object parent) {
         this.initImage();
-        this.initShape();
+        
+        try {
+            this.initShape();
+        } catch (Exception e) {
+            LOGGER.error(MessageFormat.format(Consts.ERROR_IN_SHAPE_CREATION, this.getImageFileName()), e);
+        }
     }
 
     /**

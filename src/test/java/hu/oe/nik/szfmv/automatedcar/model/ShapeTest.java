@@ -70,7 +70,6 @@ public class ShapeTest {
         assertEquals(2, car.getPosZ());
     }
 
-
     private Road createRoad(String fileName) {
         Road road = new Road();
         road.setPosition(new Position(0, 0));

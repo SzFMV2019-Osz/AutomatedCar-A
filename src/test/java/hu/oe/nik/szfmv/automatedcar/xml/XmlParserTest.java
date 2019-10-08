@@ -194,4 +194,50 @@ public class XmlParserTest {
         assertEquals(expected.getX(), objFromXml.getX());
         assertEquals(expected.getY(), objFromXml.getY());
     }
+
+    @Test
+    public void signZIndex_ShouldBeHigherThan_RoadZIndex() {
+        World world = XmlParser.parseWorldObjects(existingFileNameForWorldParser);
+        Road road = (Road)findObjectInWorld(world, Road.class);
+        Sign sign = (Sign)findObjectInWorld(world, Sign.class);
+
+        assertNotNull(world);
+        assertNotNull(road);
+        assertNotNull(sign);
+        assertTrue(sign.getPosZ() > road.getPosZ());
+    }
+
+    @Test
+    public void treeZIndex_ShouldBeHigherThan_RoadZIndex() {
+        World world = XmlParser.parseWorldObjects(existingFileNameForWorldParser);
+        Road road = (Road)findObjectInWorld(world, Road.class);
+        Tree tree = (Tree)findObjectInWorld(world, Tree.class);
+
+        assertNotNull(world);
+        assertNotNull(road);
+        assertNotNull(tree);
+        assertTrue(tree.getPosZ() > road.getPosZ());
+    }
+
+    @Test
+    public void treeZIndex_ShouldBeHigherThan_SignZIndex() {
+        World world = XmlParser.parseWorldObjects(existingFileNameForWorldParser);
+        Sign sign = (Sign)findObjectInWorld(world, Sign.class);
+        Tree tree = (Tree)findObjectInWorld(world, Tree.class);
+
+        assertNotNull(world);
+        assertNotNull(sign);
+        assertNotNull(tree);
+        assertTrue(tree.getPosZ() > sign.getPosZ());
+    }
+
+    private <T> IObject findObjectInWorld(World world, Class<T> type) {
+        for (IObject object : world.getWorldObjects()) {
+            if (type.isInstance(object)) {
+                return object;
+            }
+        }
+
+        return null;
+    }
 }

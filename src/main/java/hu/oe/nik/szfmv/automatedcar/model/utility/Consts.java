@@ -42,6 +42,7 @@ public final class Consts {
     public static final String ERROR_IN_XML_PARSING = "A(z) {0} XML parse-olása közben hiba lépett fel!";
     public static final String ERROR_XML_WRITING_NOT_ALLOWED = "XML manipuláció/kiírás nem engedélyezett!";
     public static final String ERROR_IN_WORLDOBJECT_PARSING = "A WorldObjectek parseolása közben hiba lépett fel!";
+    public static final String ERROR_IN_SHAPE_CREATION = "Nem sikerült a poligon beállítás a következő world objectnél: {0}";
 
     // --- Messages
 
