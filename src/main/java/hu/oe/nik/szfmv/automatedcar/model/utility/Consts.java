@@ -14,6 +14,7 @@ public final class Consts {
     public static final String SUFFIX_XML = ".xml";
     public static final String RES_FILENAME_BOLLARD = "bollard";
     public static final String RES_IDENTIFIER_ROAD = "road_2";
+    public static final String RES_IDENTIFIER_ROAD_CROSSROAD = "2_crossroad";
     public static final String RES_IDENTIFIER_ROAD_STRAIGHT = "road_2lane_straight";
     public static final String RES_IDENTIFIER_ROAD_90_LEFT = "road_2lane_90left";
     public static final String RES_IDENTIFIER_ROAD_90_RIGHT = "road_2lane_90right";
