@@ -14,7 +14,8 @@ public class ParkingSpace extends WorldObject implements IStatic, IBackground {
     private final int LEFT_BORDER = 4;
     private final int RIGHT_BORDER = 14;
     private final int TOP_BORDER = 10;
-    private final short BOTTOM_BORDER = 4;
+    private final int BOTTOM_BORDER = 4;
+    private final int BORDER = 10;
 
     /**
      * {@inheritDoc}
@@ -35,9 +36,8 @@ public class ParkingSpace extends WorldObject implements IStatic, IBackground {
                 this.initParallelShape();
                 break;
             case Consts.RES_IDENTIFIER_PARKINGSPACE_90:
-                // TODO: implement parking space 90
-                throw new UnsupportedOperationException("Not implemented yet");
-                //break;
+                this.init90Shape();
+                break;
             default:
                 this.initParallelShape();
                 break;
@@ -47,7 +47,17 @@ public class ParkingSpace extends WorldObject implements IStatic, IBackground {
     private void initParallelShape() {
         int parkingSpaceWidth = this.width - this.LEFT_BORDER - this.RIGHT_BORDER;
         int parkingSpaceHeight = (this.height - this.TOP_BORDER - this.BOTTOM_BORDER) / 2;
+
         this.polygon = new Rectangle(this.LEFT_BORDER, this.TOP_BORDER, parkingSpaceWidth, parkingSpaceHeight);
         ((Rectangle) this.polygon).add(new Rectangle(parkingSpaceHeight + this.TOP_BORDER, this.LEFT_BORDER, parkingSpaceWidth, parkingSpaceHeight));
+    }
+
+    private void init90Shape() {
+        int parkingSpaceWidth = this.width - this.BORDER;
+        int parkingSpaceHeight = (this.height - this.BORDER) / 3;
+
+        this.polygon = new Rectangle(0, 0, parkingSpaceWidth, parkingSpaceHeight);
+        ((Rectangle) this.polygon).add(new Rectangle(0, parkingSpaceHeight + this.TOP_BORDER, parkingSpaceWidth, parkingSpaceHeight));
+        ((Rectangle) this.polygon).add(new Rectangle(0, (parkingSpaceHeight + this.TOP_BORDER) * 2, parkingSpaceWidth, parkingSpaceHeight));
     }
 }
