@@ -46,7 +46,10 @@ public class Road extends WorldObject implements IStatic, IBackground {
             case Consts.RES_IDENTIFIER_ROAD_T_JUNCTION_RIGHT:
                 this.roadShapeTJunctionRight();
                 break;
-            // TODO: implement other road shapes
+            case Consts.RES_IDENTIFIER_ROAD_CROSSROAD_1:
+            case Consts.RES_IDENTIFIER_ROAD_CROSSROAD_2:
+                this.roadShapeCrossroad();
+                break;
             default:
                 this.roadShapeStraight();
                 break;
@@ -125,6 +128,15 @@ public class Road extends WorldObject implements IStatic, IBackground {
     private void roadShapeTJunctionLeft() {
         this.roadShapeTJunctionRight();
         this.polygon = mirrorAlongX(875, this.polygon);
+    }
+
+    private void roadShapeCrossroad() {
+        this.polygon = new Rectangle(0, -this.BORDER, this.width, -this.ROAD_WIDTH);
+
+        int x = (this.width + this.ROAD_WIDTH) / 2 - this.ROAD_WIDTH;
+        int y = (this.height + this.ROAD_WIDTH) / 2;
+        Rectangle road = new Rectangle(x, -y, this.ROAD_WIDTH, this.height);
+        ((Rectangle) this.polygon).add(road);
     }
 
     private static Shape mirrorAlongX(double x, Shape shape) {
