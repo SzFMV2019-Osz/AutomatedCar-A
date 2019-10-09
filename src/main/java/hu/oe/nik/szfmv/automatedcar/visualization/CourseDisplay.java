@@ -5,6 +5,8 @@ import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
+import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
 
 import javax.swing.*;
@@ -20,8 +22,8 @@ import java.util.List;
  */
 public class CourseDisplay extends JPanel {
 
-    private final int width = 770;
-    private final int height = 700;
+    private int width = 770;
+    private int height = 700;
     private int backgroundColor = 0xEEEEEE;
     private Gui parent;
     private IWorld world;
@@ -92,8 +94,8 @@ public class CourseDisplay extends JPanel {
     private int[] getCarOffset(AutomatedCar car) {
         int[] offset = new int[2];
 
-        offset[0] = (this.width / 2) - (car.getX() + (car.getWidth() / 2));
-        offset[1] = (this.height / 2) - (car.getY() + (car.getHeight() / 2));
+        offset[0] = (this.width / 2) - (car.getPosX() + (car.getWidth() / 2));
+        offset[1] = (this.height / 2) - (car.getPosY() + (car.getHeight() / 2));
 
         return offset;
     }
@@ -127,8 +129,8 @@ public class CourseDisplay extends JPanel {
         DebugViewer viewer = new DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
         for (IObject object : world.getAllObjectsInRectangle(
-                new Position(0,0),
-                new Position(this.world.getWidth(),this.world.getHeight()))) {
+                new hu.oe.nik.szfmv.automatedcar.model.Position(0,0),
+                new hu.oe.nik.szfmv.automatedcar.model.Position(this.world.getWidth(),this.world.getHeight()))) {
             Point2D refPoint;
             try {
                 refPoint = new Point(object.getReferenceX(), object.getReferenceY());
@@ -141,7 +143,7 @@ public class CourseDisplay extends JPanel {
             g2d.drawImage(object.getImage(), t, this);
 
             // todo: decide on how model will signal colors
-            viewer.DrawPolygon(object.getX()+ offsets[0], object.getY() + offsets[1], object.getWidth(), object.getHeight());
+            viewer.DrawPolygon(object.getPosX()+ offsets[0], object.getPosY() + offsets[1], object.getWidth(), object.getHeight());
         }
 
         // Draw car

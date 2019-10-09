@@ -37,7 +37,7 @@ public class Main {
             try {
                 worldManager.getAutomatedCar().drive();
                 // TODO IWorld-öt használjon a drawWorld
-                window.getCourseDisplay().drawWorld((World)worldManager.getWorld());
+                window.getCourseDisplay().drawWorld((WorldManager) worldManager.getWorld());
                 // TODO window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
