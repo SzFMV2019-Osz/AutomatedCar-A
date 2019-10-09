@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ShapeTest {
@@ -55,7 +55,7 @@ public class ShapeTest {
         ParkingSpace space = new ParkingSpace();
         space.setImageFileName("parking_90");
 
-        assertThrows(UnsupportedOperationException.class, () -> space.initShape());
+        assertDoesNotThrow(() -> space.initShape());
     }
 
     @Test

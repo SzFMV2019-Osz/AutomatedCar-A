@@ -53,7 +53,7 @@ public class ObjectConverter extends XmlAdapter<Object, IObject> {
 
     // @TODO: static blokkban inicializálni egy map-et és azt használni
     private Class<?> getClassByString(String classType) {
-        if (StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_ROAD)) {
+        if (StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_ROAD) || StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_ROAD_CROSSROAD)) {
             return Road.class;
         } else if (StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_TREE)) {
             return Tree.class;

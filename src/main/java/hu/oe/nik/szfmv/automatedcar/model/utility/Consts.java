@@ -14,6 +14,7 @@ public final class Consts {
     public static final String SUFFIX_XML = ".xml";
     public static final String RES_FILENAME_BOLLARD = "bollard";
     public static final String RES_IDENTIFIER_ROAD = "road_2";
+    public static final String RES_IDENTIFIER_ROAD_CROSSROAD = "2_crossroad";
     public static final String RES_IDENTIFIER_ROAD_STRAIGHT = "road_2lane_straight";
     public static final String RES_IDENTIFIER_ROAD_90_LEFT = "road_2lane_90left";
     public static final String RES_IDENTIFIER_ROAD_90_RIGHT = "road_2lane_90right";
@@ -21,6 +22,9 @@ public final class Consts {
     public static final String RES_IDENTIFIER_ROAD_45_RIGHT = "road_2lane_45right";
     public static final String RES_IDENTIFIER_ROAD_T_JUNCTION_LEFT = "road_2lane_tjunctionleft";
     public static final String RES_IDENTIFIER_ROAD_T_JUNCTION_RIGHT = "road_2lane_tjunctionright";
+    public static final String RES_IDENTIFIER_ROAD_CROSSROAD_1 = "2_crossroad_1";
+    public static final String RES_IDENTIFIER_ROAD_CROSSROAD_2 = "2_crossroad_2";
+    public static final String RES_IDENTIFIER_ROAD_ROTARY = "road_2lane_rotary";
     public static final String RES_IDENTIFIER_TREE = "tree";
     public static final String RES_IDENTIFIER_PARKINGSPACE = "parking_space";
     public static final String RES_IDENTIFIER_PARKINGSPACE_PARALLEL = "parking_space_parallel";
