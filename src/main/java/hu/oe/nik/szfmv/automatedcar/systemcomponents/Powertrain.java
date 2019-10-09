@@ -3,7 +3,6 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 import com.github.pyknic.vector.Vec2f;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.UserInputPacket;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,14 +31,14 @@ public class Powertrain extends SystemComponent {
         virtualFunctionBus.powertrainPacket = new PowertrainPacket();
     }
 
-    private void calculateMovingVector(UserInputPacket userInputPacket) {
-        calculateVelocityVector(userInputPacket.getThrottle(), userInputPacket.getBrake(), userInputPacket.getGearShift());
+    private void calculateMovingVector() {
+        calculateVelocityVector(0, 0, GearShift.N);
         virtualFunctionBus.powertrainPacket.setMovingVector(virtualFunctionBus.powertrainPacket.getVelocityVector());
     }
 
     @Override
     public void loop() {
-        calculateMovingVector(virtualFunctionBus.userInputPacket);
+        calculateMovingVector();
     }
 
     private Vec2f getDirectionUnitVector(GearShift gearShift) {
