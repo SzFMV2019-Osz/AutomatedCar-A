@@ -2,8 +2,8 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import com.github.pyknic.vector.Vec2f;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.UserInputPacket;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +22,7 @@ public class Powertrain extends SystemComponent {
     private static final int[] LOWER_LIMITS = new int[]{0, 3385, 4010, 4356, 4224};
     private static final int[] UPPER_LIMITS = new int[]{6000, 6000, 6000, 6000, Integer.MAX_VALUE};
 
+    private Vec2f currentVelocityVector = Vec2f.of(0, 0);
     private int currentInsideGearShift = 0;
     private int refreshRate;
 
@@ -32,18 +33,18 @@ public class Powertrain extends SystemComponent {
         virtualFunctionBus.powertrainPacket = new PowertrainPacket();
     }
 
-    private void calculateMovingVector(UserInputPacket userInputPacket) {
-        calculateVelocityVector(userInputPacket.getThrottle(), userInputPacket.getBrake(), userInputPacket.getGearShift());
-        virtualFunctionBus.powertrainPacket.setMovingVector(virtualFunctionBus.powertrainPacket.getVelocityVector());
+    private void calculateMovingVector(InputPacket inputPacket) {
+        calculateVelocityVector(inputPacket.getGasPedalValue(), inputPacket.getBreakPedalValue(), inputPacket.getGearShiftValue());
+        virtualFunctionBus.powertrainPacket.setMovingVector(currentVelocityVector);
     }
 
     @Override
     public void loop() {
-        calculateMovingVector(virtualFunctionBus.userInputPacket);
+        calculateMovingVector(virtualFunctionBus.inputPacket);
     }
 
-    private Vec2f getDirectionUnitVector(GearShift gearShift) {
-        switch (gearShift) {
+    private Vec2f getDirectionUnitVector(GearShift.POS gearShiftPos) {
+        switch (gearShiftPos) {
             case R:
                 return BACKWARD_VECTOR;
             case D:
@@ -53,8 +54,8 @@ public class Powertrain extends SystemComponent {
         }
     }
 
-    private void getCurrentInsideGearShift(GearShift gearShift) {
-        if (gearShift == GearShift.R) {
+    private void getCurrentInsideGearShift(GearShift.POS gearShiftPos) {
+        if (gearShiftPos == GearShift.POS.R) {
             currentInsideGearShift = 5;
         } else {
             if ((double) LOWER_LIMITS[currentInsideGearShift] > virtualFunctionBus.powertrainPacket.getRPM()) {
@@ -66,41 +67,42 @@ public class Powertrain extends SystemComponent {
         }
     }
 
-    private void calculateRPM(int throttle, GearShift gearShift) {
-        getCurrentInsideGearShift(gearShift);
+    private void calculateRPM(int throttle, GearShift.POS gearShiftPos) {
+        getCurrentInsideGearShift(gearShiftPos);
         virtualFunctionBus.powertrainPacket.setRPM((int) (throttle * RPM_CONSTANT * GEAR_RATIOS.get(currentInsideGearShift)));
-        getCurrentInsideGearShift(gearShift);
+        getCurrentInsideGearShift(gearShiftPos);
     }
 
-    private Vec2f calculateBrakeForceVector(int brake, GearShift gearShift) {
-        return getDirectionUnitVector(gearShift).scale(-1).scale(brake).scale(BRAKE_CONSTANT);
+    private Vec2f calculateBrakeForceVector(int brake, GearShift.POS gearShiftPos) {
+        return getDirectionUnitVector(gearShiftPos).scale(-1).scale(brake).scale(BRAKE_CONSTANT);
     }
 
-    private Vec2f calculateTractionForceVector(int throttle, GearShift gearShift) {
-        calculateRPM(throttle, gearShift);
-        return getDirectionUnitVector(gearShift).scale(virtualFunctionBus.powertrainPacket.getRPM());
+    private Vec2f calculateTractionForceVector(int throttle, GearShift.POS gearShiftPos) {
+        calculateRPM(throttle, gearShiftPos);
+        return getDirectionUnitVector(gearShiftPos).scale(virtualFunctionBus.powertrainPacket.getRPM());
     }
 
-    private Vec2f calculateSummaryForceVector(int throttle, int brake, GearShift gearShift) {
-        return calculateTractionForceVector(throttle, gearShift).plus(calculateBrakeForceVector(brake, gearShift)).plus(calculateResistForceVector(gearShift));
+    private Vec2f calculateSummaryForceVector(int throttle, int brake, GearShift.POS gearShiftPos) {
+        return calculateTractionForceVector(throttle, gearShiftPos).plus(calculateBrakeForceVector(brake, gearShiftPos)).plus(calculateResistForceVector(gearShiftPos));
     }
 
-    private Vec2f calculateResistForceVector(GearShift gearShift) {
-        return (getDirectionUnitVector(gearShift).scale(-1).scale(RESIST_FORCE_CONSTANT)).scale(getDirectionUnitVector(gearShift).scale(virtualFunctionBus.powertrainPacket.getVelocityVector()));
+    private Vec2f calculateResistForceVector(GearShift.POS gearShiftPos) {
+        return (getDirectionUnitVector(gearShiftPos).scale(-1).scale(RESIST_FORCE_CONSTANT)).scale(getDirectionUnitVector(gearShiftPos).scale(currentVelocityVector));
     }
 
-    private Vec2f calculateAccelerationVector(int throttle, int brake, GearShift gearShift) {
-        Vec2f summaryForce = calculateSummaryForceVector(throttle, brake, gearShift);
+    private Vec2f calculateAccelerationVector(int throttle, int brake, GearShift.POS gearShiftPos) {
+        Vec2f summaryForce = calculateSummaryForceVector(throttle, brake, gearShiftPos);
         return Vec2f.of(summaryForce.getX() / CAR_MASS, summaryForce.getY() / CAR_MASS);
     }
 
-    private void calculateVelocityVector(int throttle, int brake, GearShift gearShift) {
-        var accelerationVector = calculateAccelerationVector(throttle, brake, gearShift);
-        var velocityVector = virtualFunctionBus.powertrainPacket.getVelocityVector().plus(Vec2f.of(accelerationVector.getX() * refreshRate, accelerationVector.getY() * refreshRate));
-        if (velocityVector.getY() * getDirectionUnitVector(gearShift).getY() <= 0) {
+    private void calculateVelocityVector(int throttle, int brake, GearShift.POS gearShiftPos) {
+        var accelerationVector = calculateAccelerationVector(throttle, brake, gearShiftPos);
+        var velocityVector = currentVelocityVector.plus(Vec2f.of(accelerationVector.getX() * refreshRate, accelerationVector.getY() * refreshRate));
+        if (velocityVector.getY() * getDirectionUnitVector(gearShiftPos).getY() <= 0) {
             velocityVector = NULL_VECTOR;
         }
-        virtualFunctionBus.powertrainPacket.setVelocityVector(velocityVector);
+        currentVelocityVector = velocityVector;
+        virtualFunctionBus.powertrainPacket.setVelocity((int) currentVelocityVector.magn());
     }
 
     private double calculateSteeringLimitation(double steering) {

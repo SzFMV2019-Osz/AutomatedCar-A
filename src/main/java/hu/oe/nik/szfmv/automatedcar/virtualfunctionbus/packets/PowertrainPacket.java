@@ -4,11 +4,10 @@ import com.github.pyknic.vector.Vec2f;
 
 public class PowertrainPacket {
     private int RPM;
-    private Vec2f velocityVector;
+    private int velocity;
     private Vec2f movingVector;
 
     public PowertrainPacket() {
-        velocityVector = Vec2f.of(0, 0);
         movingVector = Vec2f.of(0, 0);
     }
 
@@ -20,12 +19,12 @@ public class PowertrainPacket {
         this.RPM = RPM;
     }
 
-    public Vec2f getVelocityVector() {
-        return velocityVector;
+    public int getVelocity() {
+        return velocity;
     }
 
-    public void setVelocityVector(Vec2f velocityVector) {
-        this.velocityVector = velocityVector;
+    public void setVelocity(int velocity) {
+        this.velocity = velocity;
     }
 
     public Vec2f getMovingVector() {
