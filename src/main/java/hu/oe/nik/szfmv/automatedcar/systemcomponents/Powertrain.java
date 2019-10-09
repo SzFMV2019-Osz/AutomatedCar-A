@@ -3,11 +3,12 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 import com.github.pyknic.vector.Vec2f;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.UserInputPacket;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Powertrain extends SystemComponent implements IPowertrain {
+public class Powertrain extends SystemComponent {
     private static final int RPM_CONSTANT = 60;
     private static final int BRAKE_CONSTANT = 60;
     private static final int RESIST_FORCE_CONSTANT = 100;
@@ -31,15 +32,14 @@ public class Powertrain extends SystemComponent implements IPowertrain {
         virtualFunctionBus.powertrainPacket = new PowertrainPacket();
     }
 
-    @Override
-    public void calculateMovingVector(int throttle, int brake, GearShift gearShift) {
-        calculateVelocityVector(throttle, brake, gearShift);
+    private void calculateMovingVector(UserInputPacket userInputPacket) {
+        calculateVelocityVector(userInputPacket.getThrottle(), userInputPacket.getBrake(), userInputPacket.getGearShift());
         virtualFunctionBus.powertrainPacket.setMovingVector(virtualFunctionBus.powertrainPacket.getVelocityVector());
     }
 
     @Override
     public void loop() {
-
+        calculateMovingVector(virtualFunctionBus.userInputPacket);
     }
 
     private Vec2f getDirectionUnitVector(GearShift gearShift) {
