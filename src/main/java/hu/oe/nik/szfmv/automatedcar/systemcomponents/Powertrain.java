@@ -22,6 +22,7 @@ public class Powertrain extends SystemComponent {
     private static final int[] LOWER_LIMITS = new int[]{0, 3385, 4010, 4356, 4224};
     private static final int[] UPPER_LIMITS = new int[]{6000, 6000, 6000, 6000, Integer.MAX_VALUE};
 
+    private Vec2f currentVelocityVector = Vec2f.of(0, 0);
     private int currentInsideGearShift = 0;
     private int refreshRate;
 
@@ -34,7 +35,7 @@ public class Powertrain extends SystemComponent {
 
     private void calculateMovingVector(InputPacket inputPacket) {
         calculateVelocityVector(inputPacket.getGasPedalValue(), inputPacket.getBreakPedalValue(), inputPacket.getGearShiftValue());
-        virtualFunctionBus.powertrainPacket.setMovingVector(virtualFunctionBus.powertrainPacket.getVelocityVector());
+        virtualFunctionBus.powertrainPacket.setMovingVector(currentVelocityVector);
     }
 
     @Override
@@ -86,7 +87,7 @@ public class Powertrain extends SystemComponent {
     }
 
     private Vec2f calculateResistForceVector(GearShift.POS gearShiftPos) {
-        return (getDirectionUnitVector(gearShiftPos).scale(-1).scale(RESIST_FORCE_CONSTANT)).scale(getDirectionUnitVector(gearShiftPos).scale(virtualFunctionBus.powertrainPacket.getVelocityVector()));
+        return (getDirectionUnitVector(gearShiftPos).scale(-1).scale(RESIST_FORCE_CONSTANT)).scale(getDirectionUnitVector(gearShiftPos).scale(currentVelocityVector));
     }
 
     private Vec2f calculateAccelerationVector(int throttle, int brake, GearShift.POS gearShiftPos) {
@@ -96,11 +97,12 @@ public class Powertrain extends SystemComponent {
 
     private void calculateVelocityVector(int throttle, int brake, GearShift.POS gearShiftPos) {
         var accelerationVector = calculateAccelerationVector(throttle, brake, gearShiftPos);
-        var velocityVector = virtualFunctionBus.powertrainPacket.getVelocityVector().plus(Vec2f.of(accelerationVector.getX() * refreshRate, accelerationVector.getY() * refreshRate));
+        var velocityVector = currentVelocityVector.plus(Vec2f.of(accelerationVector.getX() * refreshRate, accelerationVector.getY() * refreshRate));
         if (velocityVector.getY() * getDirectionUnitVector(gearShiftPos).getY() <= 0) {
             velocityVector = NULL_VECTOR;
         }
-        virtualFunctionBus.powertrainPacket.setVelocityVector(velocityVector);
+        currentVelocityVector = velocityVector;
+        virtualFunctionBus.powertrainPacket.setVelocity((int) currentVelocityVector.magn());
     }
 
     private double calculateSteeringLimitation(double steering) {
