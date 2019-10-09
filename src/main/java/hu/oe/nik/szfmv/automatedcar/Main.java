@@ -15,24 +15,28 @@ public class Main {
     private AutomatedCar car;
     private World world;
 
+    private Pont kozepPont;
+
     public static void main(String[] args) {
-
         new Main().run();
-
     }
 
     public void run() {
         init();
         loop();
-
     }
 
     private void init() {
         // create the world
         world = new World(5000, 3000);
         // create an automated car
-        car = new AutomatedCar(20, 20, "car_2_white.png");
+        car = new AutomatedCar(0, 0,"car_2_white.png");
+        kozepPont = new Pont(car.getX(),car.getY(),"kek.png");
+
+
+
         world.addObjectToWorld(car);
+        world.addObjectToWorld(kozepPont);
 
         window = new Gui(car);
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());

@@ -17,6 +17,7 @@
         <plugins>
             <!-- plugin for code coverage calculation -->
             <plugin>
+
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.2</version>
@@ -135,10 +136,7 @@
             <groupId>com.github.pyknic</groupId>
             <artifactId>vector</artifactId>
             <version>1.0.0</version>
+
         </dependency>
-
-
-
-
     </dependencies>
 </project>
