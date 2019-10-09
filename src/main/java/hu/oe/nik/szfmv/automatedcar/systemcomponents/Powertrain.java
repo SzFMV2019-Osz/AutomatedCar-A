@@ -59,7 +59,7 @@ public class Powertrain extends SystemComponent {
     private void calculateMovingVector(InputPacket inputPacket) {
 
         calculateVelocityVector(inputPacket.getGasPedalValue(), inputPacket.getBreakPedalValue(), inputPacket.getGearShiftValue());
-        float steeringAngle = virtualFunctionBus.inputPacket.getSteeringWheelValue() / 100 * 60;
+        float steeringAngle = virtualFunctionBus.inputPacket.getSteeringWheelValue() / (float)100 * (float)60;
 
         //frontWheelX = carLocationX + wheelBase/2 * cos(carHeading);
         frontX = (float) (carLocationX + wheelbase/2 * Math.cos(rotationAngle));  //ITT ELKELLENE ÉRNI A CAR.WORLDOBJECT.getWidth() -et
@@ -74,30 +74,30 @@ public class Powertrain extends SystemComponent {
         backY = (float) (carLocationY - wheelbase/2 * Math.sin(rotationAngle));
 
         //backWheelX += carSpeed * dt * cos(carHeading);
-        backX += 0 * 1 * Math.cos(rotationAngle);
+        backX += 1 * 1 * Math.cos(rotationAngle);
 
         //backWheelY += carSpeed * dt * sin(carHeading);
-        backY += 0 * 1 * Math.sin(rotationAngle);
+        backY += 1 * 1 * Math.sin(rotationAngle);
 
         //frontWheelX += carSpeed * dt * cos(carHeading+steerAngle);
-        frontX += 0 * 1 * Math.cos(rotationAngle + steeringAngle );
+        frontX += 1 * 1 * Math.cos(rotationAngle + steeringAngle );
 
         //frontWheelY += carSpeed * dt * sin(carHeading+steerAngle);
-        frontY += 0 * 1 * Math.sin(rotationAngle + steeringAngle );
+        frontY += 1 * 1 * Math.sin(rotationAngle + steeringAngle );
 
         //carLocationX = (frontWheelX + backWheelX) / 2;
         float oldX = carLocationX;
-        carLocationX = (frontX + frontY)/2;
+        carLocationX = (frontX + backX)/2;
 
         //carLocationY = (frontWheelY + backWheelY) / 2;
         float oldY = carLocationY;
-        carLocationY = (frontX + frontY)/2;
+        carLocationY = (frontY + backY)/2;
 
         //carHeading = atan2( frontWheelY - backWheelY , frontWheelX - backWheelX );
         rotationAngle = (float)Math.atan2(frontY-backY , frontX-backX);
 
         Vec2f seged = Vec2f.of(carLocationX-oldX,carLocationY-oldY);
-        virtualFunctionBus.powertrainPacket.setMovingVector(currentVelocityVector);
+        virtualFunctionBus.powertrainPacket.setMovingVector(seged);
     }
 
     public float getAutoSzoge(){
@@ -124,8 +124,8 @@ public class Powertrain extends SystemComponent {
         if (gearShiftPos == GearShift.POS.R) {
             currentInsideGearShift = 5;
         } else {
-            if(currentInsideGearShift ==5){
-                currentInsideGearShift=0;
+            if(currentInsideGearShift == 5){
+                currentInsideGearShift = 0;
             }
             if ((double) LOWER_LIMITS[currentInsideGearShift] > virtualFunctionBus.powertrainPacket.getRPM()) {
                 currentInsideGearShift--;

@@ -33,8 +33,6 @@ public class Main {
         car = new AutomatedCar(0, 0,"car_2_white.png");
         kozepPont = new Pont(car.getX(),car.getY(),"kek.png");
 
-
-
         world.addObjectToWorld(car);
         world.addObjectToWorld(kozepPont);
 
