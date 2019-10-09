@@ -7,8 +7,10 @@ import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
 
 import javax.swing.*;
+import javax.swing.text.Position;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -31,9 +33,12 @@ public class CourseDisplay extends JPanel {
      */
     CourseDisplay(Gui pt) {
         // Not using any layout manager, but fixed coordinates
+        this.width = this.world.getWidth();
+        this.height = this.world.getHeight();
+
         setDoubleBuffered(true);
         setLayout(null);
-        setBounds(0, 0, width, height);
+        setBounds(0, 0, this.width, this.height);
         parent = pt;
     }
 
@@ -56,9 +61,9 @@ public class CourseDisplay extends JPanel {
      * @return the ready to render doubleBufferedScreen
      */
     private BufferedImage renderDoubleBufferedScreen(WorldManager world) {
-        BufferedImage doubleBufferedScreen = new BufferedImage(this.world.getWidth(), this.world.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage doubleBufferedScreen = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) doubleBufferedScreen.getGraphics();
-        Rectangle r = new Rectangle(0, 0, width, height);
+        Rectangle r = new Rectangle(0, 0, this.width, this.height);
         g2d.setPaint(new Color(backgroundColor));
         g2d.fill(r);
 
@@ -130,8 +135,8 @@ public class CourseDisplay extends JPanel {
                 refPoint = new Point(0,0);
             }
             AffineTransform t = new AffineTransform();
-            t.translate(object.getPosX() - refPoint.getX() + offsets[0], object.getPosY() - refPoint.getY()+ offsets[1]);
-            t.rotate(Math.toRadians(-object.getRotation()),refPoint.getX(),refPoint.getY());
+            t.translate(object.getPosX() + offsets[0], object.getPosY() + offsets[1]);
+            t.rotate(Math.toRadians(-object.getRotation()),refPoint.getX() + offsets[0],refPoint.getY() + offsets[1]);
             g2d.drawImage(object.getImage(), t, this);
 
             // todo: decide on how model will signal colors
