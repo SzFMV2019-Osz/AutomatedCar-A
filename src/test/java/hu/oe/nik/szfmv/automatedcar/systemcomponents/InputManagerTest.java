@@ -164,7 +164,7 @@ public class InputManagerTest {
     }
 
     @Test
-    void NumPad1IsPressed_AsyncKeyHandlerIsCalled_SwitchRightSign() {
+    void NumPad1IsPressed_AsyncKeyHandlerIsCalled_SwitchLeftSign() {
 
         boolean leftsign;
         boolean expectedLeftSign;
@@ -180,7 +180,7 @@ public class InputManagerTest {
     }
 
     @Test
-    void NumPad2IsPressed_AsyncKeyHandlerIsCalled_SwitchLeftSign() {
+    void NumPad2IsPressed_AsyncKeyHandlerIsCalled_SwitchRightSign() {
         boolean rightSign;
         boolean expectedRightSign;
         bus = new VirtualFunctionBus();

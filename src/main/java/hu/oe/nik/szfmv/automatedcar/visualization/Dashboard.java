@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
+
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
@@ -109,11 +110,11 @@ public class Dashboard extends JPanel {
         speedLimitText.setBounds(10, 450, 80, 15);
         speedLimitValueText.setBounds(90, 450, 30, 15);
         steeringWheelText.setBounds(10, 580, 100, 15);
-        steeringWheelValueText.setBounds(110, 580, 20, 15);
+        steeringWheelValueText.setBounds(110, 580, 30, 15);
         xCoordText.setBounds(10, 600, 20, 15);
-        xCoordValueText.setBounds(30, 600, 10, 15);
+        xCoordValueText.setBounds(30, 600, 30, 15);
         yCoordText.setBounds(70, 600, 20, 15);
-        yCoordValueText.setBounds(90, 600, 10, 15);
+        yCoordValueText.setBounds(90, 600, 30, 15);
 
         add(gearShiftText);
         add(currentGearText);
@@ -177,19 +178,28 @@ public class Dashboard extends JPanel {
     private void inputEventHandling(InputPacket inputPacket) {
         gasProgressBar.setValue(inputPacket.getGasPedalValue());
         breakProgressBar.setValue(inputPacket.getBreakPedalValue());
-        steeringWheelValueText.setText(String.valueOf(inputPacket.getRightSteeringWheelValue() - inputPacket.getLeftSteeringWheelValue()));
+        steeringWheelValueText.setText(String.valueOf(inputPacket.getSteeringWheelValue()));
         left_Turn_Signal.setOn(inputPacket.getLeftSignalValue());
         right_Turn_Signal.setOn(inputPacket.getRightSignalValue());
         TimeGapIndicator.setText(String.valueOf(inputPacket.getAccTimeGap()));
         ReferenceSpeedIndicator.setText(String.valueOf(inputPacket.getAccSpeed()));
         currentGearText.setText(String.valueOf(inputPacket.getGearShiftValue()));
         AccIndicator.switchtIt(inputPacket.getAccState());
+        PPIndicator.switchtIt(inputPacket.getParkingState());
+        LKAIndicator.switchtIt(inputPacket.getLaneKeepingState());
 
+        /*to be deleted*/
+        speedoMeter.setPerf_Percentage(inputPacket.getGasPedalValue());
 
     }
 
 
     private void OtherEventHandling() {
+        //speedoMeter.setPerf_Percentage(PowertrainPacket.getVelocityVector()); -->some magic here
+        speedLimitValueText.setText(String.valueOf(50));
+        RPMmeter.setPerf_Percentage(/*PowertrainPacket.getRPM()*/0);
+        xCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getX()));
+        yCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getY()));
     }
 
     private void EventHandling() {
