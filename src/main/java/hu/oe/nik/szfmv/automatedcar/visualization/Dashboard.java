@@ -1,8 +1,10 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,15 +78,15 @@ public class Dashboard extends JPanel {
     }
 
     private void IndicatorPlacing() {
-        ReferenceSpeedIndicator = new StatusIndicator(10, 205,50,40,"0.0");
-        TimeGapIndicator = new StatusIndicator(60, 205,50,40,"0.8");
-        AccIndicator = new StatusIndicator(10, 250,50,40,"ACC");
-        PPIndicator = new StatusIndicator(60, 250,50,40,"PP");
-        LKAIndicator = new StatusIndicator(10, 300,50,40,"LKA");
-        LKWARNIndicator = new StatusIndicator(10, 350,100,40,"LKA WARN");
-        LastRoadSignIndicator = new StatusIndicator(120, 205,100,40,"STOP");
-        AEBWARNIndicator = new StatusIndicator(120, 310,100,40,"AEB WARN");
-        RRWARNIndicator = new StatusIndicator(120, 350,100,40,"RR WARN");
+        ReferenceSpeedIndicator = new StatusIndicator(10, 205, 50, 40, "0.0");
+        TimeGapIndicator = new StatusIndicator(60, 205, 50, 40, "0.8");
+        AccIndicator = new StatusIndicator(10, 250, 50, 40, "ACC");
+        PPIndicator = new StatusIndicator(60, 250, 50, 40, "PP");
+        LKAIndicator = new StatusIndicator(10, 300, 50, 40, "LKA");
+        LKWARNIndicator = new StatusIndicator(10, 350, 100, 40, "LKA WARN");
+        LastRoadSignIndicator = new StatusIndicator(120, 205, 100, 40, "STOP");
+        AEBWARNIndicator = new StatusIndicator(120, 310, 100, 40, "AEB WARN");
+        RRWARNIndicator = new StatusIndicator(120, 350, 100, 40, "RR WARN");
 
         add(AccIndicator);
         add(PPIndicator);
@@ -96,6 +98,7 @@ public class Dashboard extends JPanel {
         add(TimeGapIndicator);
         add(ReferenceSpeedIndicator);
     }
+
     private void TextPlacing() {
         gearShiftText.setBounds(100, 150, 40, 15);
         currentGearText.setBounds(135, 150, 10, 15);
@@ -170,15 +173,21 @@ public class Dashboard extends JPanel {
         }
     };
 
-    private void inputEventHandling() {
-
+    private void InputEventHandling(InputPacket packet) {
+        gasProgressBar.setValue(packet.getGasPedalValue());
+        breakProgressBar.setValue(packet.getBreakPedalValue());
+        currentGearText.setText(/*bus.inputPacket.getGearShiftValue().toString()*/"P");
     }
 
     private void OtherEventHandling() {
     }
 
     private void EventHandling() {
-        inputEventHandling();
+        VirtualFunctionBus virtualFunctionBus = parent.getVirtualFunctionBus();
+        if (virtualFunctionBus != null) {
+            InputEventHandling(virtualFunctionBus.inputPacket);
+        }
+
         OtherEventHandling();
     }
 
