@@ -3,6 +3,8 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -162,7 +164,7 @@ public class Dashboard extends JPanel {
 
                 try {
                     EventHandling();
-                    Thread.sleep(100);
+                    Thread.sleep(40);
                 } catch (InterruptedException ex) {
                 }
 
@@ -170,15 +172,23 @@ public class Dashboard extends JPanel {
         }
     };
 
-    private void inputEventHandling() {
+    private void inputEventHandling(InputPacket inputPacket) {
+        gasProgressBar.setValue(inputPacket.getGasPedalValue());
+        breakProgressBar.setValue(inputPacket.getBreakPedalValue());
+        left_Turn_Signal.setOn(inputPacket.getLeftSignalValue());
 
     }
+
 
     private void OtherEventHandling() {
     }
 
     private void EventHandling() {
-        inputEventHandling();
+        VirtualFunctionBus virtualFunctionBus = parent.getVirtualFunctionBus();
+        if(virtualFunctionBus != null){
+            inputEventHandling(virtualFunctionBus.inputPacket);
+        }
+
         OtherEventHandling();
     }
 

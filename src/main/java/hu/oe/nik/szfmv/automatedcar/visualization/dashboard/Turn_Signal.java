@@ -12,6 +12,17 @@ public class Turn_Signal extends JPanel {
     private int[] y;
     private Color currentColor = Signal_OFF;
 
+    public void setOn(boolean on) {
+        isOn = on;
+        if(isOn)
+            currentColor = Signal_ON;
+        else
+            currentColor = Signal_OFF;
+        repaint();
+    }
+
+    private boolean isOn;
+
     public Turn_Signal(int x_pos, int y_pos, boolean isLeft) {
         setBounds(x_pos, y_pos, 40, 40);
         if (isLeft) {
