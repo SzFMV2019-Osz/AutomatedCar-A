@@ -33,7 +33,7 @@ public class AutomatedCar extends WorldObject {
     }
 
     private void calculatePositionAndOrientation() {
-        int throttle = 0;
+        int throttle = 10;
         int brake = 0;
         GearShift gearShift = GearShift.D;
         powertrain.calculateMovingVector(throttle, brake, gearShift);

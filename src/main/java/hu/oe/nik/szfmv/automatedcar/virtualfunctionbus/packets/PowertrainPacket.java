@@ -8,6 +8,8 @@ public class PowertrainPacket {
     private Vec2f movingVector;
 
     public PowertrainPacket() {
+        velocityVector = Vec2f.of(0, 0);
+        movingVector = Vec2f.of(0, 0);
     }
 
     public int getRPM() {
