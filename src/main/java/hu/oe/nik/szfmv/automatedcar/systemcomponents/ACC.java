@@ -17,7 +17,12 @@ public class ACC {
     }
 
     public void Resume() {
-        isOn = true;
+        if(isOn==false){
+            isOn = true;
+        }
+        else{
+            isOn=false;
+        }
     }
 
     public void Plus() {

@@ -9,6 +9,7 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 import javax.swing.*;
 import java.awt.*;
 
+
 /**
  * Dashboard shows the state of the ego car, thus helps in debugging.
  */
@@ -78,15 +79,15 @@ public class Dashboard extends JPanel {
     }
 
     private void IndicatorPlacing() {
-        ReferenceSpeedIndicator = new StatusIndicator(10, 205,50,40,"0.0");
-        TimeGapIndicator = new StatusIndicator(60, 205,50,40,"0.8");
-        AccIndicator = new StatusIndicator(10, 250,50,40,"ACC");
-        PPIndicator = new StatusIndicator(60, 250,50,40,"PP");
-        LKAIndicator = new StatusIndicator(10, 300,50,40,"LKA");
-        LKWARNIndicator = new StatusIndicator(10, 350,100,40,"LKA WARN");
-        LastRoadSignIndicator = new StatusIndicator(120, 205,100,40,"STOP");
-        AEBWARNIndicator = new StatusIndicator(120, 310,100,40,"AEB WARN");
-        RRWARNIndicator = new StatusIndicator(120, 350,100,40,"RR WARN");
+        ReferenceSpeedIndicator = new StatusIndicator(10, 205, 50, 40, "0.0");
+        TimeGapIndicator = new StatusIndicator(60, 205, 50, 40, "0.8");
+        AccIndicator = new StatusIndicator(10, 250, 50, 40, "ACC");
+        PPIndicator = new StatusIndicator(60, 250, 50, 40, "PP");
+        LKAIndicator = new StatusIndicator(10, 300, 50, 40, "LKA");
+        LKWARNIndicator = new StatusIndicator(10, 350, 100, 40, "LKA WARN");
+        LastRoadSignIndicator = new StatusIndicator(120, 205, 100, 40, "STOP");
+        AEBWARNIndicator = new StatusIndicator(120, 310, 100, 40, "AEB WARN");
+        RRWARNIndicator = new StatusIndicator(120, 350, 100, 40, "RR WARN");
 
         add(AccIndicator);
         add(PPIndicator);
@@ -98,6 +99,7 @@ public class Dashboard extends JPanel {
         add(TimeGapIndicator);
         add(ReferenceSpeedIndicator);
     }
+
     private void TextPlacing() {
         gearShiftText.setBounds(100, 150, 40, 15);
         currentGearText.setBounds(135, 150, 10, 15);
@@ -175,7 +177,14 @@ public class Dashboard extends JPanel {
     private void inputEventHandling(InputPacket inputPacket) {
         gasProgressBar.setValue(inputPacket.getGasPedalValue());
         breakProgressBar.setValue(inputPacket.getBreakPedalValue());
+        steeringWheelValueText.setText(String.valueOf(inputPacket.getRightSteeringWheelValue() - inputPacket.getLeftSteeringWheelValue()));
         left_Turn_Signal.setOn(inputPacket.getLeftSignalValue());
+        right_Turn_Signal.setOn(inputPacket.getRightSignalValue());
+        TimeGapIndicator.setText(String.valueOf(inputPacket.getAccTimeGap()));
+        ReferenceSpeedIndicator.setText(String.valueOf(inputPacket.getAccSpeed()));
+        currentGearText.setText(String.valueOf(inputPacket.getGearShiftValue()));
+        AccIndicator.switchtIt(inputPacket.getAccState());
+
 
     }
 
@@ -185,7 +194,7 @@ public class Dashboard extends JPanel {
 
     private void EventHandling() {
         VirtualFunctionBus virtualFunctionBus = parent.getVirtualFunctionBus();
-        if(virtualFunctionBus != null){
+        if (virtualFunctionBus != null) {
             inputEventHandling(virtualFunctionBus.inputPacket);
         }
 
