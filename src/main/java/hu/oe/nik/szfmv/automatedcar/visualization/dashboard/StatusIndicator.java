@@ -13,13 +13,9 @@ public class StatusIndicator extends JPanel {
     String text;
     Font font;
 
-    public void switchtIt() {
-        if(isItOn){
-            isItOn = false;
-        }
-        else {
-            isItOn = true;
-        }
+    public void switchIt(boolean value) {
+        isItOn = value;
+
         repaint();
     }
 

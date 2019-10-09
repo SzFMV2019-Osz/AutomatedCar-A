@@ -184,9 +184,9 @@ public class Dashboard extends JPanel {
         TimeGapIndicator.setText(String.valueOf(inputPacket.getAccTimeGap()));
         ReferenceSpeedIndicator.setText(String.valueOf(inputPacket.getAccSpeed()));
         currentGearText.setText(String.valueOf(inputPacket.getGearShiftValue()));
-        AccIndicator.switchtIt(inputPacket.getAccState());
-        PPIndicator.switchtIt(inputPacket.getParkingState());
-        LKAIndicator.switchtIt(inputPacket.getLaneKeepingState());
+        AccIndicator.switchIt(inputPacket.getAccState());
+        PPIndicator.switchIt(inputPacket.getParkingState());
+        LKAIndicator.switchIt(inputPacket.getLaneKeepingState());
 
         /*to be deleted*/
         speedoMeter.setPerf_Percentage(inputPacket.getGasPedalValue());
@@ -195,9 +195,9 @@ public class Dashboard extends JPanel {
 
 
     private void OtherEventHandling() {
-        //speedoMeter.setPerf_Percentage(PowertrainPacket.getVelocityVector()); -->some magic here
+        //speedoMeter.setPerf_Percentage(0); -->some magic here
         speedLimitValueText.setText(String.valueOf(50));
-        RPMmeter.setPerf_Percentage(/*PowertrainPacket.getRPM()*/0);
+        RPMmeter.setPerf_Percentage(0);
         xCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getX()));
         yCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getY()));
     }
