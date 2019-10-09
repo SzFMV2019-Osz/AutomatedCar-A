@@ -56,7 +56,7 @@ public class Powertrain extends SystemComponent {
 
     private void getCurrentInsideGearShift(GearShift.POS gearShiftPos) {
         if (gearShiftPos == GearShift.POS.R) {
-            currentInsideGearShift = 5;
+            currentInsideGearShift = 4;
         } else {
             if ((double) LOWER_LIMITS[currentInsideGearShift] > virtualFunctionBus.powertrainPacket.getRPM()) {
                 currentInsideGearShift--;
@@ -102,7 +102,7 @@ public class Powertrain extends SystemComponent {
             velocityVector = NULL_VECTOR;
         }
         currentVelocityVector = velocityVector;
-        virtualFunctionBus.powertrainPacket.setVelocity((int) currentVelocityVector.magn());
+        virtualFunctionBus.powertrainPacket.setVelocity(Math.abs((int) currentVelocityVector.magn()));
     }
 
     private double calculateSteeringLimitation(double steering) {

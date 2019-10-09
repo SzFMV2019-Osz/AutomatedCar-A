@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
@@ -188,16 +189,14 @@ public class Dashboard extends JPanel {
         PPIndicator.switchIt(inputPacket.getParkingState());
         LKAIndicator.switchIt(inputPacket.getLaneKeepingState());
 
-        /*to be deleted*/
-        speedoMeter.setPerf_Percentage(inputPacket.getGasPedalValue());
 
     }
 
 
-    private void OtherEventHandling() {
-        //speedoMeter.setPerf_Percentage(0); -->some magic here
-        speedLimitValueText.setText(String.valueOf(50));
-        RPMmeter.setPerf_Percentage(0);
+    private void OtherEventHandling(PowertrainPacket packet) {
+        speedoMeter.setPerf_Percentage(packet.getVelocity());
+        speedLimitValueText.setText(String.valueOf(130));
+        RPMmeter.setPerf_Percentage(packet.getRPM());
         xCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getX()));
         yCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getY()));
     }
@@ -206,9 +205,10 @@ public class Dashboard extends JPanel {
         VirtualFunctionBus virtualFunctionBus = parent.getVirtualFunctionBus();
         if (virtualFunctionBus != null) {
             inputEventHandling(virtualFunctionBus.inputPacket);
+            OtherEventHandling(virtualFunctionBus.powertrainPacket);
         }
 
-        OtherEventHandling();
+
     }
 
     /**
