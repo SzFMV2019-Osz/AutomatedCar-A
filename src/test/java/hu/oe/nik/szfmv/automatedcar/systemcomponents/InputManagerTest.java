@@ -142,7 +142,7 @@ public class InputManagerTest {
         bus = new VirtualFunctionBus();
         inputManager = new InputManager(bus);
 
-        inputManager.HandleAsyncKeys(KeyEvent.VK_PLUS);
+        inputManager.HandleAsyncKeys(KeyEvent.VK_ADD);
 
         accSpeed = bus.inputPacket.getAccSpeed();
 
@@ -156,7 +156,7 @@ public class InputManagerTest {
         bus = new VirtualFunctionBus();
         inputManager = new InputManager(bus);
 
-        inputManager.HandleAsyncKeys(KeyEvent.VK_MINUS);
+        inputManager.HandleAsyncKeys(KeyEvent.VK_SUBTRACT);
 
         accSpeed = bus.inputPacket.getAccSpeed();
 
@@ -164,22 +164,8 @@ public class InputManagerTest {
     }
 
     @Test
-    void NumPad1IsPressed_AsyncKeyHandlerIsCalled_SwitchRightSign() {
-        boolean rightSign;
-        boolean expectedRightSign;
-        bus = new VirtualFunctionBus();
-        inputManager = new InputManager(bus);
+    void NumPad1IsPressed_AsyncKeyHandlerIsCalled_SwitchLeftSign() {
 
-        expectedRightSign = !bus.inputPacket.getRightSignalValue();
-
-        inputManager.HandleAsyncKeys(KeyEvent.VK_NUMPAD1);
-        rightSign = bus.inputPacket.getRightSignalValue();
-
-        assertEquals(expectedRightSign, rightSign);
-    }
-
-    @Test
-    void NumPad2IsPressed_AsyncKeyHandlerIsCalled_SwitchLeftSign() {
         boolean leftsign;
         boolean expectedLeftSign;
         bus = new VirtualFunctionBus();
@@ -187,10 +173,25 @@ public class InputManagerTest {
 
         expectedLeftSign = !bus.inputPacket.getLeftSignalValue();
 
-        inputManager.HandleAsyncKeys(KeyEvent.VK_NUMPAD2);
+        inputManager.HandleAsyncKeys(KeyEvent.VK_NUMPAD1);
         leftsign = bus.inputPacket.getLeftSignalValue();
 
         assertEquals(expectedLeftSign, leftsign);
+    }
+
+    @Test
+    void NumPad2IsPressed_AsyncKeyHandlerIsCalled_SwitchRightSign() {
+        boolean rightSign;
+        boolean expectedRightSign;
+        bus = new VirtualFunctionBus();
+        inputManager = new InputManager(bus);
+
+        expectedRightSign = !bus.inputPacket.getRightSignalValue();
+
+        inputManager.HandleAsyncKeys(KeyEvent.VK_NUMPAD2);
+        rightSign = bus.inputPacket.getRightSignalValue();
+
+        assertEquals(expectedRightSign, rightSign);
     }
 
     @Test

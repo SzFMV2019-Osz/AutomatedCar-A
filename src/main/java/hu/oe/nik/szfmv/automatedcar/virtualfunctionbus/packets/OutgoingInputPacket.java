@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets;
-import  hu.oe.nik.szfmv.automatedcar.systemcomponents.GearShift.POS;
+
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.GearShift.POS;
 
 public interface OutgoingInputPacket {
     int getGasPedalValue();
@@ -10,9 +11,17 @@ public interface OutgoingInputPacket {
 
     int getLeftSteeringWheelValue();
 
+    int getSteeringWheelValue();
+
     POS getGearShiftValue();
 
     int getAccSpeed();
+
+    boolean getAccState();
+
+    boolean getParkingState();
+
+    boolean getLaneKeepingState();
 
     double getAccTimeGap();
 

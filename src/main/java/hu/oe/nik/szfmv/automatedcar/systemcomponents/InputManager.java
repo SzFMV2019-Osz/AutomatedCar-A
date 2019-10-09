@@ -5,7 +5,7 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import java.awt.event.KeyEvent;
 
-public class InputManager extends SystemComponent{
+public class InputManager extends SystemComponent {
 
     private Control gasPedal;
     private Control breakPedal;
@@ -42,60 +42,59 @@ public class InputManager extends SystemComponent{
         inputPacket.setLeftSteeringWheelValue(leftSteering.getValue());
     }
 
-    public void HandleSyncKeys(int pressedKey, boolean trigger)
-    {
-        switch(pressedKey)
-        {
-            case KeyEvent.VK_UP :
+    public void HandleSyncKeys(int pressedKey, boolean trigger) {
+        switch (pressedKey) {
+            case KeyEvent.VK_UP:
                 gasPedal.Trigger(trigger);
                 break;
 
-            case KeyEvent.VK_DOWN :
+            case KeyEvent.VK_DOWN:
                 breakPedal.Trigger(trigger);
                 break;
 
-            case KeyEvent.VK_RIGHT :
+            case KeyEvent.VK_RIGHT:
                 rightSteering.Trigger(trigger);
                 break;
 
-            case KeyEvent.VK_LEFT :
+            case KeyEvent.VK_LEFT:
                 leftSteering.Trigger(trigger);
                 break;
         }
     }
 
     public void HandleAsyncKeys(int releasedKey) {
-        switch(releasedKey)
-        {
-            case KeyEvent.VK_T :
+        switch (releasedKey) {
+            case KeyEvent.VK_T:
                 acc.TimeGapSetter();
                 inputPacket.setAccTimegap(acc.ReturnTimeGap());
                 break;
 
-            case KeyEvent.VK_PLUS:
+            case KeyEvent.VK_ADD:
                 acc.Plus();
                 inputPacket.setAccSpeed(acc.getReferenceSpeed());
                 break;
 
-            case KeyEvent.VK_MINUS:
+            case KeyEvent.VK_SUBTRACT:
                 acc.Minus();
                 inputPacket.setAccSpeed(acc.getReferenceSpeed());
                 break;
 
             case KeyEvent.VK_P:
                 /*Todo: set parking pilot*/
+                inputPacket.setParkingState();
                 break;
 
             case KeyEvent.VK_L:
                 /*Todo: set lane keeping*/
+                inputPacket.setLaneKeepingState();
                 break;
 
             case KeyEvent.VK_NUMPAD1:
-                inputPacket.setRightSignValue(!inputPacket.getRightSignalValue());
+                inputPacket.setLeftSignValue(!inputPacket.getLeftSignalValue());
                 break;
 
             case KeyEvent.VK_NUMPAD2:
-                inputPacket.setLeftSignValue(!inputPacket.getLeftSignalValue());
+                inputPacket.setRightSignValue(!inputPacket.getRightSignalValue());
                 break;
 
             case KeyEvent.VK_Q:
@@ -106,6 +105,11 @@ public class InputManager extends SystemComponent{
             case KeyEvent.VK_W:
                 gearShift.Decrement();
                 inputPacket.setGearShiftValue(gearShift.GetCurrentState());
+                break;
+
+            case KeyEvent.VK_A:
+                acc.Resume();
+                inputPacket.setAccState(acc.isOn);
                 break;
         }
     }

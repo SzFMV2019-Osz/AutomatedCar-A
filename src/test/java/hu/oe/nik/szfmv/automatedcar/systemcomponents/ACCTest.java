@@ -42,7 +42,7 @@ class ACCTest extends ACC {
     }
 
     @Test
-    void minuaroundMaxValue() {
+    void minuaroundMinValue() {
         accTest.Set(30);
         accTest.Minus();
         assertEquals(accTest.referenceSpeed, 30);
