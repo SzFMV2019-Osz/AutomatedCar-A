@@ -81,10 +81,12 @@ public class InputManager extends SystemComponent {
 
             case KeyEvent.VK_P:
                 /*Todo: set parking pilot*/
+                inputPacket.setParkingState();
                 break;
 
             case KeyEvent.VK_L:
                 /*Todo: set lane keeping*/
+                inputPacket.setLaneKeepingState();
                 break;
 
             case KeyEvent.VK_NUMPAD1:

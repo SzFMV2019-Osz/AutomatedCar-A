@@ -184,6 +184,8 @@ public class Dashboard extends JPanel {
         ReferenceSpeedIndicator.setText(String.valueOf(inputPacket.getAccSpeed()));
         currentGearText.setText(String.valueOf(inputPacket.getGearShiftValue()));
         AccIndicator.switchtIt(inputPacket.getAccState());
+        PPIndicator.switchtIt(inputPacket.getParkingState());
+        LKAIndicator.switchtIt(inputPacket.getLaneKeepingState());
 
 
     }

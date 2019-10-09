@@ -16,6 +16,8 @@ public interface OutgoingInputPacket {
     int getAccSpeed();
 
     boolean getAccState();
+    boolean getParkingState();
+    boolean getLaneKeepingState();
 
     double getAccTimeGap();
 
