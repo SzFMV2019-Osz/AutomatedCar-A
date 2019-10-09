@@ -11,12 +11,16 @@ public interface OutgoingInputPacket {
 
     int getLeftSteeringWheelValue();
 
+    int getSteeringWheelValue();
+
     POS getGearShiftValue();
 
     int getAccSpeed();
 
     boolean getAccState();
+
     boolean getParkingState();
+
     boolean getLaneKeepingState();
 
     double getAccTimeGap();

@@ -34,7 +34,7 @@ public class Main {
         car = new AutomatedCar(20, 20, "car_2_white.png");
         world.addObjectToWorld(car);
 
-        window = new Gui();
+        window = new Gui(car);
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());
         window.addKeyListener(new InputReader(car.getVirtualFunctionBus()));
 

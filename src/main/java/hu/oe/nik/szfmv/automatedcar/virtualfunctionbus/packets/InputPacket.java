@@ -13,8 +13,8 @@ public class InputPacket implements OutgoingInputPacket {
     private boolean rightSignValue = false;
     private boolean leftSignValue = false;
     private boolean accState = false;
-    private boolean laneKeepingState=false;
-    private boolean parkingState=false;
+    private boolean laneKeepingState = false;
+    private boolean parkingState = false;
     private double accTimegap = 0.8;
     private int accSpeed = 50;
 
@@ -54,6 +54,11 @@ public class InputPacket implements OutgoingInputPacket {
         return leftSteeringWheelValue;
     }
 
+    @Override
+    public int getSteeringWheelValue() {
+        return rightSteeringWheelValue - leftSteeringWheelValue;
+    }
+
     public void setGearShiftValue(POS value) {
         gearShift = value;
     }
@@ -81,22 +86,19 @@ public class InputPacket implements OutgoingInputPacket {
         return laneKeepingState;
     }
 
-    public void setLaneKeepingState(boolean value) {
-        laneKeepingState = value;
-    }
+
     public void setLaneKeepingState() {
         laneKeepingState = !laneKeepingState;
     }
+
     @Override
     public boolean getParkingState() {
         return parkingState;
     }
 
-    public void setParkingState(boolean value) {
-        parkingState = value;
-    }
-    public void setParkingState(){
-        parkingState=!parkingState;
+
+    public void setParkingState() {
+        parkingState = !parkingState;
     }
 
     @Override
