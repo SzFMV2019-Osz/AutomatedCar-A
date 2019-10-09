@@ -30,7 +30,7 @@ public class Main {
         // create the world
         world = new World(5000, 3000);
         // create an automated car
-        car = new AutomatedCar(0, 0,"car_2_white.png");
+        car = new AutomatedCar(500, 500,"car_2_white.png");
         kozepPont = new Pont(car.getX(),car.getY(),"kek.png");
 
         world.addObjectToWorld(car);
@@ -45,6 +45,8 @@ public class Main {
     private void loop() {
         while (true) {
             try {
+                kozepPont.setX(car.getX());
+                kozepPont.setY(car.getY());
                 car.drive();
                 window.getCourseDisplay().drawWorld(world);
 //                window.getCourseDisplay().refreshFrame();

@@ -60,30 +60,31 @@ public class Powertrain extends SystemComponent {
 
         calculateVelocityVector(inputPacket.getGasPedalValue(), inputPacket.getBreakPedalValue(), inputPacket.getGearShiftValue());
         float steeringAngle = virtualFunctionBus.inputPacket.getSteeringWheelValue() / (float)100 * (float)60;
+        rotationAngle = 0;
 
         //frontWheelX = carLocationX + wheelBase/2 * cos(carHeading);
-        frontX = (float) (carLocationX + wheelbase/2 * Math.cos(rotationAngle));  //ITT ELKELLENE ÉRNI A CAR.WORLDOBJECT.getWidth() -et
+        frontX = (float) (carLocationX + wheelbase/2 * Math.cos(convertDegreeToRadian(rotationAngle)));  //ITT ELKELLENE ÉRNI A CAR.WORLDOBJECT.getWidth() -et
 
         //frontWheelY = carLocationY + wheelBase/2 * sin(carHeading);
-        frontY = (float) (carLocationY + wheelbase/2 * Math.sin(rotationAngle));
+        frontY = (float) (carLocationY + wheelbase/2 * Math.sin(convertDegreeToRadian(rotationAngle)));
 
         //backWheelX = carLocationX - wheelBase/2 * cos(carHeading);
-        backX = (float) (carLocationX - wheelbase/2 * Math.cos(rotationAngle));
+        backX = (float) (carLocationX - wheelbase/2 * Math.cos(convertDegreeToRadian(rotationAngle)));
 
         //backWheelY = carLocationY - wheelBase/2 * sin(carHeading);
-        backY = (float) (carLocationY - wheelbase/2 * Math.sin(rotationAngle));
+        backY = (float) (carLocationY - wheelbase/2 * Math.sin(convertDegreeToRadian(rotationAngle)));
 
         //backWheelX += carSpeed * dt * cos(carHeading);
-        backX += 1 * 1 * Math.cos(rotationAngle);
+        backX += 1 * 1 * Math.cos(convertDegreeToRadian(rotationAngle));
 
         //backWheelY += carSpeed * dt * sin(carHeading);
-        backY += 1 * 1 * Math.sin(rotationAngle);
+        backY += 1 * 1 * Math.sin(convertDegreeToRadian(rotationAngle));
 
         //frontWheelX += carSpeed * dt * cos(carHeading+steerAngle);
-        frontX += 1 * 1 * Math.cos(rotationAngle + steeringAngle );
+        frontX += 1 * 1 * Math.cos(convertDegreeToRadian(rotationAngle) + convertDegreeToRadian(steeringAngle) );
 
         //frontWheelY += carSpeed * dt * sin(carHeading+steerAngle);
-        frontY += 1 * 1 * Math.sin(rotationAngle + steeringAngle );
+        frontY += 1 * 1 * Math.sin(convertDegreeToRadian(rotationAngle) + convertDegreeToRadian(steeringAngle) );
 
         //carLocationX = (frontWheelX + backWheelX) / 2;
         float oldX = carLocationX;
