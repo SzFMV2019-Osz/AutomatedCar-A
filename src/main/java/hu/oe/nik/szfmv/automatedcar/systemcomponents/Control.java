@@ -14,11 +14,15 @@ public class Control {
     public void Increment() {
         if (currentValue + step <= rangeMax)
             currentValue += step;
+        else
+            currentValue = rangeMax;
     }
 
     public void Decrement() {
         if (currentValue - step >= rangeMin)
             currentValue -= step;
+        else
+            currentValue = rangeMin;
     }
 
     public void Listen() {
