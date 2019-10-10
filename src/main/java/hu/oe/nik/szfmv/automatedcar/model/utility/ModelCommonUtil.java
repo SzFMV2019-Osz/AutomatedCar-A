@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Modelben használt általános funkciók utility osztálya.
@@ -20,8 +21,10 @@ public final class ModelCommonUtil {
      */
     public static BufferedImage loadObjectImage(String name) throws IOException {
         // @TODO: Fájl betöltést kiemelni külön függvénybe
-        return ImageIO.read(new File(ClassLoader.getSystemResource((name + Consts.SUFFIX_IMAGE))
-                .getFile()));
+        if ( !StringUtils.endsWith(name, Consts.SUFFIX_IMAGE)) {
+            name += Consts.SUFFIX_IMAGE;
+        }
+        return ImageIO.read(new File(ClassLoader.getSystemResource(name).getFile()));
     }
 
     /**
