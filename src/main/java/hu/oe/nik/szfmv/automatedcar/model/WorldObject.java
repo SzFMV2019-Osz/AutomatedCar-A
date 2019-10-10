@@ -211,7 +211,7 @@ public class WorldObject implements IObject {
     }
 
     /**
-     * JAXB unmarshaller event listenerje.
+     * JAXB unmarshaller event listenegetReferenceXrje.
      * Az objektum felépítése után hívódik meg, a kép betöltéséért felel.
      *
      * @param u      unmarshaller
