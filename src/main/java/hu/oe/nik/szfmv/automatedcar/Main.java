@@ -28,7 +28,7 @@ public class Main {
         worldManager = new WorldManager("test_world", "reference_points");
         worldManager.setAutomatedCar(car);
 
-        window = new Gui();
+        window = new Gui(this.worldManager);
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());
     }
 
@@ -37,7 +37,7 @@ public class Main {
             try {
                 worldManager.getAutomatedCar().drive();
                 // TODO IWorld-öt használjon a drawWorld
-                window.getCourseDisplay().drawWorld((WorldManager) worldManager.getWorld());
+                window.getCourseDisplay().drawWorld((this.worldManager) );
                 // TODO window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {

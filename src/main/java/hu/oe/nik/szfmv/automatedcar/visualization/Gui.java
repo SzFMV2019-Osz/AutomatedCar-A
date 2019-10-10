@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
+import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.SamplePacket;
 import org.apache.logging.log4j.LogManager;
@@ -25,7 +26,7 @@ public class Gui extends JFrame {
     /**
      * Initialize the GUI class
      */
-    public Gui() {
+    public Gui(WorldManager wManager) {
         setTitle("AutomatedCar");
         setLocation(0, 0); // default is 0,0 (top left corner)
         addWindowListener(new GuiAdapter());
@@ -43,7 +44,7 @@ public class Gui extends JFrame {
         // Not using any layout manager, but fixed coordinates
         setLayout(null);
 
-        courseDisplay = new CourseDisplay(this);
+        courseDisplay = new CourseDisplay(this, wManager.getWorld());
         add(courseDisplay);
 
         dashboard = new Dashboard(this);
