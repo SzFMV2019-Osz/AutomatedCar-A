@@ -20,11 +20,18 @@ public final class ModelCommonUtil {
      * @throws IOException Ha nem olvasható a fájl/mappa, pl. jogosultságok hiányában.
      */
     public static BufferedImage loadObjectImage(String name) throws IOException {
-        // @TODO: Fájl betöltést kiemelni külön függvénybe
         if ( !StringUtils.endsWith(name, Consts.SUFFIX_IMAGE)) {
             name += Consts.SUFFIX_IMAGE;
         }
-        return ImageIO.read(new File(ClassLoader.getSystemResource(name).getFile()));
+        return ImageIO.read(getFileFromName(name));
+    }
+    
+    /**
+     * @param fileName - kiterjesztéssel
+     * @return betöltött fájl
+     */
+    public static File getFileFromName(String fileName) {
+        return new File(ClassLoader.getSystemResource(fileName).getFile());
     }
 
     /**
