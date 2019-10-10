@@ -15,8 +15,6 @@ public class Main {
     private AutomatedCar car;
     private World world;
 
-    private Pont kozepPont;
-
     public static void main(String[] args) {
         new Main().run();
     }
@@ -30,12 +28,8 @@ public class Main {
         // create the world
         world = new World(5000, 3000);
         // create an automated car
-        car = new AutomatedCar(500, 500,"car_2_white.png");
-        kozepPont = new Pont(car.getX(),car.getY(),"kek.png");
-
+        car = new AutomatedCar(100, 300,"kek.png");
         world.addObjectToWorld(car);
-        world.addObjectToWorld(kozepPont);
-
         window = new Gui(car);
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());
         window.addKeyListener(new InputReader(car.getVirtualFunctionBus()));
@@ -45,16 +39,12 @@ public class Main {
     private void loop() {
         while (true) {
             try {
-                kozepPont.setX(car.getX());
-                kozepPont.setY(car.getY());
                 car.drive();
                 window.getCourseDisplay().drawWorld(world);
-//                window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
                 LOGGER.error(e.getMessage());
             }
         }
     }
-
 }

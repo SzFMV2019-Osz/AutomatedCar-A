@@ -24,7 +24,6 @@ public class AutomatedCar extends WorldObject {
 
     public void drive() {
         virtualFunctionBus.loop();
-
         calculatePositionAndOrientation();
     }
 
@@ -36,7 +35,6 @@ public class AutomatedCar extends WorldObject {
         var movingVector = virtualFunctionBus.powertrainPacket.getMovingVector();
         x += movingVector.getX();
         y += movingVector.getY();
-
         setRotation(pt.getAutoSzoge());
     }
 }
