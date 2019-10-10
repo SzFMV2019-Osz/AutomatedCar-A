@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.visualization.debug;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 
 
 /**
@@ -54,15 +55,16 @@ public class DebugViewer {
      * @param width The width of the object
      * @param height The height of the object
      */
-    public void DrawPolygon(int x, int y, int width, int height){
+    public void DrawPolygon(int x, int y, int width, int height, AffineTransform t, int[] offset){
         if (debuggerSwitchedOn){
             graphics2D.setColor(info.getColor());
             graphics2D.setStroke(info.getThickness());
+
             graphics2D.drawRect(x, y, width, height);
         }
     }
 
-    public void DrawPolygon(int x, int y, int width, int height, Color color){
+    public void DrawPolygon(int x, int y, int width, int height, Color color, AffineTransform t){
         if (debuggerSwitchedOn){
             graphics2D.setColor(color);
             graphics2D.setStroke(info.getThickness());
@@ -71,7 +73,7 @@ public class DebugViewer {
     }
 
 
-    public void DrawSensorTriangle(int aX, int aY, int bX, int bY, int cX, int cY, Color color){
+    public void DrawSensorTriangle(int aX, int aY, int bX, int bY, int cX, int cY, Color color, AffineTransform t){
         if (debuggerSwitchedOn){
             graphics2D.setColor(color);
             graphics2D.drawLine(aX, aY, bX, bY);
