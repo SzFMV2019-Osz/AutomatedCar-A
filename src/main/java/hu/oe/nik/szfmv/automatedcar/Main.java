@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.World;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputReader;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import org.apache.logging.log4j.LogManager;
@@ -30,6 +31,8 @@ public class Main {
 
         window = new Gui(this.worldManager);
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());
+        window.addKeyListener(new InputReader(car.getVirtualFunctionBus()));
+
     }
 
     private void loop() {

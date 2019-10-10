@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.SamplePacket;
@@ -21,7 +22,7 @@ public class Gui extends JFrame {
     private CourseDisplay courseDisplay;
     private Dashboard dashboard;
     private VirtualFunctionBus virtualFunctionBus;
-
+    private AutomatedCar car;
 
     /**
      * Initialize the GUI class
@@ -33,7 +34,7 @@ public class Gui extends JFrame {
         setPreferredSize(new Dimension(windowWidth, windowHeight)); // inner size
         setResizable(false);
         pack();
-
+        this.car = car;
         // Icon downloaded from:
         // http://www.iconarchive.com/show/toolbar-2-icons-by-shlyapnikova/car-icon.html
         // and available under the licence of:
@@ -119,6 +120,10 @@ public class Gui extends JFrame {
         this.virtualFunctionBus = virtualFunctionBus;
     }
 
+    public AutomatedCar getAutomatedCar() {
+        return this.car;
+    }
+
     public CourseDisplay getCourseDisplay() {
         return courseDisplay;
     }
@@ -126,5 +131,6 @@ public class Gui extends JFrame {
     public Dashboard getDashboard() {
         return dashboard;
     }
+
 
 }

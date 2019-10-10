@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,8 +10,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 public class AutomatedCar extends Car {
 
+    private static final int REFRESH_RATE = 10;
     @XmlTransient
     private static final Logger LOGGER = LogManager.getLogger();
+    private Powertrain pt;
 
     @XmlTransient
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
@@ -19,11 +22,11 @@ public class AutomatedCar extends Car {
         super(x, y, imageFileName);
 
         new Driver(virtualFunctionBus);
+        pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, getRotation(),getHeight());
     }
 
     public void drive() {
         virtualFunctionBus.loop();
-
         calculatePositionAndOrientation();
     }
 
@@ -32,23 +35,9 @@ public class AutomatedCar extends Car {
     }
 
     private void calculatePositionAndOrientation() {
-        //TODO it is just a fake implementation
-
-        switch (virtualFunctionBus.samplePacket.getKey()) {
-            case 0:
-                this.setPosY(this.getPosY() - 5);
-                break;
-            case 1:
-                this.setPosX(this.getPosX() + 5);
-                break;
-            case 2:
-                this.setPosY(this.getPosY() + 5);
-                break;
-            case 3:
-                this.setPosX(this.getPosX() - 5);
-                break;
-            default:
-                break;
-        }
+        var movingVector = virtualFunctionBus.powertrainPacket.getMovingVector();
+        x += movingVector.getX();
+        y += movingVector.getY();
+        setRotation(pt.getAutoSzoge());
     }
 }
