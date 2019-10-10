@@ -37,8 +37,8 @@ public class CourseDisplay extends JPanel {
     CourseDisplay(Gui pt, IWorld world) {
         // Not using any layout manager, but fixed coordinates
         this.world = world;
-        this.width = this.world.getWidth();
-        this.height = this.world.getHeight();
+        //this.width = this.world.getWidth();
+        //this.height = this.world.getHeight();
 
         setDoubleBuffered(true);
         setLayout(null);
@@ -139,8 +139,9 @@ public class CourseDisplay extends JPanel {
                 refPoint = new Point(0,0);
             }
             AffineTransform t = new AffineTransform();
-            t.translate(object.getPosX() + offsets[0], object.getPosY() + offsets[1]);
-            t.rotate(Math.toRadians(-object.getRotation()),refPoint.getX() + offsets[0],refPoint.getY() + offsets[1]);
+
+            t.translate(object.getPosX() - refPoint.getX() + offsets[0], object.getPosY() - refPoint.getY() + offsets[1]);
+            t.rotate(Math.toRadians(-object.getRotation()), refPoint.getX(), refPoint.getY());
             g2d.drawImage(object.getImage(), t, this);
 
             // todo: decide on how model will signal colors
@@ -150,9 +151,10 @@ public class CourseDisplay extends JPanel {
         // Draw car
 
         AffineTransform t1 = new AffineTransform();
-        t1.translate(car.getPosX()+ offsets[0], car.getPosY()+ offsets[1]);
+        t1.translate(car.getPosX() + offsets[0], car.getPosY() + offsets[1]);
+        t1.rotate(Math.toRadians(car.getRotation()));
+
         g2d.drawImage(car.getImage(), t1, this);
-        t1.rotate(Math.toRadians(car.getRotation()),offsets[0],offsets[1]);
         viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
 
     }

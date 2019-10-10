@@ -44,8 +44,8 @@ public class DebugViewer {
     }
 
 
-    public DebugViewer(Graphics graphics) {
-        this.graphics2D = (Graphics2D)graphics;
+    public DebugViewer(Graphics2D graphics) {
+        this.graphics2D = graphics;
     }
 
     /**
