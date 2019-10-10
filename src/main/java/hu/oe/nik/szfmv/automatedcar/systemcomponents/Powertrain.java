@@ -16,8 +16,8 @@ public class Powertrain extends SystemComponent {
     private static final int CAR_WIDTH = 90;
     private static final float CAR_MASS = 1000.0F;
     private static final Vec2f NULL_VECTOR = Vec2f.constant(0, 0);
-    private static final Vec2f FORWARD_VECTOR = Vec2f.constant(0, 1);
-    private static final Vec2f BACKWARD_VECTOR = Vec2f.constant(0, -1);
+    private static final Vec2f FORWARD_VECTOR = Vec2f.constant(0, -1);
+    private static final Vec2f BACKWARD_VECTOR = Vec2f.constant(0, 1);
     private static final List<Double> GEAR_RATIOS = Arrays.asList(2.66, 1.78, 1.3, 1.0, 0.74, 2.9);
     private static final int[] LOWER_LIMITS = new int[]{0, 3385, 4010, 4356, 4224};
     private static final int[] UPPER_LIMITS = new int[]{6000, 6000, 6000, 6000, Integer.MAX_VALUE};
@@ -56,8 +56,11 @@ public class Powertrain extends SystemComponent {
 
     private void getCurrentInsideGearShift(GearShift.POS gearShiftPos) {
         if (gearShiftPos == GearShift.POS.R) {
-            currentInsideGearShift = 4;
+            currentInsideGearShift = 5;
         } else {
+            if (currentInsideGearShift == 5) {
+                currentInsideGearShift = 0;
+            }
             if ((double) LOWER_LIMITS[currentInsideGearShift] > virtualFunctionBus.powertrainPacket.getRPM()) {
                 currentInsideGearShift--;
             } else if ((double) UPPER_LIMITS[currentInsideGearShift] <= virtualFunctionBus.powertrainPacket.getRPM()) {
