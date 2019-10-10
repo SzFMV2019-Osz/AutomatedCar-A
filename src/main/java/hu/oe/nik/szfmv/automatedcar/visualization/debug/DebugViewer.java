@@ -59,8 +59,13 @@ public class DebugViewer {
         if (debuggerSwitchedOn){
             graphics2D.setColor(info.getColor());
             graphics2D.setStroke(info.getThickness());
-            
-            graphics2D.drawRect(x, y, width, height);
+
+            // create a rectangle with the original data and draw the result of applying the transformation
+            Rectangle rect = new Rectangle(x, y, width, height);
+            Shape newShape = t.createTransformedShape(rect);
+            graphics2D.draw(newShape);
+            rect = null;
+            newShape = null;
         }
     }
 
