@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
 import hu.oe.nik.szfmv.automatedcar.model.Position;
+import java.awt.Rectangle;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -126,5 +127,16 @@ public final class ModelCommonUtil {
         }
 
         return p;
+    }
+
+    /**
+     * @param topLeftX bal felső sarok X koordinátája
+     * @param topLeftY bal felső sarok Y koordinátája
+     * @param width négyszög szélessége
+     * @param height négyszög magasssága
+     * @return generált négyszög
+     */
+    public static Rectangle createRectangle(int topLeftX, int topLeftY, int width, int height) {
+        return new Rectangle(topLeftX, topLeftY, width, height);
     }
 }
