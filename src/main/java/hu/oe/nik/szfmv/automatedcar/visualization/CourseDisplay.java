@@ -34,8 +34,9 @@ public class CourseDisplay extends JPanel {
      *
      * @param pt parent Gui
      */
-    CourseDisplay(Gui pt) {
+    CourseDisplay(Gui pt, IWorld world) {
         // Not using any layout manager, but fixed coordinates
+        this.world = world;
         this.width = this.world.getWidth();
         this.height = this.world.getHeight();
 
