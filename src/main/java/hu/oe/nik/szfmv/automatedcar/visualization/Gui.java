@@ -23,6 +23,7 @@ public class Gui extends JFrame {
     private Dashboard dashboard;
     private VirtualFunctionBus virtualFunctionBus;
     private AutomatedCar car;
+    private WorldManager manager;
 
     /**
      * Initialize the GUI class
@@ -34,7 +35,6 @@ public class Gui extends JFrame {
         setPreferredSize(new Dimension(windowWidth, windowHeight)); // inner size
         setResizable(false);
         pack();
-        this.car = car;
         // Icon downloaded from:
         // http://www.iconarchive.com/show/toolbar-2-icons-by-shlyapnikova/car-icon.html
         // and available under the licence of:
@@ -45,6 +45,7 @@ public class Gui extends JFrame {
         // Not using any layout manager, but fixed coordinates
         setLayout(null);
 
+        this.manager = wManager;
         courseDisplay = new CourseDisplay(this, wManager.getWorld());
         add(courseDisplay);
 
@@ -121,7 +122,7 @@ public class Gui extends JFrame {
     }
 
     public AutomatedCar getAutomatedCar() {
-        return this.car;
+        return this.manager.getAutomatedCar();
     }
 
     public CourseDisplay getCourseDisplay() {

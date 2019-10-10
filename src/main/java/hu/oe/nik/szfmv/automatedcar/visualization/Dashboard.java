@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
+import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
@@ -198,8 +199,10 @@ public class Dashboard extends JPanel {
         //speedoMeter.setPerf_Percentage(0); -->some magic here
         speedLimitValueText.setText(String.valueOf(50));
         RPMmeter.setPerf_Percentage(0);
-        xCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getX()));
-        yCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getY()));
+        Car car = parent.getAutomatedCar();
+
+        xCoordValueText.setText(String.valueOf(car.getPosX()));
+        yCoordValueText.setText(String.valueOf(car.getPosY()));
     }
 
     private void EventHandling() {
