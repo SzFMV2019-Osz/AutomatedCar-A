@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
+import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDebugColorable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
@@ -7,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.Shape;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
@@ -50,6 +53,8 @@ public class WorldObject implements IObject {
 
     @XmlTransient
     protected BufferedImage image;
+    protected Color debugColor = Color.GREEN;
+
 
     @XmlAttribute(name = "type", required = true)
     protected String imageFileName;
@@ -214,7 +219,7 @@ public class WorldObject implements IObject {
      */
     public void afterUnmarshal(Unmarshaller u, Object parent) {
         this.initImage();
-        
+
         try {
             this.initShape();
         } catch (Exception e) {
