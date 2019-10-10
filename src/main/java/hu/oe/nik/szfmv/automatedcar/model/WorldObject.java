@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
+import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDebugColorable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
@@ -7,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.Shape;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
@@ -50,6 +53,8 @@ public class WorldObject implements IObject {
 
     @XmlTransient
     protected BufferedImage image;
+    protected Color debugColor = Color.GREEN;
+
 
     @XmlAttribute(name = "type", required = true)
     protected String imageFileName;
@@ -206,7 +211,7 @@ public class WorldObject implements IObject {
     }
 
     /**
-     * JAXB unmarshaller event listenerje.
+     * JAXB unmarshaller event listenegetReferenceXrje.
      * Az objektum felépítése után hívódik meg, a kép betöltéséért felel.
      *
      * @param u      unmarshaller
@@ -214,7 +219,7 @@ public class WorldObject implements IObject {
      */
     public void afterUnmarshal(Unmarshaller u, Object parent) {
         this.initImage();
-        
+
         try {
             this.initShape();
         } catch (Exception e) {
@@ -226,15 +231,15 @@ public class WorldObject implements IObject {
      * {@inheritDoc}
      */
     @Override
-    public Shape getPolygon() {
-        return this.getShapeTransfrom().createTransformedShape(this.polygon);
+    public Shape getPolygon(int offsetX, int offsetY) {
+        return this.getShapeTransfrom(offsetX, offsetY).createTransformedShape(this.polygon);
     }
 
-    private AffineTransform getShapeTransfrom() {
+    private AffineTransform getShapeTransfrom(int offsetX, int offsetY) {
         double theta = Math.toRadians(this.getRotation());
         AffineTransform shapeTransform = new AffineTransform();
         shapeTransform.rotate(theta);
-        shapeTransform.translate(this.getPosX() + this.getReferenceX(), this.getPosX() + this.getReferenceY());
+        shapeTransform.translate(this.getPosX() + this.getReferenceX() + offsetX, this.getPosX() + this.getReferenceY() + offsetY);
 
         return shapeTransform;
     }

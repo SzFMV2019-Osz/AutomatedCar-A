@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.World;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputReader;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import org.apache.logging.log4j.LogManager;
@@ -24,12 +25,14 @@ public class Main {
     }
 
     private void init() {
-        AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
+        AutomatedCar car = new AutomatedCar(80, 80, "car_2_white.png");
         worldManager = new WorldManager("test_world", "reference_points");
         worldManager.setAutomatedCar(car);
 
-        window = new Gui();
+        window = new Gui(this.worldManager);
         window.setVirtualFunctionBus(car.getVirtualFunctionBus());
+        window.addKeyListener(new InputReader(car.getVirtualFunctionBus()));
+
     }
 
     private void loop() {
@@ -37,7 +40,7 @@ public class Main {
             try {
                 worldManager.getAutomatedCar().drive();
                 // TODO IWorld-öt használjon a drawWorld
-                window.getCourseDisplay().drawWorld((World)worldManager.getWorld());
+                window.getCourseDisplay().drawWorld((this.worldManager) );
                 // TODO window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
