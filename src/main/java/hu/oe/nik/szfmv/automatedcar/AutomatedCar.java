@@ -1,15 +1,18 @@
 package hu.oe.nik.szfmv.automatedcar;
 
-import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import javax.xml.bind.annotation.XmlTransient;
 
-public class AutomatedCar extends WorldObject {
+public class AutomatedCar extends Car {
 
+    @XmlTransient
     private static final Logger LOGGER = LogManager.getLogger();
 
+    @XmlTransient
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
 
     public AutomatedCar(int x, int y, String imageFileName) {
@@ -33,16 +36,16 @@ public class AutomatedCar extends WorldObject {
 
         switch (virtualFunctionBus.samplePacket.getKey()) {
             case 0:
-                y -= 5;
+                this.setPosY(this.getPosY() - 5);
                 break;
             case 1:
-                x += 5;
+                this.setPosX(this.getPosX() + 5);
                 break;
             case 2:
-                y += 5;
+                this.setPosY(this.getPosY() + 5);
                 break;
             case 3:
-                x -= 5;
+                this.setPosX(this.getPosX() - 5);
                 break;
             default:
                 break;
