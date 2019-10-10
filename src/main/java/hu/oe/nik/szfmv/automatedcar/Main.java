@@ -25,7 +25,7 @@ public class Main {
     }
 
     private void init() {
-        AutomatedCar car = new AutomatedCar(20, 20, "car_2_white.png");
+        AutomatedCar car = new AutomatedCar(80, 80, "car_2_white.png");
         worldManager = new WorldManager("test_world", "reference_points");
         worldManager.setAutomatedCar(car);
 

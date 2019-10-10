@@ -59,7 +59,7 @@ public class DebugViewer {
         if (debuggerSwitchedOn){
             graphics2D.setColor(info.getColor());
             graphics2D.setStroke(info.getThickness());
-
+            
             graphics2D.drawRect(x, y, width, height);
         }
     }

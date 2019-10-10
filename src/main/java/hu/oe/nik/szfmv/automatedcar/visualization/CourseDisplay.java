@@ -151,8 +151,8 @@ public class CourseDisplay extends JPanel {
 
         // Draw car
         AffineTransform t1 = new AffineTransform();
-        t1.translate(car.getPosX() + offsets[0], car.getPosY() + offsets[1]);
-        t1.rotate(Math.toRadians(car.getRotation()));
+        t1.translate(car.getPosX() - car.getReferenceX() + offsets[0], car.getPosY() - car.getReferenceY() + offsets[1]);
+        t1.rotate(Math.toRadians(car.getRotation() + 90), car.getReferenceX(), car.getReferenceY());
 
         g2d.drawImage(car.getImage(), t1, this);
         //viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
