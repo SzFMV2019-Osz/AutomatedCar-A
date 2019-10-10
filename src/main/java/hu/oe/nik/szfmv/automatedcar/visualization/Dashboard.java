@@ -26,6 +26,8 @@ public class Dashboard extends JPanel {
     private Turn_Signal left_Turn_Signal;
     private Turn_Signal right_Turn_Signal;
 
+    private JLabel currentSpeedText = new JLabel("0 KM/h");
+    private JLabel currentRpmText = new JLabel("0");
     private JLabel gearShiftText = new JLabel("Gear:");
     private JLabel gasPedalText = new JLabel("Gas Pedal");
     private JLabel accMenuText = new JLabel("ACC opts:");
@@ -69,7 +71,7 @@ public class Dashboard extends JPanel {
         RPMmeter.setPosition(new Point(0, 0));
         RPMmeter.setSize(new Point(80, 80));
         RPMmeter.setPerf_Percentage(0);
-        RPMmeter.setBounds(120, 25, 110, 110);
+        RPMmeter.setBounds(120, 25, 110, 100);
     }
 
     private void OMeterPlacing() {
@@ -116,6 +118,8 @@ public class Dashboard extends JPanel {
         xCoordValueText.setBounds(30, 600, 30, 15);
         yCoordText.setBounds(70, 600, 20, 15);
         yCoordValueText.setBounds(90, 600, 30, 15);
+        currentSpeedText.setBounds(50, 125, 40, 15);
+        currentRpmText.setBounds(150, 125, 50,15);
 
         add(gearShiftText);
         add(currentGearText);
@@ -130,6 +134,8 @@ public class Dashboard extends JPanel {
         add(xCoordValueText);
         add(yCoordText);
         add(yCoordValueText);
+        add(currentSpeedText);
+        add(currentRpmText);
 
     }
 
@@ -199,13 +205,17 @@ public class Dashboard extends JPanel {
         RPMmeter.setPerf_Percentage(packet.getRPM());
         xCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getX()));
         yCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getY()));
+        currentSpeedText.setText(String.valueOf(packet.getVelocity()) + " KM/H");
+        currentRpmText.setText(String.valueOf(packet.getRPM()));
     }
 
     private void EventHandling() {
         VirtualFunctionBus virtualFunctionBus = parent.getVirtualFunctionBus();
         if (virtualFunctionBus != null) {
-            inputEventHandling(virtualFunctionBus.inputPacket);
-            OtherEventHandling(virtualFunctionBus.powertrainPacket);
+            if(virtualFunctionBus.inputPacket != null)
+                inputEventHandling(virtualFunctionBus.inputPacket);
+            if(virtualFunctionBus.powertrainPacket != null)
+                OtherEventHandling(virtualFunctionBus.powertrainPacket);
         }
 
 
