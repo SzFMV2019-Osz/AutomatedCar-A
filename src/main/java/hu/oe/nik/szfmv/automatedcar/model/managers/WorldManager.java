@@ -10,6 +10,8 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 
+import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,14 +71,17 @@ public class WorldManager {
      */
     public List<IObject> getAllObjectsInTriangle(Position pointA, Position pointB, Position pointC,
                                                  int offsetX, int offsetY) {
+        Polygon triangle = new Polygon();
+        triangle.addPoint(pointA.getX(), pointA.getY());
+        triangle.addPoint(pointB.getX(), pointB.getY());
+        triangle.addPoint(pointC.getX(), pointC.getY());
+
         List<IObject> inTriangle = new ArrayList<>();
-        
         for (IObject obj : currentWorld.getWorldObjects()) {
-            if (ModelCommonUtil.isShapeInTriangle(pointA, pointB, pointC, obj.getPolygon(offsetX, offsetY))) {
+            if (ModelCommonUtil.isShapeInPolygon(obj.getPolygon(offsetX, offsetY), triangle)) {
                 inTriangle.add(obj);
             }
         }
-
         return inTriangle;
     }
 
@@ -88,16 +93,14 @@ public class WorldManager {
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a ponton vannak.
      */
     public List<IObject> getAllObjectsOnPoint(Position point, int offsetX, int offsetY) {
-        Rectangle rect = new Rectangle(point.getX(), point.getY(), 0, 0);
+        Point pointPolygon = new Point(point.getX(), point.getY());
 
         List<IObject> onPoint = new ArrayList<>();
-
         for (IObject obj : currentWorld.getWorldObjects()) {
-            if (ModelCommonUtil.isShapeInRectangle(obj.getPolygon(offsetX, offsetY), rect)) {
+            if (ModelCommonUtil.isShapeOnPoint(obj.getPolygon(offsetX, offsetY), pointPolygon)) {
                 onPoint.add(obj);
             }
         }
-
         return onPoint;
     }
 

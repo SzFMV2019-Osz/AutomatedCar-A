@@ -4,6 +4,7 @@ import hu.oe.nik.szfmv.automatedcar.model.Position;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -62,31 +63,21 @@ public final class ModelCommonUtil {
     }
 
     /**
-     * Visszaadja, hogy az adott shape a háromszögön belül van-e.
-     * @param triangleA Háromszög első pontja.
-     * @param triangleB Háromszög második pontja.
-     * @param triangleC Háromszög harmadik pontja.
+     * Visszaadja, hogy az adott shape a polygonon belül van-e.
      * @param shape Adott shape.
+     * @param whereIn Polygon amiben keressük.
      * @return Benne van? logikai kifejezés értéke.
      */
-    public static boolean isShapeInTriangle(Position triangleA, Position triangleB, Position triangleC,
-                                            Shape shape) {
-        Polygon triangle = new Polygon();
-        triangle.addPoint(triangleA.getX(), triangleA.getY());
-        triangle.addPoint(triangleB.getX(), triangleB.getY());
-        triangle.addPoint(triangleC.getX(), triangleC.getY());
-
-        return (triangle.intersects(shape.getBounds()) || triangle.contains(shape.getBounds()));
+    public static boolean isShapeInPolygon(Shape shape, Polygon whereIn) {
+        return (whereIn.intersects(shape.getBounds()) || whereIn.contains(shape.getBounds()));
     }
 
-    /**
-     * Visszaadja, hogy az adott shape a négyzeten belül van-e.
-     * @param shape Adott shape.
-     * @param rect Rectangle amiben keresünk.
-     * @return Benne van? Logikai kifejezés értéke.
-     */
     public static boolean isShapeInRectangle(Shape shape, Rectangle rect) {
         return (rect.intersects(shape.getBounds()) || rect.contains(shape.getBounds()));
+    }
+
+    public static boolean isShapeOnPoint(Shape shape, Point point) {
+        return shape.contains(point);
     }
 
     public static Position getTopLeftPoint(Position... points) {
