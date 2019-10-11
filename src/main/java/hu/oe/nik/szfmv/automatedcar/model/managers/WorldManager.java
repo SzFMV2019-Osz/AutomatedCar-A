@@ -93,11 +93,11 @@ public class WorldManager {
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a ponton vannak.
      */
     public List<IObject> getAllObjectsOnPoint(Position point, int offsetX, int offsetY) {
-        Point pointPolygon = new Point(point.getX(), point.getY());
+        Point pointShape = new Point(point.getX(), point.getY());
 
         List<IObject> onPoint = new ArrayList<>();
         for (IObject obj : currentWorld.getWorldObjects()) {
-            if (ModelCommonUtil.isShapeOnPoint(obj.getPolygon(offsetX, offsetY), pointPolygon)) {
+            if (ModelCommonUtil.isShapeOnPoint(obj.getPolygon(offsetX, offsetY), pointShape)) {
                 onPoint.add(obj);
             }
         }
@@ -126,7 +126,7 @@ public class WorldManager {
         List<IObject> inRectangle = new ArrayList<>();
 
         for (IObject obj : currentWorld.getWorldObjects()) {
-            if (ModelCommonUtil.isShapeInRectangle(obj.getPolygon(offsetX, offsetY), rect)) {
+            if (ModelCommonUtil.isShapeInPolygon(obj.getPolygon(offsetX, offsetY), rect)) {
                 inRectangle.add(obj);
             }
         }

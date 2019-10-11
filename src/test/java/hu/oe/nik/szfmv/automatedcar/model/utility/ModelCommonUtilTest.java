@@ -1,14 +1,19 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -18,6 +23,11 @@ public class ModelCommonUtilTest {
     Position pointB;
     Position pointC;
     Position pointD;
+    Polygon triangle;
+    Rectangle rectangle;
+    Polygon smallLine;
+    Rectangle rectangleFarAway;
+    Point point;
 
     @BeforeEach
     public void init() {
@@ -26,6 +36,16 @@ public class ModelCommonUtilTest {
         this.pointC = new Position(0, 1);
         this.pointD = new Position(0, 0);
 
+        triangle = new Polygon();
+        triangle.addPoint(-1, 2);
+        triangle.addPoint(-1, -3);
+        triangle.addPoint(2, 2);
+        rectangle = new Rectangle(0, 0, 1, 2);
+        smallLine = new Polygon();
+        smallLine.addPoint(0,0);
+        smallLine.addPoint(1,1);
+        rectangleFarAway = new Rectangle(2, 2, 2 ,1);
+        point = new Point(0,0);
     }
 
     @Test
@@ -101,5 +121,35 @@ public class ModelCommonUtilTest {
         Position point = ModelCommonUtil.getBottomRightPoint(this.pointB, this.pointC);
         assertEquals(1, point.getX());
         assertEquals(1, point.getY());
+    }
+
+    @Test
+    public void shapeInPolygon() {
+        assertTrue(ModelCommonUtil.isShapeInPolygon(smallLine, triangle));
+    }
+
+    @Test
+    public void shapeOnEdgeOfPolygon() {
+        assertFalse(ModelCommonUtil.isShapeInPolygon(rectangleFarAway, rectangle));
+    }
+
+    @Test
+    public void shapeIntersectsWithPolygon() {
+        assertTrue(ModelCommonUtil.isShapeInPolygon(triangle, rectangle));
+    }
+
+    @Test
+    public void shapeOutsidePolygon() {
+        assertFalse(ModelCommonUtil.isShapeInPolygon(rectangle, rectangleFarAway));
+    }
+
+    @Test
+    public void pointInPolygon() {
+        assertTrue(ModelCommonUtil.isShapeOnPoint(triangle, point));
+    }
+
+    @Test
+    public void pointOutsideOfPolygon() {
+        assertFalse(ModelCommonUtil.isShapeOnPoint(rectangleFarAway, point));
     }
 }

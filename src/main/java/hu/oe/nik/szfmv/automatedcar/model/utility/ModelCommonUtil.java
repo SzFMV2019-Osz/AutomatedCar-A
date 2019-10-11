@@ -5,8 +5,6 @@ import hu.oe.nik.szfmv.automatedcar.model.Position;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -63,19 +61,21 @@ public final class ModelCommonUtil {
     }
 
     /**
-     * Visszaadja, hogy az adott shape a polygonon belül van-e.
+     * Visszaadja, hogy az adott shape benne van-e a másikban.
      * @param shape Adott shape.
-     * @param whereIn Polygon amiben keressük.
-     * @return Benne van? logikai kifejezés értéke.
+     * @param whereIn Shape amiben keressük.
+     * @return Igaz, ha teljesen vagy részletesen benne van, hamis ha nincs bent vagy csak a szélével érintkezik.
      */
-    public static boolean isShapeInPolygon(Shape shape, Polygon whereIn) {
+    public static boolean isShapeInPolygon(Shape shape, Shape whereIn) {
         return (whereIn.intersects(shape.getBounds()) || whereIn.contains(shape.getBounds()));
     }
 
-    public static boolean isShapeInRectangle(Shape shape, Rectangle rect) {
-        return (rect.intersects(shape.getBounds()) || rect.contains(shape.getBounds()));
-    }
-
+    /**
+     * Visszaadja, hogy a pont a shapere belül esik-e.
+     * @param shape Adott shape.
+     * @param point Point amire nézünk.
+     * @return Igaz ha a polygonon belül van a pont, hamis ha rajta kívül vagy a vonalán.
+     */
     public static boolean isShapeOnPoint(Shape shape, Point point) {
         return shape.contains(point);
     }
@@ -84,9 +84,8 @@ public final class ModelCommonUtil {
         Position p = new Position(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
         for (Position point : points) {
-            if (point.getX() <= p.getX() && point.getY() <= p.getY()) {
-                p = point;
-            }
+            p.setX(Math.min(point.getX(), p.getX()));
+            p.setY(Math.min(point.getY(), p.getY()));
         }
 
         return p;
@@ -96,9 +95,8 @@ public final class ModelCommonUtil {
         Position p = new Position(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
         for (Position point : points) {
-            if (point.getX() >= p.getX() && point.getY() >= p.getY()) {
-                p = point;
-            }
+            p.setX(Math.max(point.getX(), p.getX()));
+            p.setY(Math.max(point.getY(), p.getY()));
         }
 
         return p;
