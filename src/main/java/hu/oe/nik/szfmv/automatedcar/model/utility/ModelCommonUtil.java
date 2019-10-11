@@ -2,11 +2,15 @@ package hu.oe.nik.szfmv.automatedcar.model.utility;
 
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 
-import javax.imageio.ImageIO;
+import org.apache.commons.lang3.StringUtils;
+
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import org.apache.commons.lang3.StringUtils;
+import javax.imageio.ImageIO;
 
 /**
  * Modelben használt általános funkciók utility osztálya.
@@ -58,40 +62,33 @@ public final class ModelCommonUtil {
     }
 
     /**
-     * Visszaadja, hogy az adott pont a háromszögön belül van-e.
+     * Visszaadja, hogy az adott shape a háromszögön belül van-e.
      * @param triangleA Háromszög első pontja.
      * @param triangleB Háromszög második pontja.
      * @param triangleC Háromszög harmadik pontja.
-     * @param point Lekérdezett pont.
+     * @param shape Adott shape.
      * @return Benne van? logikai kifejezés értéke.
      */
-    public static boolean isPointInTriangle (Position triangleA, Position triangleB, Position triangleC,
-                                             Position point) {
-        double a = calculateAreaOfTriangle(triangleA, triangleB, triangleC);
-        double b = calculateAreaOfTriangle(point, triangleB, triangleC);
-        double c = calculateAreaOfTriangle(triangleA, point, triangleC);
-        double d = calculateAreaOfTriangle(triangleA, triangleB, point);
+    public static boolean isShapeInTriangle(Position triangleA, Position triangleB, Position triangleC,
+                                            Shape shape) {
+        Polygon triangle = new Polygon();
+        triangle.addPoint(triangleA.getX(), triangleA.getY());
+        triangle.addPoint(triangleB.getX(), triangleB.getY());
+        triangle.addPoint(triangleC.getX(), triangleC.getY());
 
-        return (a == (b + c + d));
+        return (triangle.intersects(shape.getBounds()) || triangle.contains(shape.getBounds()));
     }
 
     /**
-     * Egy háromszög területét adja vissza.
-     * @param a Háromszög első pontja.
-     * @param b Háromszög második pontja.
-     * @param c Háromszög harmadik pontja.
-     * @return A háromszög területe.
+     * Visszaadja, hogy az adott shape a négyzeten belül van-e.
+     * @param shape Adott shape.
+     * @param rect Rectangle amiben keresünk.
+     * @return Benne van? Logikai kifejezés értéke.
      */
-    private static double calculateAreaOfTriangle(Position a, Position b, Position c) {
-        return Math.abs((a.getX() * (b.getY() - c.getY()) + b.getX() * (c.getY() - a.getY())
-                + c.getX() * (a.getY() - b.getY())) / 2.0);
+    public static boolean isShapeInRectangle(Shape shape, Rectangle rect) {
+        return (rect.intersects(shape.getBounds()) || rect.contains(shape.getBounds()));
     }
 
-    /**
-     * Visszaadja, hogy a pontok közül melyik a bal felső pont.
-     * @param points A pontok amik közül a bal felsőt keressük.
-     * @return A bal felső pont.
-     */
     public static Position getTopLeftPoint(Position... points) {
         Position p = new Position(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
@@ -104,11 +101,6 @@ public final class ModelCommonUtil {
         return p;
     }
 
-    /**
-     * Visszaadja, hogy a pontok közül melyik a jobb alsó pont.
-     * @param points A pontok amik közül a jobb alsót keressük.
-     * @return A jobb alsó pont.
-     */
     public static Position getBottomRightPoint(Position... points) {
         Position p = new Position(Integer.MIN_VALUE, Integer.MIN_VALUE);
 

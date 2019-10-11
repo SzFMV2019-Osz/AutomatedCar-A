@@ -12,10 +12,7 @@ import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * {@link World}-el dolgozó manager, ezen keresztül lehet lekérdezni az abban levő objektumokat.
@@ -62,20 +59,20 @@ public class WorldManager {
     }
 
     /**
-     * Visszaadja az összes objektumot a három pont között. TODO majd változni fog poligonok definiálása után
+     * Visszaadja az összes objektumot a három pont között.
      * @param pointA Első pont.
      * @param pointB Második pont.
      * @param pointC Harmadik pont.
+     * @param offsetX X irányú eltolás.
+     * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a háromszögön belülre esnek.
      */
-    public List<IObject> getAllObjectsInTriangle(Position pointA, Position pointB, Position pointC) {
+    public List<IObject> getAllObjectsInTriangle(Position pointA, Position pointB, Position pointC,
+                                                 int offsetX, int offsetY) {
         List<IObject> inTriangle = new ArrayList<>();
-
-        Position pos = new Position();
+        
         for (IObject obj : currentWorld.getWorldObjects()) {
-            pos.setX(obj.getPosX());
-            pos.setY(obj.getPosY());
-            if (ModelCommonUtil.isPointInTriangle(pointA, pointB, pointC, pos)) {
+            if (ModelCommonUtil.isShapeInTriangle(pointA, pointB, pointC, obj.getPolygon(offsetX, offsetY))) {
                 inTriangle.add(obj);
             }
         }
@@ -84,15 +81,19 @@ public class WorldManager {
     }
 
     /**
-     * Visszaadja az összes objektumot a ponton. TODO majd változni fog poligonok definiálása után
+     * Visszaadja az összes objektumot a ponton.
      * @param point A pont ahol keressük az objektumokat.
+     * @param offsetX X irányú eltolás.
+     * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a ponton vannak.
      */
-    public List<IObject> getAllObjectsOnPoint(Position point) {
+    public List<IObject> getAllObjectsOnPoint(Position point, int offsetX, int offsetY) {
+        Rectangle rect = new Rectangle(point.getX(), point.getY(), 0, 0);
+
         List<IObject> onPoint = new ArrayList<>();
 
         for (IObject obj : currentWorld.getWorldObjects()) {
-            if (obj.getPosX() == point.getX() && obj.getPosY() == point.getY()) {
+            if (ModelCommonUtil.isShapeInRectangle(obj.getPolygon(offsetX, offsetY), rect)) {
                 onPoint.add(obj);
             }
         }
@@ -101,13 +102,16 @@ public class WorldManager {
     }
 
     /**
-     * Visszaadja az összes objektumot a négyzeten belül. TODO majd változni fog poligonok után (ez csak kicsit)
+     * Visszaadja az összes objektumot a négyzeten belül. Ha két víszintes vagy függőleges pontra eső vonalat kapunk
+     * akkor pedig a vonalon levőket adja vissza helyesen elvileg!
      * @param pointA A négyzet egyik pontja.
      * @param pointB A négyzet másik pontja.
+     * @param offsetX X irányú eltolás.
+     * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a négyzeten belül vannak.
      */
-    public List<IObject> getAllObjectsInRectangle(Position pointA, Position pointB) {
-        // @TODO: rectangle létrehozást kiemelni a ModelCommonUtilba
+    public List<IObject> getAllObjectsInRectangle(Position pointA, Position pointB, int offsetX, int offsetY) {
+        // Rectangle létrehozás itt marad, hogy ne minden összehasonlításkor példányosítson, elég szűrésenként 1x
         Position pointC = new Position(pointA.getX(), pointB.getY());
         Position pointD = new Position(pointB.getX(), pointA.getY());
 
@@ -119,7 +123,7 @@ public class WorldManager {
         List<IObject> inRectangle = new ArrayList<>();
 
         for (IObject obj : currentWorld.getWorldObjects()) {
-            if (rect.contains(obj.getPosX(), obj.getPosY())) {
+            if (ModelCommonUtil.isShapeInRectangle(obj.getPolygon(offsetX, offsetY), rect)) {
                 inRectangle.add(obj);
             }
         }

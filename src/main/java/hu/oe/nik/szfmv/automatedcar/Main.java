@@ -1,9 +1,9 @@
 package hu.oe.nik.szfmv.automatedcar;
 
-import hu.oe.nik.szfmv.automatedcar.model.World;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputReader;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputReader;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,8 +39,8 @@ public class Main {
         while (true) {
             try {
                 worldManager.getAutomatedCar().drive();
-                // TODO IWorld-öt használjon a drawWorld
-                window.getCourseDisplay().drawWorld((this.worldManager) );
+                // TODO IWorld-öt használjon a drawWorld, ha ezt akarjátok akkor legyen "drawobjects" is
+                window.getCourseDisplay().drawWorld((this.worldManager));
                 // TODO window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {

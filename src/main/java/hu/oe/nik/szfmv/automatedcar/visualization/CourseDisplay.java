@@ -4,18 +4,19 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
-import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
 
-import javax.swing.*;
-import javax.swing.text.Position;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.List;
+import javax.swing.JPanel;
 
 /**
  * CourseDisplay is for providing a viewport to the virtual world where the simulation happens.
@@ -82,7 +83,7 @@ public class CourseDisplay extends JPanel {
      */
     public void drawWorld(WorldManager world) {
         this.world = world.getWorld();
-        this.backgroundColor = Integer.valueOf(this.world.getColor().replace("#","").toUpperCase(),16);
+        this.backgroundColor = Integer.valueOf(this.world.getColor().replace("#", "").toUpperCase(), 16);
         paintComponent(getGraphics(), world);
 
     }
@@ -102,24 +103,6 @@ public class CourseDisplay extends JPanel {
     }
 
     /**
-     * Selects the AutomatedCar object from the list and returns with it.
-     * @param objects WorldObjects in an array.
-     * @return Returns the AutomatedCar object from the list.
-     */
-    private AutomatedCar getCarObject(List<WorldObject> objects) {
-        AutomatedCar findCar = null;
-
-        for(WorldObject item : objects) {
-            if (item instanceof AutomatedCar) {
-                findCar = (AutomatedCar)item;
-                break;
-            }
-        }
-
-        return findCar;
-    }
-
-    /**
      * Draw every object to the world. Center the car object and offset the others according to this.
      * @param g2d Buffered image.
      * @param world World object which will be drawn.
@@ -130,28 +113,32 @@ public class CourseDisplay extends JPanel {
         DebugViewer viewer = new DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
         for (IObject object : world.getAllObjectsInRectangle(
-                new hu.oe.nik.szfmv.automatedcar.model.Position(0,0),
-                new hu.oe.nik.szfmv.automatedcar.model.Position(this.world.getWidth(),this.world.getHeight()))) {
+                new hu.oe.nik.szfmv.automatedcar.model.Position(0, 0),
+                new hu.oe.nik.szfmv.automatedcar.model.Position(this.world.getWidth(), this.world.getHeight()),
+                offsets[0], offsets[1])) {
             Point2D refPoint;
             try {
                 refPoint = new Point(object.getReferenceX(), object.getReferenceY());
-            } catch (NullPointerException e){
-                refPoint = new Point(0,0);
+            } catch (NullPointerException e) {
+                refPoint = new Point(0, 0);
             }
             AffineTransform t = new AffineTransform();
 
-            t.translate(object.getPosX() - refPoint.getX() + offsets[0], object.getPosY() - refPoint.getY() + offsets[1]);
+            t.translate(object.getPosX() - refPoint.getX() + offsets[0],
+                    object.getPosY() - refPoint.getY() + offsets[1]);
             t.rotate(Math.toRadians(-object.getRotation()), refPoint.getX(), refPoint.getY());
             g2d.drawImage(object.getImage(), t, this);
 
             // todo: decide on how model will signal colors
 
-            viewer.DrawPolygon(object.getPosX()+ offsets[0], object.getPosY() + offsets[1], object.getWidth(), object.getHeight(), t, offsets);
+            viewer.DrawPolygon(object.getPosX() + offsets[0], object.getPosY() + offsets[1],
+                    object.getWidth(), object.getHeight(), t, offsets);
         }
 
         // Draw car
         AffineTransform t1 = new AffineTransform();
-        t1.translate(car.getPosX() - car.getReferenceX() + offsets[0], car.getPosY() - car.getReferenceY() + offsets[1]);
+        t1.translate(car.getPosX() - car.getReferenceX() + offsets[0],
+                car.getPosY() - car.getReferenceY() + offsets[1]);
         t1.rotate(Math.toRadians(car.getRotation() + 90), car.getReferenceX(), car.getReferenceY());
 
         g2d.drawImage(car.getImage(), t1, this);

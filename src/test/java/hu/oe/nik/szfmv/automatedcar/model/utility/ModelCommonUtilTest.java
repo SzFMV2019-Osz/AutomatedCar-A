@@ -1,12 +1,13 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import hu.oe.nik.szfmv.automatedcar.model.Position;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -72,16 +73,6 @@ public class ModelCommonUtilTest {
     @Test
     public void loadNotExistingImage() {
         assertThrows(NullPointerException.class, () -> ModelCommonUtil.loadObjectImage("car_2"));
-    }
-
-    @Test
-    public void pointInTriangle() {
-        assertEquals(true, ModelCommonUtil.isPointInTriangle(this.pointA, this.pointB, this.pointC, this.pointD));
-    }
-
-    @Test
-    public void pointNotInTriangle() {
-        assertEquals(false, ModelCommonUtil.isPointInTriangle(this.pointA, this.pointC, this.pointD, this.pointB));
     }
 
     @Test
