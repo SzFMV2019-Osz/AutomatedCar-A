@@ -15,9 +15,9 @@ public class ShapeTest {
         Road road = this.createRoad("road_2lane_straight");
 
         assertNotNull(road.getImage());
-        assertNotNull(road.getPolygon(0,0));
-        assertEquals(330, road.getPolygon(0,0).getBounds().width);
-        assertEquals(350, road.getPolygon(0,0).getBounds().height);
+        assertNotNull(road.getPolygon());
+        assertEquals(330, road.getPolygon().getBounds().width);
+        assertEquals(350, road.getPolygon().getBounds().height);
     }
 
     @Test
@@ -25,9 +25,9 @@ public class ShapeTest {
         Road road = this.createRoad("road_2lane_90right");
 
         assertNotNull(road.getImage());
-        assertNotNull(road.getPolygon(0, 0));
-        assertEquals(510, road.getPolygon(0,0).getBounds().width);
-        assertEquals(510, road.getPolygon(0,0).getBounds().height);
+        assertNotNull(road.getPolygon());
+        assertEquals(510, road.getPolygon().getBounds().width);
+        assertEquals(510, road.getPolygon().getBounds().height);
     }
 
     @Test
@@ -35,9 +35,9 @@ public class ShapeTest {
         Road road = this.createRoad("road_2lane_45right");
 
         assertNotNull(road.getImage());
-        assertNotNull(road.getPolygon(0,0));
-        assertEquals(380, road.getPolygon(0,0).getBounds().width);
-        assertEquals(360, road.getPolygon(0,0).getBounds().height);
+        assertNotNull(road.getPolygon());
+        assertEquals(380, road.getPolygon().getBounds().width);
+        assertEquals(360, road.getPolygon().getBounds().height);
     }
 
     @Test
@@ -45,9 +45,9 @@ public class ShapeTest {
         Road road = this.createRoad("road_2lane_tjunctionleft");
 
         assertNotNull(road.getImage());
-        assertNotNull(road.getPolygon(0,0));
-        assertEquals(865, road.getPolygon(0,0).getBounds().width);
-        assertEquals(1400, road.getPolygon(0,0).getBounds().height);
+        assertNotNull(road.getPolygon());
+        assertEquals(865, road.getPolygon().getBounds().width);
+        assertEquals(1400, road.getPolygon().getBounds().height);
     }
 
     @Test
@@ -64,9 +64,9 @@ public class ShapeTest {
         car.setReferencePosition(new Position(0, 0));
 
         assertNotNull(car.getImage());
-        assertNotNull(car.getPolygon(0,0));
-        assertEquals(90, car.getPolygon(0,0).getBounds().width);
-        assertEquals(206, car.getPolygon(0,0).getBounds().height);
+        assertNotNull(car.getPolygon());
+        assertEquals(90, car.getPolygon().getBounds().width);
+        assertEquals(206, car.getPolygon().getBounds().height);
         assertEquals(2, car.getPosZ());
     }
 

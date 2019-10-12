@@ -94,8 +94,8 @@ public class CourseDisplay extends JPanel {
     private int[] getCarOffset(AutomatedCar car) {
         int[] offset = new int[2];
 
-        offset[0] = (this.width / 2) - (car.getPosX() + (car.getWidth() / 2));
-        offset[1] = (this.height / 2) - (car.getPosY() + (car.getHeight() / 2));
+        offset[0] = (this.width / 2) - (car.getPosX() - car.getReferenceX() + (car.getWidth() / 2));
+        offset[1] = (this.height / 2) - (car.getPosY() - car.getReferenceY() + (car.getHeight() / 2));
 
         return offset;
     }
@@ -144,16 +144,14 @@ public class CourseDisplay extends JPanel {
             g2d.drawImage(object.getImage(), t, this);
 
             // todo: decide on how model will signal colors
-
-            viewer.DrawPolygon(object.getReferenceX(), object.getReferenceY(), object.getWidth(), object.getHeight(), t, offsets);
+            viewer.DrawPolygon(object, t);
         }
 
         // Draw car
         AffineTransform t1 = new AffineTransform();
-        t1.translate(car.getPosX() - car.getReferenceX() + offsets[0], car.getPosY() - car.getReferenceY() + offsets[1]);
+        t1.translate(car.getPosX() + offsets[0], car.getPosY() + offsets[1]);
         t1.rotate(Math.toRadians(car.getRotation() + 90), car.getReferenceX(), car.getReferenceY());
-        viewer.DrawPolygon(car.getReferenceX()-car.getWidth()/2, car.getReferenceY()-car.getHeight()/2, car.getWidth(), car.getHeight(), t1, offsets);
-
+        viewer.DrawPolygon(car, t1);
         g2d.drawImage(car.getImage(), t1, this);
         //viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
         t1 = null;

@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.visualization.debug;
 
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
 
 import java.awt.*;
@@ -50,21 +51,19 @@ public class DebugViewer {
     }
 
     /**
-     * @param x The x of coordinate of the center of the object
-     * @param y The y of coordinate of the center of the object
-     * @param width The width of the object
+     * @param x      The x of coordinate of the center of the object
+     * @param y      The y of coordinate of the center of the object
+     * @param width  The width of the object
      * @param height The height of the object
      */
-    public void DrawPolygon(int x, int y, int width, int height, AffineTransform t, int[] offset){
-        if (debuggerSwitchedOn){
+    public void DrawPolygon(IObject object, AffineTransform t) {
+        if (debuggerSwitchedOn) {
             graphics2D.setColor(info.getColor());
             graphics2D.setStroke(info.getThickness());
 
             // create a rectangle with the original data and draw the result of applying the transformation
-            Rectangle rect = new Rectangle(x, y, width, height);
-            Shape newShape = t.createTransformedShape(rect);
+            Shape newShape = t.createTransformedShape(object.getPolygon());
             graphics2D.draw(newShape);
-            rect = null;
             newShape = null;
         }
     }

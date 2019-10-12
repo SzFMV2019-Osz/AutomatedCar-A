@@ -62,5 +62,5 @@ public interface IObject {
      * Visszadja az objektum alakját
      * @return objektum alakja
      */
-    Shape getPolygon(int offsetX, int offsetY);
+    Shape getPolygon();
 }
