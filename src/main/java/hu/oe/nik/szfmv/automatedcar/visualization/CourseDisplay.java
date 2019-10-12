@@ -149,7 +149,7 @@ public class CourseDisplay extends JPanel {
 
         // Draw car
         AffineTransform t1 = new AffineTransform();
-        t1.translate(car.getPosX() + offsets[0], car.getPosY() + offsets[1]);
+        t1.translate(car.getPosX() - car.getReferenceX() + offsets[0], car.getPosY() - car.getReferenceY() + offsets[1]);
         t1.rotate(Math.toRadians(car.getRotation() + 90), car.getReferenceX(), car.getReferenceY());
         viewer.DrawPolygon(car, t1);
         g2d.drawImage(car.getImage(), t1, this);

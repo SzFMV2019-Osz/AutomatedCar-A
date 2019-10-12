@@ -17,6 +17,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -60,7 +62,7 @@ public class WorldObject implements IObject {
     protected String imageFileName;
 
     @XmlTransient
-    protected Shape polygon;
+    protected List<Shape> polygons = new ArrayList<>();
 
     public WorldObject() {
         this.transform = new Transform();
@@ -231,8 +233,8 @@ public class WorldObject implements IObject {
      * {@inheritDoc}
      */
     @Override
-    public Shape getPolygon() {
-        return this.polygon;
+    public List<Shape> getPolygons() {
+        return this.polygons;
         //return this.getShapeTransfrom().createTransformedShape(this.polygon);
     }
 
@@ -251,6 +253,6 @@ public class WorldObject implements IObject {
     public void initShape() {
         int x = 0 - (this.width / 2);
         int y = 0 - (this.height / 2);
-        this.polygon = new Rectangle(x, y, this.width, this.height);
+        this.polygons.add( new Rectangle(x, y, this.width, this.height));
     }
 }

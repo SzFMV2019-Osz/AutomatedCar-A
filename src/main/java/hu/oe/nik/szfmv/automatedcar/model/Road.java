@@ -62,9 +62,9 @@ public class Road extends WorldObject implements IStatic, IBackground {
     }
 
     private void roadShapeStraight() {
-        this.polygon = new Rectangle(this.BORDER, 0, this.width - (this.BORDER * 2), this.height);
+        this.polygons.add(new Rectangle(this.BORDER, 0, this.width - (this.BORDER * 2), this.height));
         Rectangle line = new Rectangle(this.width / 2 - 1, 0, 2, this.height);
-        ((Rectangle) this.polygon).add(line);
+        this.polygons.add(line);
     }
 
     private void roadShape90Left() {
@@ -72,14 +72,14 @@ public class Road extends WorldObject implements IStatic, IBackground {
         Polygon middleArc = this.createMiddle90Arc();
         Polygon bigArc = this.createBig90Arc();
 
-        this.polygon = new Area(bigArc);
-        ((Area) this.polygon).add(new Area(middleArc));
-        ((Area) this.polygon).add(new Area(smallArc));
+        this.polygons.add(bigArc);
+        this.polygons.add(middleArc);
+        this.polygons.add(smallArc);
     }
 
     private void roadShape90Right() {
         this.roadShape90Left();
-        this.polygon = mirrorAlongX(525, this.polygon);
+        //this.polygon = mirrorAlongX(525, this.polygon);
     }
 
     private void roadShape45Left() {
@@ -87,14 +87,14 @@ public class Road extends WorldObject implements IStatic, IBackground {
         Polygon middleArc = this.createMiddle45Arc();
         Polygon bigArc = this.createBig45Arc();
 
-        this.polygon = new Area(bigArc);
-        ((Area) this.polygon).add(new Area(middleArc));
-        ((Area) this.polygon).add(new Area(smallArc));
+        this.polygons.add(bigArc);
+        this.polygons.add(middleArc);
+        this.polygons.add(smallArc);
     }
 
     private void roadShape45Right() {
         this.roadShape45Left();
-        this.polygon = mirrorAlongX(401, this.polygon);
+        //this.polygon = mirrorAlongX(401, this.polygon);
     }
 
     private Polygon createSmall90Arc() {
@@ -122,29 +122,29 @@ public class Road extends WorldObject implements IStatic, IBackground {
     }
 
     private void roadShapeTJunctionRight() {
-        this.polygon = new Rectangle(this.BORDER, 0, this.ROAD_WIDTH, this.height);
+        this.polygons.add(new Rectangle(this.BORDER, 0, this.ROAD_WIDTH, this.height));
         Rectangle line = new Rectangle(this.width / 2 - 1, 0, 2, this.height);
         int x = this.BORDER + this.ROAD_WIDTH;
         Rectangle secondRoad = new Rectangle(x, (this.height / 2) - (this.ROAD_WIDTH / 2), this.width - x, this.ROAD_WIDTH);
-        ((Rectangle) this.polygon).add(line);
-        ((Rectangle) this.polygon).add((secondRoad));
+        this.polygons.add(line);
+        this.polygons.add(secondRoad);
     }
 
     private void roadShapeTJunctionLeft() {
         this.roadShapeTJunctionRight();
-        this.polygon = mirrorAlongX(875, this.polygon);
+        //this.polygon = mirrorAlongX(875, this.polygon);
     }
 
     private void roadShapeCrossroad() {
-        this.polygon = new Rectangle(0, -this.BORDER, this.width, -this.ROAD_WIDTH);
-        ((Rectangle) this.polygon).add(this.createCrossroadRoad());
+        this.polygons.add(new Rectangle(0, -this.BORDER, this.width, -this.ROAD_WIDTH));
+        this.polygons.add(this.createCrossroadRoad());
     }
 
     private void roadShapeRotary() {
-        this.polygon = new Rectangle(0, -this.BORDER, this.width, -this.ROAD_WIDTH);
+        this.polygons.add(new Rectangle(0, -this.BORDER, this.width, -this.ROAD_WIDTH));
 
-        ((Rectangle) this.polygon).add(this.createCrossroadRoad());
-        ((Area) this.polygon).add(this.createEllipses());
+        this.polygons.add(this.createCrossroadRoad());
+        this.polygons.add(this.createEllipses());
     }
 
     private Rectangle createCrossroadRoad() {

@@ -3,6 +3,8 @@ package hu.oe.nik.szfmv.automatedcar.model.interfaces;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
 
+import java.util.List;
+
 /**
  * A világban megtalálható objektumok közös tulajdonságait írja le.
  */
@@ -62,5 +64,5 @@ public interface IObject {
      * Visszadja az objektum alakját
      * @return objektum alakja
      */
-    Shape getPolygon();
+    List<Shape> getPolygons();
 }

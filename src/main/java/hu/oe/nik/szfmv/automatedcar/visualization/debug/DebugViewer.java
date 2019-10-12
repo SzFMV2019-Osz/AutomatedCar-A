@@ -62,9 +62,11 @@ public class DebugViewer {
             graphics2D.setStroke(info.getThickness());
 
             // create a rectangle with the original data and draw the result of applying the transformation
-            Shape newShape = t.createTransformedShape(object.getPolygon());
-            graphics2D.draw(newShape);
-            newShape = null;
+            for(Shape shape : object.getPolygons()) {
+                Shape newShape = t.createTransformedShape(shape);
+                graphics2D.draw(newShape);
+            }
+            //newShape = null;
         }
     }
 
