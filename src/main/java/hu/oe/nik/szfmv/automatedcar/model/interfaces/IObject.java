@@ -1,6 +1,9 @@
 package hu.oe.nik.szfmv.automatedcar.model.interfaces;
 
+import javafx.scene.transform.Affine;
+
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import java.util.List;
@@ -64,5 +67,7 @@ public interface IObject {
      * Visszadja az objektum alakját
      * @return objektum alakja
      */
-    List<Shape> getPolygons();
+    List<Shape> getPolygons(int offsetX, int offsetY);
+
+    AffineTransform getTransform(int offsetX, int offsetY);
 }

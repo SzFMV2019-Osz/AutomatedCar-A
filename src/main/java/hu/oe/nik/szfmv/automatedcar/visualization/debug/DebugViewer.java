@@ -58,17 +58,15 @@ public class DebugViewer {
      * @param width  The width of the object
      * @param height The height of the object
      */
-    public void DrawPolygon(IObject object, AffineTransform t) {
+    public void DrawPolygon(IObject object, int offsetX, int offsetY) {
         if (debuggerSwitchedOn) {
             graphics2D.setColor(info.getColor());
             graphics2D.setStroke(info.getThickness());
 
             // create a rectangle with the original data and draw the result of applying the transformation
-            for(Shape shape : object.getPolygons()) {
-                Shape newShape = t.createTransformedShape(shape);
-                graphics2D.draw(newShape);
+            for(Shape shape : object.getPolygons(offsetX, offsetY)) {
+                graphics2D.draw(shape);
             }
-            //newShape = null;
         }
     }
 

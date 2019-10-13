@@ -226,7 +226,6 @@ public class Road extends WorldObject implements IStatic, IBackground {
         AffineTransform at = new AffineTransform();
         at.translate(x, 0);
         at.scale(-1, 1);
-        //at.translate(-x, 0);
         return at.createTransformedShape(shape);
     }
 

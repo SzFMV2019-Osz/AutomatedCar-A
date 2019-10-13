@@ -15,8 +15,8 @@ public class ShapeTest {
         Road road = this.createRoad("road_2lane_straight");
 
         assertNotNull(road.getImage());
-        assertNotNull(road.getPolygons());
-        assertNotNull(road.getPolygons().get(0));
+        assertNotNull(road.getPolygons(0,0));
+        assertNotNull(road.getPolygons(0,0).get(0));
     }
 
     @Test
@@ -24,8 +24,8 @@ public class ShapeTest {
         Road road = this.createRoad("road_2lane_90right");
 
         assertNotNull(road.getImage());
-        assertNotNull(road.getPolygons());
-        assertNotNull(road.getPolygons().get(0));
+        assertNotNull(road.getPolygons(0,0));
+        assertNotNull(road.getPolygons(0,0).get(0));
     }
 
     @Test
@@ -33,8 +33,8 @@ public class ShapeTest {
         Road road = this.createRoad("road_2lane_45right");
 
         assertNotNull(road.getImage());
-        assertNotNull(road.getPolygons());
-        assertNotNull(road.getPolygons().get(0));
+        assertNotNull(road.getPolygons(0,0));
+        assertNotNull(road.getPolygons(0,0).get(0));
     }
 
     @Test
@@ -42,8 +42,8 @@ public class ShapeTest {
         Road road = this.createRoad("road_2lane_tjunctionleft");
 
         assertNotNull(road.getImage());
-        assertNotNull(road.getPolygons());
-        assertNotNull(road.getPolygons().get(0));
+        assertNotNull(road.getPolygons(0,0));
+        assertNotNull(road.getPolygons(0,0).get(0));
     }
 
     @Test
@@ -60,8 +60,8 @@ public class ShapeTest {
         car.setReferencePosition(new Position(0, 0));
 
         assertNotNull(car.getImage());
-        assertNotNull(car.getPolygons());
-        assertNotNull(car.getPolygons().get(0));
+        assertNotNull(car.getPolygons(0,0));
+        assertNotNull(car.getPolygons(0,0).get(0));
         assertEquals(2, car.getPosZ());
     }
 

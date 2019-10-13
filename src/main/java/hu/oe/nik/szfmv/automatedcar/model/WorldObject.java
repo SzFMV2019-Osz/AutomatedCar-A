@@ -233,16 +233,23 @@ public class WorldObject implements IObject {
      * {@inheritDoc}
      */
     @Override
-    public List<Shape> getPolygons() {
-        return this.polygons;
-        //return this.getShapeTransfrom().createTransformedShape(this.polygon);
+    public List<Shape> getPolygons(int offsetX, int offsetY) {
+        List<Shape> transformedList = new ArrayList<>();
+
+        AffineTransform transform = getTransform(offsetX, offsetY);
+
+        for(Shape shape : this.polygons){
+            transformedList.add(transform.createTransformedShape(shape));
+        }
+
+        return transformedList;
     }
 
-    private AffineTransform getShapeTransfrom() {
-        double theta = Math.toRadians(this.getRotation());
+    public AffineTransform getTransform(int offsetX, int offsetY) {
         AffineTransform shapeTransform = new AffineTransform();
-        shapeTransform.rotate(theta);
-        shapeTransform.translate(this.getPosX() + this.getReferenceX(), this.getPosX() + this.getReferenceY());
+
+        shapeTransform.translate(this.getPosX() - this.getReferenceX() + offsetX, this.getPosY() - this.getReferenceY() + offsetY);
+        shapeTransform.rotate(Math.toRadians(-this.getRotation()), this.getReferenceX(), this.getReferenceY());
 
         return shapeTransform;
     }
