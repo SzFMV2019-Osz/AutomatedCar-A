@@ -3,7 +3,9 @@ package hu.oe.nik.szfmv.automatedcar.visualization.debug;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
 
-import java.awt.*;
+import java.awt.Shape;
+import java.awt.Graphics2D;
+import java.awt.Color;
 import java.awt.geom.AffineTransform;
 
 
