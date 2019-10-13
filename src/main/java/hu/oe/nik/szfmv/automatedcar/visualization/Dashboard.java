@@ -1,12 +1,12 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,6 +36,16 @@ public class Dashboard extends JPanel {
     private JLabel yCoordText = new JLabel("Y: ");
     private JLabel steeringWheelText = new JLabel("Steering Wheel:");
     private JLabel speedLimitText = new JLabel("Speed Limit:");
+    private JLabel controlStartExplainerText=new JLabel("Controls");
+    private JLabel pedalExplainerText=new JLabel("W/S : Throttle/Break  ");
+    private JLabel steeringExplainerText=new JLabel(" A/D :Turn Left/Right");
+    private JLabel gearChangeExplainerText=new JLabel("Q/E : Gear Up/Down");
+    private JLabel indicatorExplainerText=new JLabel("L/R Arrow: Indicator Left/Right");
+    private JLabel parkingIndicatorExplainerText=new JLabel("P : Parking mode on/off");
+    private JLabel accIndicatorExplainerText=new JLabel("O : Automated Cruise Control on/off");
+    private JLabel laneKeepingIndicatorExplainerText=new JLabel("L : LaneKeeping mode on/off");
+    private JLabel timeGapExplainerText=new JLabel("T: Set time Gap");
+    private JLabel referenceSpeedExplainer=new JLabel("U/D Arrow : Change speed on the ACC");
 
     private JLabel currentGearText = new JLabel("P");
     private JLabel speedLimitValueText = new JLabel("30");
@@ -112,14 +122,27 @@ public class Dashboard extends JPanel {
         breakPedalText.setBounds(10, 420, 100, 15);
         speedLimitText.setBounds(10, 450, 80, 15);
         speedLimitValueText.setBounds(90, 450, 30, 15);
-        steeringWheelText.setBounds(10, 580, 100, 15);
-        steeringWheelValueText.setBounds(110, 580, 30, 15);
-        xCoordText.setBounds(10, 600, 20, 15);
-        xCoordValueText.setBounds(30, 600, 30, 15);
-        yCoordText.setBounds(70, 600, 20, 15);
-        yCoordValueText.setBounds(90, 600, 30, 15);
+        steeringWheelText.setBounds(10, 620, 100, 15);
+        steeringWheelValueText.setBounds(110, 620, 40, 15);
+        xCoordText.setBounds(10, 635, 30, 15);
+        xCoordValueText.setBounds(40, 635, 30, 15);
+        yCoordText.setBounds(70, 635, 30, 15);
+        yCoordValueText.setBounds(100, 635, 30, 15);
         currentSpeedText.setBounds(50, 125, 40, 15);
         currentRpmText.setBounds(150, 125, 50,15);
+        controlStartExplainerText.setBounds(10,470,200,15);
+        pedalExplainerText.setBounds(10,485,200,15);
+        steeringExplainerText.setBounds(10,500,200,15);
+        gearChangeExplainerText.setBounds(10,515,200,15);
+        indicatorExplainerText.setBounds(10,530,200,15);
+        laneKeepingIndicatorExplainerText.setBounds(10,560,200,15);
+        parkingIndicatorExplainerText.setBounds(10,545,200,15);
+        accIndicatorExplainerText.setBounds(10,575,220,15);
+        timeGapExplainerText.setBounds(10,590,220,15);
+        referenceSpeedExplainer.setBounds(10,605,220,15);
+
+
+
 
         add(gearShiftText);
         add(currentGearText);
@@ -136,6 +159,16 @@ public class Dashboard extends JPanel {
         add(yCoordValueText);
         add(currentSpeedText);
         add(currentRpmText);
+        add(controlStartExplainerText);
+        add(pedalExplainerText);
+        add(steeringExplainerText);
+        add(gearChangeExplainerText);
+        add(indicatorExplainerText);
+        add(accIndicatorExplainerText);
+        add(parkingIndicatorExplainerText);
+        add(laneKeepingIndicatorExplainerText);
+        add(timeGapExplainerText);
+        add(referenceSpeedExplainer);
 
     }
 
