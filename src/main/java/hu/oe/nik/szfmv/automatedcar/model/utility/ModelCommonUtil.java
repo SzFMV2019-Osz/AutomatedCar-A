@@ -96,9 +96,8 @@ public final class ModelCommonUtil {
         Position p = new Position(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
         for (Position point : points) {
-            if (point.getX() <= p.getX() && point.getY() <= p.getY()) {
-                p = point;
-            }
+            p.setX(Math.min(point.getX(), p.getX()));
+            p.setY(Math.min(point.getY(), p.getY()));
         }
 
         return p;
@@ -113,9 +112,8 @@ public final class ModelCommonUtil {
         Position p = new Position(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
         for (Position point : points) {
-            if (point.getX() >= p.getX() && point.getY() >= p.getY()) {
-                p = point;
-            }
+            p.setX(Math.max(point.getX(), p.getX()));
+            p.setY(Math.max(point.getY(), p.getY()));
         }
 
         return p;
