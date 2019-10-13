@@ -16,8 +16,7 @@ public class ShapeTest {
 
         assertNotNull(road.getImage());
         assertNotNull(road.getPolygons());
-        //assertEquals(330, road.getPolygons().getBounds().width);
-        //assertEquals(350, road.getPolygons().getBounds().height);
+        assertNotNull(road.getPolygons().get(0));
     }
 
     @Test
@@ -25,9 +24,8 @@ public class ShapeTest {
         Road road = this.createRoad("road_2lane_90right");
 
         assertNotNull(road.getImage());
-        //assertNotNull(road.getPolygon());
-        //assertEquals(510, road.getPolygon().getBounds().width);
-        //assertEquals(510, road.getPolygon().getBounds().height);
+        assertNotNull(road.getPolygons());
+        assertNotNull(road.getPolygons().get(0));
     }
 
     @Test
@@ -35,9 +33,8 @@ public class ShapeTest {
         Road road = this.createRoad("road_2lane_45right");
 
         assertNotNull(road.getImage());
-        //assertNotNull(road.getPolygon());
-        //assertEquals(380, road.getPolygon().getBounds().width);
-        //assertEquals(360, road.getPolygon().getBounds().height);
+        assertNotNull(road.getPolygons());
+        assertNotNull(road.getPolygons().get(0));
     }
 
     @Test
@@ -45,9 +42,8 @@ public class ShapeTest {
         Road road = this.createRoad("road_2lane_tjunctionleft");
 
         assertNotNull(road.getImage());
-        //assertNotNull(road.getPolygon());
-        //assertEquals(865, road.getPolygon().getBounds().width);
-        //assertEquals(1400, road.getPolygon().getBounds().height);
+        assertNotNull(road.getPolygons());
+        assertNotNull(road.getPolygons().get(0));
     }
 
     @Test
@@ -64,9 +60,8 @@ public class ShapeTest {
         car.setReferencePosition(new Position(0, 0));
 
         assertNotNull(car.getImage());
-        //assertNotNull(car.getPolygon());
-        //assertEquals(90, car.getPolygon().getBounds().width);
-        //assertEquals(206, car.getPolygon().getBounds().height);
+        assertNotNull(car.getPolygons());
+        assertNotNull(car.getPolygons().get(0));
         assertEquals(2, car.getPosZ());
     }
 

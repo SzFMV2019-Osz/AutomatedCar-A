@@ -142,8 +142,26 @@ public class Road extends WorldObject implements IStatic, IBackground {
     }
 
     private void roadShapeCrossroad() {
-        this.polygons.add(new Rectangle(0, -this.BORDER, this.width, -this.ROAD_WIDTH));
-        this.polygons.add(this.createCrossroadRoad());
+        int x = 535;
+        this.polygons.add(new Line2D.Float(x, 0, x, this.height));
+        this.polygons.add(new Line2D.Float(x + this.ROAD_WIDTH / 2, 0, x + this.ROAD_WIDTH / 2, this.height));
+
+        this.polygons.add(new Line2D.Float(x * 2 + this.ROAD_WIDTH, 0, x * 2 + this.ROAD_WIDTH, 350));
+        this.polygons.add(new Line2D.Float(x * 2 + this.ROAD_WIDTH, 1050, x * 2 + this.ROAD_WIDTH, this.height));
+
+        this.polygons.add(new Line2D.Float(x + 525, 540, x + 875, 540));
+        this.polygons.add(new Line2D.Float(x + 525, 700, x + 875, 700));
+        this.polygons.add(new Line2D.Float(x + 525, 860, x + 875, 860));
+
+        this.polygons.add(new Line2D.Float(0, 540, 345, 540));
+        this.polygons.add(new Line2D.Float(0, 700, 345, 700));
+        this.polygons.add(new Line2D.Float(0, 860, 345, 860));
+
+        this.polygons.add(this.createArc(new int[]{x + 340, x + 420, x + 524}, new int[]{350, 450, 536}, 3));
+        this.polygons.add(this.createArc(new int[]{x + 340, x + 420, x + 524}, new int[]{1050, 946, 868}, 3));
+
+        this.polygons.add(this.createArc(new int[]{348, 450, 537}, new int[]{350, 450, 536}, 3));
+        this.polygons.add(this.createArc(new int[]{348, 450, 537}, new int[]{1050, 946, 868}, 3));
     }
 
     private void roadShapeRotary() {
