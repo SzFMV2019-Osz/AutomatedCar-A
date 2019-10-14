@@ -23,6 +23,10 @@ public class PowertrainPacket {
         return velocity;
     }
 
+    public double ConvertToKmph(int value) {
+        return value/50*3.6;
+    }
+
     public void setVelocity(int velocity) {
         this.velocity = velocity;
     }
