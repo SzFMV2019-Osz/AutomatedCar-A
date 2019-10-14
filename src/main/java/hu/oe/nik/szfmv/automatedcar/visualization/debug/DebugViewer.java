@@ -61,7 +61,7 @@ public class DebugViewer {
      * @param width  The width of the object
      * @param height The height of the object
      */
-    public void DrawPolygon(int x, int y, int width, int height, AffineTransform t, int[] offset, List<Shape> shapes) {
+    public void DrawPolygon(List<Shape> shapes) {
         if (debuggerSwitchedOn){
             graphics2D.setColor(info.getColor());
             graphics2D.setStroke(info.getThickness());
