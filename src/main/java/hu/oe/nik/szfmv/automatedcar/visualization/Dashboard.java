@@ -79,7 +79,7 @@ public class Dashboard extends JPanel {
         speedoMeter.setPosition(new Point(0, 0));
         speedoMeter.setSize(new Point(100, 100));
         speedoMeter.setPerf_Percentage(0);
-        speedoMeter.setBounds(10, 15, 110, 110);
+        speedoMeter.setBounds(10, 15, 110, 100);
     }
 
     private void CreateRPMmeter() {
@@ -87,7 +87,7 @@ public class Dashboard extends JPanel {
         RPMmeter.setPosition(new Point(0, 0));
         RPMmeter.setSize(new Point(80, 80));
         RPMmeter.setPerf_Percentage(0);
-        RPMmeter.setBounds(120, 25, 110, 110);
+        RPMmeter.setBounds(120, 25, 110, 100);
     }
 
     private void OMeterPlacing() {
