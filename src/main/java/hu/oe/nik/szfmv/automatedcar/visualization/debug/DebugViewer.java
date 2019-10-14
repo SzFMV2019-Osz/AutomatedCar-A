@@ -1,11 +1,15 @@
 package hu.oe.nik.szfmv.automatedcar.visualization.debug;
 
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
 
-import java.awt.*;
+import java.awt.Shape;
+import java.awt.Graphics2D;
+import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
+import java.util.List;
 
 
 /**
@@ -52,19 +56,20 @@ public class DebugViewer {
     }
 
     /**
-     * @param x The x of coordinate of the center of the object
-     * @param y The y of coordinate of the center of the object
-     * @param width The width of the object
+     * @param x      The x of coordinate of the center of the object
+     * @param y      The y of coordinate of the center of the object
+     * @param width  The width of the object
      * @param height The height of the object
      */
-    public void DrawPolygon(int x, int y, int width, int height, AffineTransform t, int[] offset, Shape s){
+    public void DrawPolygon(List<Shape> shapes) {
         if (debuggerSwitchedOn){
             graphics2D.setColor(info.getColor());
             graphics2D.setStroke(info.getThickness());
 
             // create a rectangle with the original data and draw the result of applying the transformation
-            Rectangle rect = new Rectangle(x, y, width, height);
-            graphics2D.draw(t.createTransformedShape(rect));
+            for(Shape shape : shapes) {
+                graphics2D.draw(shape);
+            }
         }
     }
 
