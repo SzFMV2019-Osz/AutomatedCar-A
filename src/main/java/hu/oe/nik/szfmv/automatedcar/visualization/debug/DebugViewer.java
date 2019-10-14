@@ -7,6 +7,9 @@ import java.awt.Shape;
 import java.awt.Graphics2D;
 import java.awt.Color;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.GeneralPath;
+import java.awt.geom.PathIterator;
+import java.util.List;
 
 
 /**
@@ -58,13 +61,13 @@ public class DebugViewer {
      * @param width  The width of the object
      * @param height The height of the object
      */
-    public void DrawPolygon(IObject object, int offsetX, int offsetY) {
-        if (debuggerSwitchedOn) {
+    public void DrawPolygon(int x, int y, int width, int height, AffineTransform t, int[] offset, List<Shape> shapes) {
+        if (debuggerSwitchedOn){
             graphics2D.setColor(info.getColor());
             graphics2D.setStroke(info.getThickness());
 
             // create a rectangle with the original data and draw the result of applying the transformation
-            for(Shape shape : object.getPolygons(offsetX, offsetY)) {
+            for(Shape shape : shapes) {
                 graphics2D.draw(shape);
             }
         }
