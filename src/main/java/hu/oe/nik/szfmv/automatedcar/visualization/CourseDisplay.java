@@ -135,15 +135,15 @@ public class CourseDisplay extends JPanel {
             g2d.drawImage(object.getImage(), t, this);
 
             // todo: decide on how model will signal colors
-            viewer.DrawPolygon(object, offsets[0], offsets[1]);
+
+            viewer.DrawPolygon(object.getPolygons(offsets[0], offsets[1]));
         }
 
         // Draw car
         AffineTransform t1 = car.getTransform(offsets[0], offsets[1]);
-        //t1.rotate(Math.toRadians(car.getRotation() + 90), car.getReferenceX(), car.getReferenceY());
-        viewer.DrawPolygon(car,offsets[0], offsets[1]);
+        viewer.DrawPolygon(car.getPolygons(offsets[0], offsets[1]));
+
         g2d.drawImage(car.getImage(), t1, this);
         //viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
-        t1 = null;
     }
 }
