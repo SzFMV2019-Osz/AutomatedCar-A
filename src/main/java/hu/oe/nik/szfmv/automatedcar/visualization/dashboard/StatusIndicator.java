@@ -8,6 +8,7 @@ public class StatusIndicator extends JPanel {
 
     public void setText(String text) {
         this.text = text;
+        repaint();
     }
 
     String text;
