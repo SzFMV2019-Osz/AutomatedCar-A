@@ -64,7 +64,7 @@ public class Powertrain extends SystemComponent {
         }
 
         calculateVelocityVector(inputPacket.getGasPedalValue(), inputPacket.getBreakPedalValue(), inputPacket.getGearShiftValue());
-        float steeringAngle = virtualFunctionBus.inputPacket.getSteeringWheelValue() / (float)100 * (float)30;
+        float steeringAngle = virtualFunctionBus.inputPacket.getSteeringWheelValue() / (float)100 * (float)35;
 
         frontX = (float) (carLocationX + wheelbase/2 * Math.cos(convertDegreeToRadian(rotationAngle)));
         frontY = (float) (carLocationY + wheelbase/2 * Math.sin(convertDegreeToRadian(rotationAngle)));
