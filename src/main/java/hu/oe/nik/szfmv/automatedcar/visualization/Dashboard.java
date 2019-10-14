@@ -1,11 +1,13 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
+import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.LastRoadSign;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +27,8 @@ public class Dashboard extends JPanel {
     private Turn_Signal left_Turn_Signal;
     private Turn_Signal right_Turn_Signal;
 
+    private JLabel currentSpeedText = new JLabel("0 KM/h");
+    private JLabel currentRpmText = new JLabel("0");
     private JLabel gearShiftText = new JLabel("Gear:");
     private JLabel gasPedalText = new JLabel("Gas Pedal");
     private JLabel accMenuText = new JLabel("ACC opts:");
@@ -33,6 +37,16 @@ public class Dashboard extends JPanel {
     private JLabel yCoordText = new JLabel("Y: ");
     private JLabel steeringWheelText = new JLabel("Steering Wheel:");
     private JLabel speedLimitText = new JLabel("Speed Limit:");
+    private JLabel controlStartExplainerText=new JLabel("Controls");
+    private JLabel pedalExplainerText=new JLabel("W/S : Throttle/Break  ");
+    private JLabel steeringExplainerText=new JLabel(" A/D :Turn Left/Right");
+    private JLabel gearChangeExplainerText=new JLabel("Q/E : Gear Up/Down");
+    private JLabel indicatorExplainerText=new JLabel("L/R Arrow: Indicator L/R");
+    private JLabel parkingIndicatorExplainerText=new JLabel("P : Parking mode");
+    private JLabel accIndicatorExplainerText=new JLabel("O : Automated Cruise Control");
+    private JLabel laneKeepingIndicatorExplainerText=new JLabel("L : LaneKeeping");
+    private JLabel timeGapExplainerText=new JLabel("T: Set time Gap");
+    private JLabel referenceSpeedExplainer=new JLabel("U/D Arrow : Change ACC speed");
 
     private JLabel currentGearText = new JLabel("P");
     private JLabel speedLimitValueText = new JLabel("30");
@@ -55,6 +69,8 @@ public class Dashboard extends JPanel {
     private StatusIndicator TimeGapIndicator;
     private StatusIndicator ReferenceSpeedIndicator;
 
+    private LastRoadSign roadSign = new LastRoadSign("No sign");
+
     private void CreateSpeedometer() {
         speedoMeter = new OMeter();
         speedoMeter.setPosition(new Point(0, 0));
@@ -68,7 +84,7 @@ public class Dashboard extends JPanel {
         RPMmeter.setPosition(new Point(0, 0));
         RPMmeter.setSize(new Point(80, 80));
         RPMmeter.setPerf_Percentage(0);
-        RPMmeter.setBounds(120, 25, 110, 110);
+        RPMmeter.setBounds(120, 25, 110, 100);
     }
 
     private void OMeterPlacing() {
@@ -86,7 +102,7 @@ public class Dashboard extends JPanel {
         PPIndicator = new StatusIndicator(60, 250, 50, 40, "PP");
         LKAIndicator = new StatusIndicator(10, 300, 50, 40, "LKA");
         LKWARNIndicator = new StatusIndicator(10, 350, 100, 40, "LKA WARN");
-        LastRoadSignIndicator = new StatusIndicator(120, 205, 100, 40, "STOP");
+        LastRoadSignIndicator = new StatusIndicator(120, 205, 100, 40, roadSign.getRoadSignName());
         AEBWARNIndicator = new StatusIndicator(120, 310, 100, 40, "AEB WARN");
         RRWARNIndicator = new StatusIndicator(120, 350, 100, 40, "RR WARN");
 
@@ -104,17 +120,32 @@ public class Dashboard extends JPanel {
     private void TextPlacing() {
         gearShiftText.setBounds(100, 150, 40, 15);
         currentGearText.setBounds(135, 150, 10, 15);
-        accMenuText.setBounds(10, 190, 60, 15);
+        accMenuText.setBounds(10, 190, 80, 15);
         gasPedalText.setBounds(10, 390, 100, 15);
         breakPedalText.setBounds(10, 420, 100, 15);
-        speedLimitText.setBounds(10, 450, 80, 15);
-        speedLimitValueText.setBounds(90, 450, 30, 15);
-        steeringWheelText.setBounds(10, 580, 100, 15);
-        steeringWheelValueText.setBounds(110, 580, 30, 15);
-        xCoordText.setBounds(10, 600, 20, 15);
-        xCoordValueText.setBounds(30, 600, 30, 15);
-        yCoordText.setBounds(70, 600, 20, 15);
-        yCoordValueText.setBounds(90, 600, 30, 15);
+        speedLimitText.setBounds(10, 450, 120, 15);
+        speedLimitValueText.setBounds(130, 450, 30, 15);
+        steeringWheelText.setBounds(10, 620, 120, 15);
+        steeringWheelValueText.setBounds(130, 620, 40, 15);
+        xCoordText.setBounds(10, 635, 30, 15);
+        xCoordValueText.setBounds(40, 635, 40, 15);
+        yCoordText.setBounds(80, 635, 30, 15);
+        yCoordValueText.setBounds(110, 635, 40, 15);
+        currentSpeedText.setBounds(50, 125, 50, 15);
+        currentRpmText.setBounds(150, 125, 50,15);
+        controlStartExplainerText.setBounds(10,470,200,15);
+        pedalExplainerText.setBounds(10,485,200,15);
+        steeringExplainerText.setBounds(10,500,200,15);
+        gearChangeExplainerText.setBounds(10,515,200,15);
+        indicatorExplainerText.setBounds(10,530,200,15);
+        laneKeepingIndicatorExplainerText.setBounds(10,560,200,15);
+        parkingIndicatorExplainerText.setBounds(10,545,200,15);
+        accIndicatorExplainerText.setBounds(10,575,220,15);
+        timeGapExplainerText.setBounds(10,590,220,15);
+        referenceSpeedExplainer.setBounds(10,605,220,15);
+
+
+
 
         add(gearShiftText);
         add(currentGearText);
@@ -129,6 +160,18 @@ public class Dashboard extends JPanel {
         add(xCoordValueText);
         add(yCoordText);
         add(yCoordValueText);
+        add(currentSpeedText);
+        add(currentRpmText);
+        add(controlStartExplainerText);
+        add(pedalExplainerText);
+        add(steeringExplainerText);
+        add(gearChangeExplainerText);
+        add(indicatorExplainerText);
+        add(accIndicatorExplainerText);
+        add(parkingIndicatorExplainerText);
+        add(laneKeepingIndicatorExplainerText);
+        add(timeGapExplainerText);
+        add(referenceSpeedExplainer);
 
     }
 
@@ -188,27 +231,36 @@ public class Dashboard extends JPanel {
         PPIndicator.switchIt(inputPacket.getParkingState());
         LKAIndicator.switchIt(inputPacket.getLaneKeepingState());
 
-        /*to be deleted*/
-        speedoMeter.setPerf_Percentage(inputPacket.getGasPedalValue());
 
     }
 
 
-    private void OtherEventHandling() {
-        //speedoMeter.setPerf_Percentage(0); -->some magic here
-        speedLimitValueText.setText(String.valueOf(50));
-        RPMmeter.setPerf_Percentage(0);
+    private void OtherEventHandling(PowertrainPacket packet) {
+        speedoMeter.setPerf_Percentage(packet.getVelocity());
+        speedLimitValueText.setText(String.valueOf(130));
+        RPMmeter.setPerf_Percentage(packet.getRPM());
         xCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getX()));
         yCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getY()));
+        currentSpeedText.setText(String.valueOf(packet.getVelocity()) + " KM/H");
+        currentRpmText.setText(String.valueOf(packet.getRPM()));
+    }
+
+    private void RoadSignEventHandling(){
+            LastRoadSignIndicator.setText("No sign");
     }
 
     private void EventHandling() {
         VirtualFunctionBus virtualFunctionBus = parent.getVirtualFunctionBus();
         if (virtualFunctionBus != null) {
-            inputEventHandling(virtualFunctionBus.inputPacket);
+            if(virtualFunctionBus.inputPacket != null)
+                inputEventHandling(virtualFunctionBus.inputPacket);
+            if(virtualFunctionBus.powertrainPacket != null)
+                OtherEventHandling(virtualFunctionBus.powertrainPacket);
+            if(virtualFunctionBus.samplePacket != null)
+                RoadSignEventHandling();
         }
 
-        OtherEventHandling();
+
     }
 
     /**

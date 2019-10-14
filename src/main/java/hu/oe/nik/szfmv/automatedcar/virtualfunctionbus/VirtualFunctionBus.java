@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.SystemComponent;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.ReadOnlySamplePacket;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class VirtualFunctionBus {
 
     public ReadOnlySamplePacket samplePacket;
     public InputPacket inputPacket;
+    public PowertrainPacket powertrainPacket;
 
     public List<WorldObject> worldObjects = new ArrayList<>();
 
