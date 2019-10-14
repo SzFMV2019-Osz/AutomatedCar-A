@@ -2,8 +2,8 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
-import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
+import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
@@ -110,6 +110,7 @@ public class CourseDisplay extends JPanel {
 
         DebugViewer viewer = new DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
+
         for (IObject object : world.getAllObjectsInRectangle(
                 new Position(0, 0),
                 new Position(this.world.getWidth(), this.world.getHeight()),
@@ -128,6 +129,5 @@ public class CourseDisplay extends JPanel {
         viewer.DrawPolygon(car, offsets[0], offsets[1]);
         g2d.drawImage(car.getImage(), t1, this);
         //viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
-        t1 = null;
     }
 }

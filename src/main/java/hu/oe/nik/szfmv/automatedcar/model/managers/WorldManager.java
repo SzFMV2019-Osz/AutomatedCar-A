@@ -115,7 +115,6 @@ public class WorldManager {
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a négyzeten belül vannak.
      */
     public List<IObject> getAllObjectsInRectangle(Position pointA, Position pointB, int offsetX, int offsetY) {
-        // Rectangle létrehozás itt marad, hogy ne minden összehasonlításkor példányosítson, elég szűrésenként 1x
         Position pointC = new Position(pointA.getX(), pointB.getY());
         Position pointD = new Position(pointB.getX(), pointA.getY());
 
