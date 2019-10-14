@@ -4,13 +4,16 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IBackground;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 
-import javax.xml.bind.Unmarshaller;
-import java.awt.Shape;
 import java.awt.Rectangle;
-import java.awt.Polygon;
-import java.awt.geom.*;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.Unmarshaller;
 
 /**
  * Út alaposztály.
@@ -27,9 +30,6 @@ public class Road extends WorldObject implements IStatic, IBackground {
     @Override
     public void initShape() {
         switch (this.imageFileName) {
-            case Consts.RES_IDENTIFIER_ROAD_STRAIGHT:
-                this.roadShapeStraight();
-                break;
             case Consts.RES_IDENTIFIER_ROAD_90_LEFT:
                 this.roadShape90Left();
                 break;
@@ -138,7 +138,7 @@ public class Road extends WorldObject implements IStatic, IBackground {
 
     private void roadShapeTJunctionLeft() {
         this.roadShapeTJunctionRight();
-        this.polygons = this.mirrorList(this.width, this.polygons);
+        this.polygons = mirrorList(this.width, this.polygons);
     }
 
     private void roadShapeCrossroad() {

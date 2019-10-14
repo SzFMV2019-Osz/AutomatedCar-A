@@ -24,7 +24,7 @@ public final class ModelCommonUtil {
      */
     public static BufferedImage loadObjectImage(String name) throws IOException {
         // @TODO: Fájl betöltést kiemelni külön függvénybe
-        if ( !StringUtils.endsWith(name, Consts.SUFFIX_IMAGE)) {
+        if (!StringUtils.endsWith(name, Consts.SUFFIX_IMAGE)) {
             name += Consts.SUFFIX_IMAGE;
         }
         return ImageIO.read(new File(ClassLoader.getSystemResource(name).getFile()));
@@ -67,7 +67,7 @@ public final class ModelCommonUtil {
      * @return Igaz, ha teljesen vagy részletesen benne van, hamis ha nincs bent vagy csak a szélével érintkezik.
      */
     public static boolean isShapeInPolygon(Shape shape, Shape whereIn) {
-        return (whereIn.intersects(shape.getBounds()) || whereIn.contains(shape.getBounds()));
+        return (whereIn.intersects(shape.getBounds2D()) || whereIn.contains(shape.getBounds2D()));
     }
 
     /**

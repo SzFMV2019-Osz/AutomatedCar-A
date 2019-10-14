@@ -28,6 +28,8 @@ public class CourseDisplay extends JPanel {
     private Gui parent;
     private IWorld world;
 
+    private int renderDistance = 200;
+
     /**
      * Initialize the course display
      *
@@ -112,8 +114,8 @@ public class CourseDisplay extends JPanel {
         AutomatedCar car = world.getAutomatedCar();
 
         for (IObject object : world.getAllObjectsInRectangle(
-                new Position(0, 0),
-                new Position(this.world.getWidth(), this.world.getHeight()),
+                new Position(0 - renderDistance, 0 - renderDistance),
+                new Position(width + renderDistance, height + renderDistance),
                 offsets[0], offsets[1])) {
             AffineTransform t = object.getTransform(offsets[0], offsets[1]);
 
