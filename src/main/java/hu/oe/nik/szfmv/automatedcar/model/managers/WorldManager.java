@@ -13,6 +13,7 @@ import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class WorldManager {
 
         List<IObject> inTriangle = new ArrayList<>();
         for (IObject obj : currentWorld.getWorldObjects()) {
-            if (ModelCommonUtil.isShapeInPolygon(obj.getPolygon(offsetX, offsetY), triangle)) {
+            if (isObjectInShape(obj.getPolygons(offsetX, offsetY), triangle)) {
                 inTriangle.add(obj);
             }
         }
@@ -97,7 +98,7 @@ public class WorldManager {
 
         List<IObject> onPoint = new ArrayList<>();
         for (IObject obj : currentWorld.getWorldObjects()) {
-            if (ModelCommonUtil.isShapeOnPoint(obj.getPolygon(offsetX, offsetY), pointShape)) {
+            if (isObjectOnPoint(obj.getPolygons(offsetX, offsetY), pointShape)) {
                 onPoint.add(obj);
             }
         }
@@ -126,7 +127,7 @@ public class WorldManager {
         List<IObject> inRectangle = new ArrayList<>();
 
         for (IObject obj : currentWorld.getWorldObjects()) {
-            if (ModelCommonUtil.isShapeInPolygon(obj.getPolygon(offsetX, offsetY), rect)) {
+            if (isObjectInShape(obj.getPolygons(offsetX, offsetY), rect)) {
                 inRectangle.add(obj);
             }
         }
@@ -150,4 +151,21 @@ public class WorldManager {
         this.automatedCar = car;
     }
 
+    private boolean isObjectInShape(List<Shape> polygonsOfObject, Shape shape) {
+        for (Shape poly : polygonsOfObject) {
+            if (ModelCommonUtil.isShapeInPolygon(poly, shape)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isObjectOnPoint(List<Shape> polygonsOfObject, Point point) {
+        for (Shape poly : polygonsOfObject) {
+            if (ModelCommonUtil.isShapeOnPoint(poly, point)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
