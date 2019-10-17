@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
+@SuppressWarnings("ALL")
 public final class Consts {
 
     // --- Values
@@ -32,6 +33,14 @@ public final class Consts {
     public static final String RES_IDENTIFIER_CROSSWALK = "crosswalk";
     public static final String RES_IDENTIFIER_SIGN = "roadsign";
     public static final String RES_IDENTIFIER_CAR = "car";
+    public static final String RES_IDENTIFIER_CAR_1 = "car1";
+    public static final String RES_IDENTIFIER_CAR_2 = "car2";
+    public static final String RES_IDENTIFIER_CAR_3 = "car3";
+    public static final String RES_IDENTIFIER_CAR_PREFIX = "car_";
+    public static final String RES_IDENTIFIER_CAR_BLACK = "car_3_black";
+    public static final String RES_IDENTIFIER_COLOR_RED_SUFFIX = "_red";
+    public static final String RES_IDENTIFIER_COLOR_WHITE_SUFFIX = "_white";
+    public static final String RES_IDENTIFIER_COLOR_BLUE_SUFFIX = "_blue";
     public static final String RES_IDENTIFIER_BOLLARD = "parking_bollard";
     public static final String XML_ATTRIBUTE_TYPE = "type";
     public static final String XML_ATTRIBUTE_NAME = "name";
@@ -47,6 +56,7 @@ public final class Consts {
     public static final String ERROR_XML_WRITING_NOT_ALLOWED = "XML manipuláció/kiírás nem engedélyezett!";
     public static final String ERROR_IN_WORLDOBJECT_PARSING = "A WorldObjectek parseolása közben hiba lépett fel!";
     public static final String ERROR_IN_SHAPE_CREATION = "Nem sikerült a poligon beállítás a következő world objectnél: {0}";
+    public static final String ERROR_LARGER_THAN_ONE = "{0} nagyobb kell legyen 1-nél.";
 
     // --- Messages
 

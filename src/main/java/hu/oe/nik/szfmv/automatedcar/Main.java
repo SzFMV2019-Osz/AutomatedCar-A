@@ -39,7 +39,7 @@ public class Main {
         while (true) {
             try {
                 worldManager.getAutomatedCar().drive();
-                // TODO IWorld-öt használjon a drawWorld, ha ezt akarjátok akkor legyen "drawobjects" is
+                // TODO IWorld-öt használjon a drawWorld
                 window.getCourseDisplay().drawWorld((this.worldManager));
                 // TODO window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);

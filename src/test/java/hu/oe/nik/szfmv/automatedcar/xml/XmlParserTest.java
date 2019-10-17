@@ -89,11 +89,23 @@ public class XmlParserTest {
         tree.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
         expectedWorld.getWorldObjects().add(tree);
 
-        Car car = new Car();
-        car.setPosition(createPosition(356,1648));
-        car.setZ(0);
-        car.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
-        expectedWorld.getWorldObjects().add(car);
+        Car car1 = new Car();
+        car1.setPosition(createPosition(356, 1648));
+        car1.setZ(0);
+        car1.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
+        expectedWorld.getWorldObjects().add(car1);
+        
+        Car car2 = new Car();
+        car2.setPosition(createPosition(656, 2758));
+        car2.setZ(0);
+        car2.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
+        expectedWorld.getWorldObjects().add(car2);
+        
+        Car car3 = new Car();
+        car3.setPosition(createPosition(356, 1648));
+        car3.setZ(0);
+        car3.setRotation(ModelCommonUtil.getRotationValue(1, 0, 0, 1));
+        expectedWorld.getWorldObjects().add(car3);
 
         ParkingBollard pb = new ParkingBollard();
         pb.setPosition(createPosition(581, 844));

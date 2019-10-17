@@ -14,6 +14,11 @@ import org.junit.jupiter.api.Test;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -28,6 +33,8 @@ public class ModelCommonUtilTest {
     Polygon smallLine;
     Rectangle rectangleFarAway;
     Point point;
+    int[] invalidNumbersForRandom = new int[] {0, -1, -235, -542};
+    int[] properNumbersForRandom = new int[] {123, 1, 5, 86};
 
     @BeforeEach
     public void init() {
@@ -151,5 +158,21 @@ public class ModelCommonUtilTest {
     @Test
     public void pointOutsideOfPolygon() {
         assertFalse(ModelCommonUtil.isShapeOnPoint(rectangleFarAway, point));
+    }
+
+    @Test
+    public void getRandom_ThrowsIllegalArgumentException_WhenCalledWith_NumbersLowerThanOne() {
+        for (int num : invalidNumbersForRandom) {
+            assertThrows(IllegalArgumentException.class, () -> ModelCommonUtil.getRandom(num));
+        }
+    }
+
+    @Test
+    public void getRandom_ReturnProperNumber_WhenCalledWith_NumbersGreaterOrEqualsOne() {
+        for (int num : properNumbersForRandom) {
+            int random = ModelCommonUtil.getRandom(num);
+            assertTrue(random > 0);
+            assertTrue(random <= num);
+        }
     }
 }

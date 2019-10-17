@@ -20,9 +20,9 @@ import javax.xml.bind.Unmarshaller;
  */
 public class Road extends WorldObject implements IStatic, IBackground {
 
-    private final int BORDER = 10;
-    private final int ROAD_WIDTH = 325;
-    private final int SMALL_CIRCLE_DIAMETER = 350;
+    private static final int BORDER = 10;
+    private static final int ROAD_WIDTH = 325;
+    private static final int SMALL_CIRCLE_DIAMETER = 350;
 
     /**
      * {@inheritDoc}
@@ -63,7 +63,7 @@ public class Road extends WorldObject implements IStatic, IBackground {
 
     private void roadShapeStraight() {
         this.polygons.add(new Line2D.Float(this.BORDER, 0, this.BORDER , this.height));
-        this.polygons.add(new Line2D.Float(this.width / 2, 0, this.width/ 2, this.height));
+        this.polygons.add(new Line2D.Float(this.width / 2, 0, this.width / 2, this.height));
         this.polygons.add(new Line2D.Float(this.width - this.BORDER, 0, this.width - this.BORDER , this.height));
     }
 
@@ -79,7 +79,7 @@ public class Road extends WorldObject implements IStatic, IBackground {
 
     private void roadShape90Right() {
         this.roadShape90Left();
-        this.polygons = this.mirrorList(this.width, this.polygons);
+        this.polygons = mirrorList(this.width, this.polygons);
     }
 
     private void roadShape45Left() {
@@ -94,7 +94,7 @@ public class Road extends WorldObject implements IStatic, IBackground {
 
     private void roadShape45Right() {
         this.roadShape45Left();
-        this.polygons = this.mirrorList(this.width, this.polygons);
+        this.polygons = mirrorList(this.width, this.polygons);
     }
 
     private Path2D.Float createSmall90Arc() {
@@ -123,10 +123,13 @@ public class Road extends WorldObject implements IStatic, IBackground {
 
     private void roadShapeTJunctionRight() {
         this.polygons.add(new Line2D.Float(this.BORDER, 0, this.BORDER, this.height));
-        this.polygons.add(new Line2D.Float(this.BORDER + this.ROAD_WIDTH / 2, 0, this.BORDER + this.ROAD_WIDTH / 2, this.height));
+        this.polygons.add(new Line2D.Float(
+                this.BORDER + this.ROAD_WIDTH / 2, 0, this.BORDER + this.ROAD_WIDTH / 2, this.height));
 
-        this.polygons.add(new Line2D.Float(this.BORDER * 2 + this.ROAD_WIDTH, 0, this.BORDER * 2 + this.ROAD_WIDTH, 350));
-        this.polygons.add(new Line2D.Float(this.BORDER * 2 + this.ROAD_WIDTH, 1050, this.BORDER * 2 + this.ROAD_WIDTH, this.height));
+        this.polygons.add(new Line2D.Float(
+                this.BORDER * 2 + this.ROAD_WIDTH, 0, this.BORDER * 2 + this.ROAD_WIDTH, 350));
+        this.polygons.add(new Line2D.Float(
+                this.BORDER * 2 + this.ROAD_WIDTH, 1050, this.BORDER * 2 + this.ROAD_WIDTH, this.height));
 
         this.polygons.add(new Line2D.Float(525, 540, 875, 540));
         this.polygons.add(new Line2D.Float(525, 700, 875, 700));
@@ -202,20 +205,20 @@ public class Road extends WorldObject implements IStatic, IBackground {
         return new Ellipse2D.Float(x, y, this.SMALL_CIRCLE_DIAMETER, this.SMALL_CIRCLE_DIAMETER);
     }
 
-    private Path2D.Float createArc(int[] x, int[] y, int n){
+    private Path2D.Float createArc(int[] x, int[] y, int n) {
         Path2D.Float arc = new Path2D.Float();
         arc.moveTo(x[0], y[0]);
-        for (int i = 1; i < n; i++){
+        for (int i = 1; i < n; i++) {
             arc.lineTo(x[i], y[i]);
         }
 
         return arc;
     }
 
-    private static List<Shape> mirrorList(double x, List<Shape> objects){
+    private static List<Shape> mirrorList(double x, List<Shape> objects) {
         List<Shape> mirroredObjects = new ArrayList<>();
 
-        for(Shape object : objects){
+        for (Shape object : objects) {
             mirroredObjects.add(mirrorAlongX(x, object));
         }
 

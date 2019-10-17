@@ -4,8 +4,8 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 
-import javax.xml.bind.Unmarshaller;
 import java.awt.Rectangle;
+import javax.xml.bind.Unmarshaller;
 
 /**
  * Parkoló bólya alaposztály.

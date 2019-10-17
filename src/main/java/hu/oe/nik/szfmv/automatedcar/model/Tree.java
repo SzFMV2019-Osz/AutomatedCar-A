@@ -3,8 +3,8 @@ package hu.oe.nik.szfmv.automatedcar.model;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
 
-import javax.xml.bind.Unmarshaller;
 import java.awt.geom.Ellipse2D;
+import javax.xml.bind.Unmarshaller;
 
 /**
  * Fa objektum alaposztály.

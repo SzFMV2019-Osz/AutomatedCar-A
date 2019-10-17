@@ -234,7 +234,7 @@ public class WorldObject implements IObject {
 
         AffineTransform transform = getTransform(offsetX, offsetY);
 
-        for(Shape shape : this.polygons){
+        for (Shape shape : this.polygons) {
             transformedList.add(transform.createTransformedShape(shape));
         }
 
@@ -244,7 +244,8 @@ public class WorldObject implements IObject {
     public AffineTransform getTransform(int offsetX, int offsetY) {
         AffineTransform shapeTransform = new AffineTransform();
 
-        shapeTransform.translate(this.getPosX() - this.getReferenceX() + offsetX, this.getPosY() - this.getReferenceY() + offsetY);
+        shapeTransform.translate(this.getPosX() - this.getReferenceX() + offsetX,
+                this.getPosY() - this.getReferenceY() + offsetY);
         shapeTransform.rotate(Math.toRadians(-this.getRotation()), this.getReferenceX(), this.getReferenceY());
 
         return shapeTransform;
@@ -256,6 +257,6 @@ public class WorldObject implements IObject {
     public void initShape() {
         int x = 0 - (this.width / 2);
         int y = 0 - (this.height / 2);
-        this.polygons.add( new Rectangle(x, y, this.width, this.height));
+        this.polygons.add(new Rectangle(x, y, this.width, this.height));
     }
 }
