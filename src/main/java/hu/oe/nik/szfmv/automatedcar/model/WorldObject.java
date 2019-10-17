@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
+import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDebugColorable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
@@ -7,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.Shape;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
@@ -14,6 +17,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -50,12 +55,14 @@ public class WorldObject implements IObject {
 
     @XmlTransient
     protected BufferedImage image;
+    protected Color debugColor = Color.GREEN;
+
 
     @XmlAttribute(name = "type", required = true)
     protected String imageFileName;
 
     @XmlTransient
-    protected Shape polygon;
+    protected List<Shape> polygons = new ArrayList<>();
 
     public WorldObject() {
         this.transform = new Transform();
@@ -206,7 +213,7 @@ public class WorldObject implements IObject {
     }
 
     /**
-     * JAXB unmarshaller event listenerje.
+     * JAXB unmarshaller event listenegetReferenceXrje.
      * Az objektum felépítése után hívódik meg, a kép betöltéséért felel.
      *
      * @param u      unmarshaller
@@ -214,7 +221,7 @@ public class WorldObject implements IObject {
      */
     public void afterUnmarshal(Unmarshaller u, Object parent) {
         this.initImage();
-        
+
         try {
             this.initShape();
         } catch (Exception e) {
@@ -226,15 +233,23 @@ public class WorldObject implements IObject {
      * {@inheritDoc}
      */
     @Override
-    public Shape getPolygon() {
-        return this.getShapeTransfrom().createTransformedShape(this.polygon);
+    public List<Shape> getPolygons(int offsetX, int offsetY) {
+        List<Shape> transformedList = new ArrayList<>();
+
+        AffineTransform transform = getTransform(offsetX, offsetY);
+
+        for(Shape shape : this.polygons){
+            transformedList.add(transform.createTransformedShape(shape));
+        }
+
+        return transformedList;
     }
 
-    private AffineTransform getShapeTransfrom() {
-        double theta = Math.toRadians(this.getRotation());
+    public AffineTransform getTransform(int offsetX, int offsetY) {
         AffineTransform shapeTransform = new AffineTransform();
-        shapeTransform.rotate(theta);
-        shapeTransform.translate(this.getPosX() + this.getReferenceX(), this.getPosX() + this.getReferenceY());
+
+        shapeTransform.translate(this.getPosX() - this.getReferenceX() + offsetX, this.getPosY() - this.getReferenceY() + offsetY);
+        shapeTransform.rotate(Math.toRadians(-this.getRotation()), this.getReferenceX(), this.getReferenceY());
 
         return shapeTransform;
     }
@@ -245,6 +260,6 @@ public class WorldObject implements IObject {
     public void initShape() {
         int x = 0 - (this.width / 2);
         int y = 0 - (this.height / 2);
-        this.polygon = new Rectangle(x, y, this.width, this.height);
+        this.polygons.add( new Rectangle(x, y, this.width, this.height));
     }
 }
