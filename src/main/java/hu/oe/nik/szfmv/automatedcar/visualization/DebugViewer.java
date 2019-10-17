@@ -38,8 +38,11 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
 
     private boolean debuggerSwitchedOn = true;
 
-    public DebugViewer(Graphics2D graphics) {
+    DebugViewer(Graphics2D graphics) {
         this.graphics2D = graphics;
+    }
+
+    public DebugViewer() {
     }
 
     /**
