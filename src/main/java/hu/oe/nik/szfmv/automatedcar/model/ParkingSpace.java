@@ -6,7 +6,6 @@ import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 
 import javax.xml.bind.Unmarshaller;
 import java.awt.Rectangle;
-import java.awt.geom.Area;
 
 /**
  * Parkolóhely alaposztály.

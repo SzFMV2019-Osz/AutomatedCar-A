@@ -1,21 +1,16 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
-import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
-import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDebugColorable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.Shape;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;

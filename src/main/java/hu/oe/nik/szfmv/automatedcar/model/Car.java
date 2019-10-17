@@ -6,7 +6,6 @@ import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 
 import java.awt.Rectangle;
-import java.util.Random;
 import javax.xml.bind.Unmarshaller;
 
 /**
