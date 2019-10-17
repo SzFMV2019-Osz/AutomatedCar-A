@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -80,14 +79,10 @@ public final class ModelCommonUtil {
      * @return Igaz, ha teljesen vagy részletesen benne van, hamis ha nincs bent vagy csak a szélével érintkezik.
      */
     public static boolean isShapeInPolygon(Shape shape, Shape whereIn) {
-        if (whereIn.getBounds2D().intersects(shape.getBounds2D())
-                || whereIn.getBounds2D().contains(shape.getBounds2D())) {
-            return true;
-        }
-
-        // Line2D-kkel nem tud dolgozni ezért kell egy check, hogy a közepét látja-e
-        return whereIn.getBounds2D().contains(new Rectangle2D.Double(shape.getBounds2D().getCenterX(),
-                shape.getBounds2D().getCenterY(), 1, 1));
+        // Line2D-knek 0 a widthje vagy heightja ezért nem adná vissza őket az intersect, ezért kerül rá correction
+        return whereIn.getBounds2D().intersects(shape.getBounds2D().getX(),
+                shape.getBounds2D().getY(), shape.getBounds2D().getWidth() + 1, shape.getBounds2D().getHeight() + 1)
+                || whereIn.getBounds2D().contains(shape.getBounds2D());
     }
 
     /**
