@@ -7,7 +7,6 @@ import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import javax.xml.bind.Unmarshaller;
 import java.awt.Shape;
 import java.awt.Rectangle;
-import java.awt.Polygon;
 import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.List;

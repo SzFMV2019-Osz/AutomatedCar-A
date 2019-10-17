@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -17,6 +18,8 @@ public class ModelCommonUtilTest {
     Position pointB;
     Position pointC;
     Position pointD;
+    int[] invalidNumbersForRandom = new int[] {0, -1, -235, -542};
+    int[] properNumbersForRandom = new int[] {123, 1, 5, 86};
 
     @BeforeEach
     public void init() {
@@ -110,5 +113,21 @@ public class ModelCommonUtilTest {
         Position point = ModelCommonUtil.getBottomRightPoint(this.pointB, this.pointC);
         assertEquals(1, point.getX());
         assertEquals(1, point.getY());
+    }
+    
+    @Test
+    public void getRandom_ThrowsIllegalArgumentException_WhenCalledWith_NumbersLowerThanOne() {
+        for (int num : invalidNumbersForRandom) {
+            assertThrows(IllegalArgumentException.class, () -> ModelCommonUtil.getRandom(num));
+        }
+    }
+    
+    @Test
+    public void getRandom_ReturnProperNumber_WhenCalledWith_NumbersGreaterOrEqualsOne() {
+        for (int num : properNumbersForRandom) {
+            int random = ModelCommonUtil.getRandom(num);
+            assertTrue(random > 0);
+            assertTrue(random <= num);
+        }
     }
 }

@@ -4,6 +4,7 @@ package hu.oe.nik.szfmv.automatedcar.xml;
 import hu.oe.nik.szfmv.automatedcar.model.References;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
+import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
@@ -12,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import java.io.File;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,7 +66,7 @@ public class XmlParser {
 
             JAXBContext jaxbContext = createJAXBContext(World.class); // nem cacheljük, mert elég belőle egy instance
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            world = (World) jaxbUnmarshaller.unmarshal(getFileByName(xmlFileName));
+            world = (World) jaxbUnmarshaller.unmarshal(ModelCommonUtil.getFileFromName(xmlFileName));
             logger.debug(MessageFormat.format(Consts.XML_WORLD_OBJECT_NUMBER, world.getWorldObjects().size()));
         } catch (NullPointerException e) {
             logger.warn(Consts.ERROR_IN_PROCESSING + " " + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
@@ -98,7 +98,7 @@ public class XmlParser {
 
             JAXBContext jaxbContext = createJAXBContext(References.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            refs = (References) jaxbUnmarshaller.unmarshal(getFileByName(xmlFileName));
+            refs = (References) jaxbUnmarshaller.unmarshal(ModelCommonUtil.getFileFromName(xmlFileName));
         } catch (NullPointerException e) {
             logger.warn(Consts.ERROR_IN_PROCESSING + " " + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
             throw new NullPointerException(Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
@@ -130,11 +130,6 @@ public class XmlParser {
         return elapsedTime;
     }
     
-    private static File getFileByName(String xmlFileName) {
-        // @TODO: Fájl betöltést kiemelni a ModelCommonUtilba
-        return new File(ClassLoader.getSystemResource(xmlFileName).getFile());
-    }
-
     private static JAXBContext createJAXBContext(Class<?> newClass) throws JAXBException {
         return JAXBContext.newInstance(newClass);
     }

@@ -1,17 +1,21 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
 import hu.oe.nik.szfmv.automatedcar.model.Position;
+import java.awt.Rectangle;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * Modelben használt általános funkciók utility osztálya.
  */
 public final class ModelCommonUtil {
+
+    private static final Random rnd = new Random();
 
     /**
      * Betölt egy képet a nyersanyagok közül.
@@ -20,11 +24,18 @@ public final class ModelCommonUtil {
      * @throws IOException Ha nem olvasható a fájl/mappa, pl. jogosultságok hiányában.
      */
     public static BufferedImage loadObjectImage(String name) throws IOException {
-        // @TODO: Fájl betöltést kiemelni külön függvénybe
         if ( !StringUtils.endsWith(name, Consts.SUFFIX_IMAGE)) {
             name += Consts.SUFFIX_IMAGE;
         }
-        return ImageIO.read(new File(ClassLoader.getSystemResource(name).getFile()));
+        return ImageIO.read(getFileFromName(name));
+    }
+    
+    /**
+     * @param fileName - kiterjesztéssel
+     * @return betöltött fájl
+     */
+    public static File getFileFromName(String fileName) {
+        return new File(ClassLoader.getSystemResource(fileName).getFile());
     }
 
     /**
@@ -117,5 +128,28 @@ public final class ModelCommonUtil {
         }
 
         return p;
+    }
+
+    /**
+     * @param topLeftX bal felső sarok X koordinátája
+     * @param topLeftY bal felső sarok Y koordinátája
+     * @param width négyszög szélessége
+     * @param height négyszög magasssága
+     * @return generált négyszög
+     */
+    public static Rectangle createRectangle(int topLeftX, int topLeftY, int width, int height) {
+        return new Rectangle(topLeftX, topLeftY, width, height);
+    }
+    
+    /**
+     * @param maxNumber
+     * @return 1 és maxNumber között ad vissza számokat
+     * @throws IllegalArgumentException, ha maxNumber < 1
+     */
+    public static int getRandom(int maxNumber) {
+        if (maxNumber < 1) {
+            throw new IllegalArgumentException("Max number must be greater than 1.");
+        }
+        return rnd.nextInt(maxNumber) + 1;
     }
 }

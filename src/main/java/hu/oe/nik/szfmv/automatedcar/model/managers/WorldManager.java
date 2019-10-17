@@ -14,8 +14,6 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * {@link World}-el dolgozó manager, ezen keresztül lehet lekérdezni az abban levő objektumokat.
@@ -107,14 +105,14 @@ public class WorldManager {
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a négyzeten belül vannak.
      */
     public List<IObject> getAllObjectsInRectangle(Position pointA, Position pointB) {
-        // @TODO: rectangle létrehozást kiemelni a ModelCommonUtilba
         Position pointC = new Position(pointA.getX(), pointB.getY());
         Position pointD = new Position(pointB.getX(), pointA.getY());
 
         Position topLeft = ModelCommonUtil.getTopLeftPoint(pointA, pointB, pointC, pointD);
         Position bottomRight = ModelCommonUtil.getBottomRightPoint(pointA, pointB, pointC, pointD);
-        Rectangle rect = new Rectangle(topLeft.getX(), topLeft.getY(), (bottomRight.getX() - topLeft.getX()),
-                (bottomRight.getY() - topLeft.getX()));
+        Rectangle rect = ModelCommonUtil.createRectangle(topLeft.getX(), topLeft.getY(),
+                                                        (bottomRight.getX() - topLeft.getX()),
+                                                        (bottomRight.getY() - topLeft.getX()));
 
         List<IObject> inRectangle = new ArrayList<>();
 
