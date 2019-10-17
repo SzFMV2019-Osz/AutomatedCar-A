@@ -7,12 +7,15 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * Modelben használt általános funkciók utility osztálya.
  */
 public final class ModelCommonUtil {
+
+    private static final Random rnd = new Random();
 
     /**
      * Betölt egy képet a nyersanyagok közül.
@@ -136,5 +139,17 @@ public final class ModelCommonUtil {
      */
     public static Rectangle createRectangle(int topLeftX, int topLeftY, int width, int height) {
         return new Rectangle(topLeftX, topLeftY, width, height);
+    }
+    
+    /**
+     * @param maxNumber
+     * @return 1 és maxNumber között ad vissza számokat
+     * @throws IllegalArgumentException, ha maxNumber < 1
+     */
+    public static int getRandom(int maxNumber) {
+        if (maxNumber < 1) {
+            throw new IllegalArgumentException("Max number must be greater than 1.");
+        }
+        return rnd.nextInt(maxNumber) + 1;
     }
 }
