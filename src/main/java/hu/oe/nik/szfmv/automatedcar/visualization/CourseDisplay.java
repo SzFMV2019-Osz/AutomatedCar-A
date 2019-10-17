@@ -7,10 +7,8 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
-import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
 
 import javax.swing.*;
-import javax.swing.text.Position;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
