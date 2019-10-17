@@ -1,6 +1,8 @@
 package hu.oe.nik.szfmv.automatedcar.visualization.debug;
 
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
+import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDebugColorable;
+import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISwitchableDebugViewer;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -11,7 +13,7 @@ import java.awt.geom.PathIterator;
 /**
  * Displays debugging-related information on the screen
  */
-public class DebugViewer {
+public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer {
 
     private Graphics2D graphics2D;
     private DrawingInfo info = new DrawingInfo(Color.RED, 2);
@@ -32,21 +34,6 @@ public class DebugViewer {
 
     private boolean debuggerSwitchedOn = true;
 
-    /**
-     * @return If debugger is switched on or not
-     */
-    public boolean isDebuggerSwitchedOn() {
-        return this.debuggerSwitchedOn;
-    }
-
-    /**
-     * @param debuggerSwitchedOn Flag indicating if debugger is switched on or not
-     */
-    public void setDebuggerSwitchedOn(boolean debuggerSwitchedOn) {
-        this.debuggerSwitchedOn = debuggerSwitchedOn;
-    }
-
-
     public DebugViewer(Graphics2D graphics) {
         this.graphics2D = graphics;
     }
@@ -59,7 +46,7 @@ public class DebugViewer {
      */
     public void DrawPolygon(int x, int y, int width, int height, AffineTransform t, int[] offset, Shape s){
         if (debuggerSwitchedOn){
-            graphics2D.setColor(info.getColor());
+            graphics2D.setColor(getDebugColor());
             graphics2D.setStroke(info.getThickness());
 
             // create a rectangle with the original data and draw the result of applying the transformation
@@ -68,9 +55,9 @@ public class DebugViewer {
         }
     }
 
-    public void DrawPolygon(int x, int y, int width, int height, Color color, AffineTransform t){
+    public void DrawPolygon(int x, int y, int width, int height, AffineTransform t){
         if (debuggerSwitchedOn){
-            graphics2D.setColor(color);
+            graphics2D.setColor(getDebugColor());
             graphics2D.setStroke(info.getThickness());
             graphics2D.drawRect(x, y, width, height);
         }
@@ -84,5 +71,26 @@ public class DebugViewer {
             graphics2D.drawLine(aX, aY, cX, cY);
             graphics2D.drawLine(bX, bY, cX, cY);
         }
+    }
+
+    @Override
+    public Color getDebugColor() {
+        return info.getColor();
+    }
+
+    @Override
+    public void setColor(Color debugColor) {
+        info.setColor(debugColor);
+    }
+
+    @Override
+    public boolean getState() {
+        return this.debuggerSwitchedOn;
+    }
+
+    @Override
+    public void setState(boolean desiredState) {
+        this.debuggerSwitchedOn = desiredState;
+
     }
 }
