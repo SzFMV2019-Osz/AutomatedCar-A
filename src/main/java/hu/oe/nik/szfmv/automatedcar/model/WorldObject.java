@@ -6,9 +6,9 @@ import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.*;
-import java.awt.Shape;
+import java.awt.Color;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.text.MessageFormat;
