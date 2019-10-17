@@ -32,6 +32,14 @@ public final class Consts {
     public static final String RES_IDENTIFIER_CROSSWALK = "crosswalk";
     public static final String RES_IDENTIFIER_SIGN = "roadsign";
     public static final String RES_IDENTIFIER_CAR = "car";
+    public static final String RES_IDENTIFIER_CAR_1 = "car1";
+    public static final String RES_IDENTIFIER_CAR_2 = "car2";
+    public static final String RES_IDENTIFIER_CAR_3 = "car3";
+    public static final String RES_IDENTIFIER_CAR_PREFIX = "car_";
+    public static final String RES_IDENTIFIER_CAR_BLACK = "car_3_black";
+    public static final String RES_IDENTIFIER_COLOR_RED_SUFFIX = "_red";
+    public static final String RES_IDENTIFIER_COLOR_WHITE_SUFFIX = "_white";
+    public static final String RES_IDENTIFIER_COLOR_BLUE_SUFFIX = "_blue";
     public static final String RES_IDENTIFIER_BOLLARD = "parking_bollard";
     public static final String XML_ATTRIBUTE_TYPE = "type";
     public static final String XML_ATTRIBUTE_NAME = "name";
