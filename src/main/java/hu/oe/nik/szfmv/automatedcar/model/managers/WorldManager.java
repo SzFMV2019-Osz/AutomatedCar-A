@@ -10,9 +10,11 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 
+import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.util.ArrayList;
-
 import java.util.List;
 
 /**
@@ -60,51 +62,59 @@ public class WorldManager {
     }
 
     /**
-     * Visszaadja az összes objektumot a három pont között. TODO majd változni fog poligonok definiálása után
+     * Visszaadja az összes objektumot a három pont között.
      * @param pointA Első pont.
      * @param pointB Második pont.
      * @param pointC Harmadik pont.
+     * @param offsetX X irányú eltolás.
+     * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a háromszögön belülre esnek.
      */
-    public List<IObject> getAllObjectsInTriangle(Position pointA, Position pointB, Position pointC) {
-        List<IObject> inTriangle = new ArrayList<>();
+    public List<IObject> getAllObjectsInTriangle(Position pointA, Position pointB, Position pointC,
+                                                 int offsetX, int offsetY) {
+        Polygon triangle = new Polygon();
+        triangle.addPoint(pointA.getX(), pointA.getY());
+        triangle.addPoint(pointB.getX(), pointB.getY());
+        triangle.addPoint(pointC.getX(), pointC.getY());
 
-        Position pos = new Position();
+        List<IObject> inTriangle = new ArrayList<>();
         for (IObject obj : currentWorld.getWorldObjects()) {
-            pos.setX(obj.getPosX());
-            pos.setY(obj.getPosY());
-            if (ModelCommonUtil.isPointInTriangle(pointA, pointB, pointC, pos)) {
+            if (isObjectInShape(obj.getPolygons(offsetX, offsetY), triangle)) {
                 inTriangle.add(obj);
             }
         }
-
         return inTriangle;
     }
 
     /**
-     * Visszaadja az összes objektumot a ponton. TODO majd változni fog poligonok definiálása után
+     * Visszaadja az összes objektumot a ponton.
      * @param point A pont ahol keressük az objektumokat.
+     * @param offsetX X irányú eltolás.
+     * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a ponton vannak.
      */
-    public List<IObject> getAllObjectsOnPoint(Position point) {
-        List<IObject> onPoint = new ArrayList<>();
+    public List<IObject> getAllObjectsOnPoint(Position point, int offsetX, int offsetY) {
+        Point pointShape = new Point(point.getX(), point.getY());
 
+        List<IObject> onPoint = new ArrayList<>();
         for (IObject obj : currentWorld.getWorldObjects()) {
-            if (obj.getPosX() == point.getX() && obj.getPosY() == point.getY()) {
+            if (isObjectOnPoint(obj.getPolygons(offsetX, offsetY), pointShape)) {
                 onPoint.add(obj);
             }
         }
-
         return onPoint;
     }
 
     /**
-     * Visszaadja az összes objektumot a négyzeten belül. TODO majd változni fog poligonok után (ez csak kicsit)
+     * Visszaadja az összes objektumot a négyzeten belül. Ha két víszintes vagy függőleges pontra eső vonalat kapunk
+     * akkor pedig a vonalon levőket adja vissza helyesen elvileg!
      * @param pointA A négyzet egyik pontja.
      * @param pointB A négyzet másik pontja.
+     * @param offsetX X irányú eltolás.
+     * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a négyzeten belül vannak.
      */
-    public List<IObject> getAllObjectsInRectangle(Position pointA, Position pointB) {
+    public List<IObject> getAllObjectsInRectangle(Position pointA, Position pointB, int offsetX, int offsetY) {
         Position pointC = new Position(pointA.getX(), pointB.getY());
         Position pointD = new Position(pointB.getX(), pointA.getY());
 
@@ -117,7 +127,7 @@ public class WorldManager {
         List<IObject> inRectangle = new ArrayList<>();
 
         for (IObject obj : currentWorld.getWorldObjects()) {
-            if (rect.contains(obj.getPosX(), obj.getPosY())) {
+            if (isObjectInShape(obj.getPolygons(offsetX, offsetY), rect)) {
                 inRectangle.add(obj);
             }
         }
@@ -141,4 +151,21 @@ public class WorldManager {
         this.automatedCar = car;
     }
 
+    private boolean isObjectInShape(List<Shape> polygonsOfObject, Shape shape) {
+        for (Shape poly : polygonsOfObject) {
+            if (ModelCommonUtil.isShapeInPolygon(poly, shape)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isObjectOnPoint(List<Shape> polygonsOfObject, Point point) {
+        for (Shape poly : polygonsOfObject) {
+            if (ModelCommonUtil.isShapeOnPoint(poly, point)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

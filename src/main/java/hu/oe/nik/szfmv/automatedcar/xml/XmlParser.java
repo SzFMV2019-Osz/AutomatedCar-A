@@ -1,22 +1,22 @@
 package hu.oe.nik.szfmv.automatedcar.xml;
 
-
 import hu.oe.nik.szfmv.automatedcar.model.References;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 /**
  * XML feldolgozáshoz segéd osztály.
@@ -35,7 +35,7 @@ public class XmlParser {
      * Ugyanezt az {@link Unmarshaller}-el nem tehetjük meg (nem thread-safe).
      * Szerencsére létrehozása kevésbé is költséges.
      * 
-     * @TODO: elgondolkozni és utánanézni, hogy érdemes-e hardcode-olni az instanceokat
+     * TODO: elgondolkozni és utánanézni, hogy érdemes-e hardcode-olni az instanceokat
      *       (sebesség vs memóriagazdálkodás? esetleg a beolvasás végén invalidálni?)
      */
     private static Map<Class<?>, JAXBContext> jaxbInstanceCache = new HashMap<>();
@@ -112,7 +112,7 @@ public class XmlParser {
     }
 
     private static String getXmlNameWithExtension(String fileName) {
-        if ( !StringUtils.endsWith(fileName, Consts.SUFFIX_XML)) {
+        if (!StringUtils.endsWith(fileName, Consts.SUFFIX_XML)) {
             fileName += Consts.SUFFIX_XML;
         }
         return fileName;

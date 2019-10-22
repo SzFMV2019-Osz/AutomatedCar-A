@@ -13,8 +13,8 @@ import javax.xml.bind.Unmarshaller;
  */
 public class Car extends WorldObject implements ICrashable, IDynamic {
 
-    private final int WIDTH_BORDER = 6;
-    private final int HEIGHT_BORDER = 1;
+    private static final int WIDTH_BORDER = 6;
+    private static final int HEIGHT_BORDER = 1;
 
     public Car() { }
 
@@ -27,7 +27,7 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
     public Car(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
         this.position.setZ(2);
-        this.referencePosition = new Position(this.width / 2,this.height / 2);
+        this.referencePosition = new Position(this.width / 2, this.height / 2);
     }
 
     public double getWeight() {
@@ -40,16 +40,28 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
      */
     @Override
     public void initShape() {
-        this.polygons.add(new Rectangle(WIDTH_BORDER, HEIGHT_BORDER, this.width - WIDTH_BORDER * 2, this.height - HEIGHT_BORDER * 2));
+        this.polygons.add(new Rectangle(
+                WIDTH_BORDER, HEIGHT_BORDER, this.width - WIDTH_BORDER * 2, this.height - HEIGHT_BORDER * 2));
     }
 
     @Override
     public void afterUnmarshal(Unmarshaller u, Object parent) {
         switch (this.imageFileName) {
-            case (Consts.RES_IDENTIFIER_CAR_1):  this.imageFileName = generateFilename(1); break;
-            case (Consts.RES_IDENTIFIER_CAR_2):  this.imageFileName = generateFilename(2); break;
-            case (Consts.RES_IDENTIFIER_CAR_3):  this.imageFileName = Consts.RES_IDENTIFIER_CAR_BLACK; break;
-            default:                             this.imageFileName = generateFilename(ModelCommonUtil.getRandom(2));
+            case (Consts.RES_IDENTIFIER_CAR_1): {
+                this.imageFileName = generateFilename(1);
+                break;
+            }
+            case (Consts.RES_IDENTIFIER_CAR_2): {
+                this.imageFileName = generateFilename(2);
+                break;
+            }
+            case (Consts.RES_IDENTIFIER_CAR_3):  {
+                this.imageFileName = Consts.RES_IDENTIFIER_CAR_BLACK;
+                break;
+            }
+            default: {
+                this.imageFileName = generateFilename(ModelCommonUtil.getRandom(2));
+            }
         }
         super.afterUnmarshal(u, parent);
     }

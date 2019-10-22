@@ -2,19 +2,22 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
-import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
-import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import javax.swing.JPanel;
 
 /**
  * CourseDisplay is for providing a viewport to the virtual world where the simulation happens.
@@ -26,6 +29,7 @@ public class CourseDisplay extends JPanel {
     private int backgroundColor = 0xEEEEEE;
     private Gui parent;
     private IWorld world;
+    private int renderDistance = 300;
 
     /**
      * Initialize the course display
@@ -80,7 +84,8 @@ public class CourseDisplay extends JPanel {
      */
     public void drawWorld(WorldManager world) {
         this.world = world.getWorld();
-        this.backgroundColor = Integer.valueOf(this.world.getColor().replace("#","").toUpperCase(),16);
+        this.backgroundColor = Integer.valueOf(this.world.getColor().replace("#", "").toUpperCase(),
+                16);
         paintComponent(getGraphics(), world);
 
     }
@@ -107,7 +112,7 @@ public class CourseDisplay extends JPanel {
     private AutomatedCar getCarObject(List<WorldObject> objects) {
         AutomatedCar findCar = null;
 
-        for(WorldObject item : objects) {
+        for (WorldObject item : objects) {
             if (item instanceof AutomatedCar) {
                 findCar = (AutomatedCar)item;
                 break;
@@ -128,8 +133,9 @@ public class CourseDisplay extends JPanel {
         DebugViewer viewer = new DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
         for (IObject object : world.getAllObjectsInRectangle(
-                new Position(0,0),
-                new Position(this.world.getWidth(),this.world.getHeight()))) {
+                new Position(0 - renderDistance, 0 - renderDistance),
+                new Position(this.width + renderDistance, this.height + renderDistance),
+                offsets[0], offsets[1])) {
             AffineTransform t = object.getTransform(offsets[0], offsets[1]);
 
             g2d.drawImage(object.getImage(), t, this);

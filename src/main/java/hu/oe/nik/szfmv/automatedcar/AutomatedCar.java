@@ -4,12 +4,16 @@ import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.awt.geom.AffineTransform;
 
 public class AutomatedCar extends Car {
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static final int REFRESH_RATE = 10;
-    
     private Powertrain pt;
 
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
@@ -18,7 +22,7 @@ public class AutomatedCar extends Car {
         super(x, y, imageFileName);
 
         new Driver(virtualFunctionBus);
-        pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(),getHeight());
+        pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(), getHeight());
     }
 
     public void drive() {

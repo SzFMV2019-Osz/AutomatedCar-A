@@ -2,12 +2,13 @@ package hu.oe.nik.szfmv.automatedcar.xml.converter;
 
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.w3c.dom.Node;
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * Referenciapontokat beolvasó és parse-oló objektum.

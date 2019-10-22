@@ -9,21 +9,19 @@ import hu.oe.nik.szfmv.automatedcar.model.Sign;
 import hu.oe.nik.szfmv.automatedcar.model.Tree;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
-
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-
-import javax.xml.bind.Binder;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Node;
 
 import java.text.MessageFormat;
+import javax.xml.bind.Binder;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * Nem sikerült mindent annotációval megoldani, ezért jött létre ez a segédosztály,
@@ -52,7 +50,8 @@ public class ObjectConverter extends XmlAdapter<Object, IObject> {
     }
 
     private Class<?> getClassByString(String classType) {
-        if (StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_ROAD) || StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_ROAD_CROSSROAD)) {
+        if (StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_ROAD)
+                || StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_ROAD_CROSSROAD)) {
             return Road.class;
         } else if (StringUtils.startsWith(classType, Consts.RES_IDENTIFIER_TREE)) {
             return Tree.class;
@@ -73,7 +72,7 @@ public class ObjectConverter extends XmlAdapter<Object, IObject> {
     }
 
     @Override
-    public Object marshal(IObject v) throws Exception {
+    public Object marshal(IObject v) throws UnsupportedOperationException {
         throw new UnsupportedOperationException(Consts.ERROR_XML_WRITING_NOT_ALLOWED);
     }
 

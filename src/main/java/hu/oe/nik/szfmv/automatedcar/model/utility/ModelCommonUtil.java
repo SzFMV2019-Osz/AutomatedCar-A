@@ -1,21 +1,25 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
 import hu.oe.nik.szfmv.automatedcar.model.Position;
-import java.awt.Rectangle;
 
-import javax.imageio.ImageIO;
+import org.apache.commons.lang3.StringUtils;
+
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Random;
-import org.apache.commons.lang3.StringUtils;
+import javax.imageio.ImageIO;
 
 /**
  * Modelben használt általános funkciók utility osztálya.
  */
 public final class ModelCommonUtil {
 
-    private static final Random rnd = new Random();
+    private static final Random RND = new Random();
 
     /**
      * Betölt egy képet a nyersanyagok közül.
@@ -24,12 +28,12 @@ public final class ModelCommonUtil {
      * @throws IOException Ha nem olvasható a fájl/mappa, pl. jogosultságok hiányában.
      */
     public static BufferedImage loadObjectImage(String name) throws IOException {
-        if ( !StringUtils.endsWith(name, Consts.SUFFIX_IMAGE)) {
+        if (!StringUtils.endsWith(name, Consts.SUFFIX_IMAGE)) {
             name += Consts.SUFFIX_IMAGE;
         }
         return ImageIO.read(getFileFromName(name));
     }
-    
+
     /**
      * @param fileName - kiterjesztéssel
      * @return betöltött fájl
@@ -69,40 +73,28 @@ public final class ModelCommonUtil {
     }
 
     /**
-     * Visszaadja, hogy az adott pont a háromszögön belül van-e.
-     * @param triangleA Háromszög első pontja.
-     * @param triangleB Háromszög második pontja.
-     * @param triangleC Háromszög harmadik pontja.
-     * @param point Lekérdezett pont.
-     * @return Benne van? logikai kifejezés értéke.
+     * Visszaadja, hogy az adott shape benne van-e a másikban.
+     * @param shape Adott shape.
+     * @param whereIn Shape amiben keressük.
+     * @return Igaz, ha teljesen vagy részletesen benne van, hamis ha nincs bent vagy csak a szélével érintkezik.
      */
-    public static boolean isPointInTriangle (Position triangleA, Position triangleB, Position triangleC,
-                                             Position point) {
-        double a = calculateAreaOfTriangle(triangleA, triangleB, triangleC);
-        double b = calculateAreaOfTriangle(point, triangleB, triangleC);
-        double c = calculateAreaOfTriangle(triangleA, point, triangleC);
-        double d = calculateAreaOfTriangle(triangleA, triangleB, point);
-
-        return (a == (b + c + d));
+    public static boolean isShapeInPolygon(Shape shape, Shape whereIn) {
+        // Line2D-knek 0 a widthje vagy heightja ezért nem adná vissza őket az intersect, ezért kerül rá correction
+        return whereIn.getBounds2D().intersects(shape.getBounds2D().getX(),
+                shape.getBounds2D().getY(), shape.getBounds2D().getWidth() + 1, shape.getBounds2D().getHeight() + 1)
+                || whereIn.getBounds2D().contains(shape.getBounds2D());
     }
 
     /**
-     * Egy háromszög területét adja vissza.
-     * @param a Háromszög első pontja.
-     * @param b Háromszög második pontja.
-     * @param c Háromszög harmadik pontja.
-     * @return A háromszög területe.
+     * Visszaadja, hogy a pont a shapere belül esik-e.
+     * @param shape Adott shape.
+     * @param point Point amire nézünk.
+     * @return Igaz ha a polygonon belül van a pont, hamis ha rajta kívül vagy a vonalán.
      */
-    private static double calculateAreaOfTriangle(Position a, Position b, Position c) {
-        return Math.abs((a.getX() * (b.getY() - c.getY()) + b.getX() * (c.getY() - a.getY())
-                + c.getX() * (a.getY() - b.getY())) / 2.0);
+    public static boolean isShapeOnPoint(Shape shape, Point point) {
+        return shape.contains(point);
     }
 
-    /**
-     * Visszaadja, hogy a pontok közül melyik a bal felső pont.
-     * @param points A pontok amik közül a bal felsőt keressük.
-     * @return A bal felső pont.
-     */
     public static Position getTopLeftPoint(Position... points) {
         Position p = new Position(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
@@ -114,11 +106,6 @@ public final class ModelCommonUtil {
         return p;
     }
 
-    /**
-     * Visszaadja, hogy a pontok közül melyik a jobb alsó pont.
-     * @param points A pontok amik közül a jobb alsót keressük.
-     * @return A jobb alsó pont.
-     */
     public static Position getBottomRightPoint(Position... points) {
         Position p = new Position(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
@@ -140,16 +127,16 @@ public final class ModelCommonUtil {
     public static Rectangle createRectangle(int topLeftX, int topLeftY, int width, int height) {
         return new Rectangle(topLeftX, topLeftY, width, height);
     }
-    
+
     /**
-     * @param maxNumber
      * @return 1 és maxNumber között ad vissza számokat
      * @throws IllegalArgumentException, ha maxNumber < 1
      */
     public static int getRandom(int maxNumber) {
         if (maxNumber < 1) {
-            throw new IllegalArgumentException("Max number must be greater than 1.");
+            throw new IllegalArgumentException(
+                    MessageFormat.format(Consts.ERROR_LARGER_THAN_ONE, "Maximum"));
         }
-        return rnd.nextInt(maxNumber) + 1;
+        return RND.nextInt(maxNumber) + 1;
     }
 }

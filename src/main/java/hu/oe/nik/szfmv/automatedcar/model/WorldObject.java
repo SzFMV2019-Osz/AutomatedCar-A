@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.model;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,8 +16,8 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -208,7 +209,7 @@ public class WorldObject implements IObject {
     }
 
     /**
-     * JAXB unmarshaller event listenegetReferenceXrje.
+     * JAXB unmarshaller event.
      * Az objektum felépítése után hívódik meg, a kép betöltéséért felel.
      *
      * @param u      unmarshaller
@@ -233,7 +234,7 @@ public class WorldObject implements IObject {
 
         AffineTransform transform = getTransform(offsetX, offsetY);
 
-        for(Shape shape : this.polygons){
+        for (Shape shape : this.polygons) {
             transformedList.add(transform.createTransformedShape(shape));
         }
 
@@ -243,7 +244,8 @@ public class WorldObject implements IObject {
     public AffineTransform getTransform(int offsetX, int offsetY) {
         AffineTransform shapeTransform = new AffineTransform();
 
-        shapeTransform.translate(this.getPosX() - this.getReferenceX() + offsetX, this.getPosY() - this.getReferenceY() + offsetY);
+        shapeTransform.translate(this.getPosX() - this.getReferenceX() + offsetX,
+                this.getPosY() - this.getReferenceY() + offsetY);
         shapeTransform.rotate(Math.toRadians(-this.getRotation()), this.getReferenceX(), this.getReferenceY());
 
         return shapeTransform;
@@ -255,6 +257,6 @@ public class WorldObject implements IObject {
     public void initShape() {
         int x = 0 - (this.width / 2);
         int y = 0 - (this.height / 2);
-        this.polygons.add( new Rectangle(x, y, this.width, this.height));
+        this.polygons.add(new Rectangle(x, y, this.width, this.height));
     }
 }
