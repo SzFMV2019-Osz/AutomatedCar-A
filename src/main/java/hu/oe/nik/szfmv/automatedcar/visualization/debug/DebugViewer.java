@@ -1,11 +1,12 @@
 package hu.oe.nik.szfmv.automatedcar.visualization.debug;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
+import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.PathIterator;
+import java.awt.geom.Ellipse2D;
 
 
 /**
@@ -15,6 +16,9 @@ public class DebugViewer {
 
     private Graphics2D graphics2D;
     private DrawingInfo info = new DrawingInfo(Color.RED, 2);
+    private Color sensorColor = Color.RED;
+    private Position sensorPosition;
+    private static final int SENSOR_DIMENSION = 8;
 
     /**
      * @return The information represening the color and borderline width of the object
@@ -84,5 +88,20 @@ public class DebugViewer {
             graphics2D.drawLine(aX, aY, cX, cY);
             graphics2D.drawLine(bX, bY, cX, cY);
         }
+    }
+
+
+
+    private void updateSensorPosition(AutomatedCar car){
+        // the center of the car bumper is the same x as the car refX and hal the car refY
+        // the sensor is going to be on the same layer (z) as the car
+        sensorPosition = new Position(car.getReferenceX(), car.getReferenceY() - car.getHeight()/2);
+    }
+
+
+    public void operateSensor(Graphics2D drawer, AutomatedCar car,  AffineTransform t){
+        updateSensorPosition(car);
+        Shape sensor = new Ellipse2D.Double(sensorPosition.getX(), sensorPosition.getY(), SENSOR_DIMENSION, SENSOR_DIMENSION);
+        drawer.fill(t.createTransformedShape(sensor));
     }
 }
