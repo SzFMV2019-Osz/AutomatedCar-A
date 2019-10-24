@@ -158,6 +158,6 @@ public class CourseDisplay extends JPanel {
 
         g2d.drawImage(car.getImage(), t1, this);
         viewer.operateSensor(g2d, car, t1);
-        //viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
+        viewer.DrawSensorTriangle(Color.GREEN, t1);
     }
 }

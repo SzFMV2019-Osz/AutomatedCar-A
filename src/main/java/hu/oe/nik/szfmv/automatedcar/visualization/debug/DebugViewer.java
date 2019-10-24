@@ -7,6 +7,7 @@ import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 
 
 /**
@@ -14,11 +15,18 @@ import java.awt.geom.Ellipse2D;
  */
 public class DebugViewer {
 
+
     private Graphics2D graphics2D;
     private DrawingInfo info = new DrawingInfo(Color.RED, 2);
+
+
+    // sensor
     private Color sensorColor = Color.RED;
     private Position sensorPosition;
     private static final int SENSOR_DIMENSION = 8;
+    private Position sensorTriangleUpperTip;
+    private Position sensorTriangleLowerTip;
+
 
     /**
      * @return The information represening the color and borderline width of the object
@@ -81,12 +89,18 @@ public class DebugViewer {
     }
 
 
-    public void DrawSensorTriangle(int aX, int aY, int bX, int bY, int cX, int cY, Color color, AffineTransform t){
+    public void DrawSensorTriangle(Color color, AffineTransform t){
         if (debuggerSwitchedOn){
-            graphics2D.setColor(color);
-            graphics2D.drawLine(aX, aY, bX, bY);
-            graphics2D.drawLine(aX, aY, cX, cY);
-            graphics2D.drawLine(bX, bY, cX, cY);
+            updateSensorTrianglePosition();
+            //graphics2D.setColor(color);
+            Shape upperLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleUpperTip.getX(), sensorTriangleUpperTip.getY());
+            Shape height = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorPosition.getX(), sensorPosition.getY()-200);
+            Shape centralLine = new Line2D.Double(sensorTriangleUpperTip.getX(), sensorTriangleUpperTip.getY(), sensorTriangleLowerTip.getX(), sensorTriangleLowerTip.getY());
+            Shape lowerLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleLowerTip.getX(), sensorTriangleLowerTip.getY());
+            graphics2D.draw(t.createTransformedShape(upperLine));
+            graphics2D.draw(t.createTransformedShape(centralLine));
+            graphics2D.draw(t.createTransformedShape(lowerLine));
+            graphics2D.draw(t.createTransformedShape(height));
         }
     }
 
@@ -96,6 +110,22 @@ public class DebugViewer {
         // the center of the car bumper is the same x as the car refX and hal the car refY
         // the sensor is going to be on the same layer (z) as the car
         sensorPosition = new Position(car.getReferenceX(), car.getReferenceY() - car.getHeight()/2);
+    }
+
+    private void updateSensorTrianglePosition(){
+        /* Calculating the positions of the sensor triangle using ANAL1 trigonometrikus szögfüggvény: tan(alpha) = a/b
+           The edge of the triangle is always the exact position of the sensor body.
+           Since the sensor area is 2 right-angled triangles and we know that the sensor sees in 60° (30° each),
+           we know that alpha = 60 °. We also know the sensor position and the length of the central edge = 200.
+           So, since tan(30) = 200/b, from here b = 200/tan(30).
+         */
+        int sensorLength = 100;
+        int baseAngle = 60;
+
+        Position sensorTriangleBasePoint = new Position(sensorPosition.getX(), sensorPosition.getY()-sensorLength);
+        int sensorTriangleBaseHalfLength = (int)(sensorLength/Math.tan(baseAngle));
+        sensorTriangleUpperTip = new Position(sensorTriangleBasePoint.getX()-sensorTriangleBaseHalfLength,sensorTriangleBasePoint.getY());
+        sensorTriangleLowerTip = new Position(sensorTriangleBasePoint.getX() + sensorTriangleBaseHalfLength, sensorTriangleBasePoint.getY());
     }
 
 
