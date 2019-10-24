@@ -5,9 +5,12 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.LastRoadSign;
+import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,7 +79,7 @@ public class Dashboard extends JPanel {
         speedoMeter.setPosition(new Point(0, 0));
         speedoMeter.setSize(new Point(100, 100));
         speedoMeter.setPerf_Percentage(0);
-        speedoMeter.setBounds(10, 15, 110, 110);
+        speedoMeter.setBounds(10, 15, 110, 100);
     }
 
     private void CreateRPMmeter() {
@@ -239,14 +242,18 @@ public class Dashboard extends JPanel {
         speedoMeter.setPerf_Percentage(packet.getVelocity());
         speedLimitValueText.setText(String.valueOf(130));
         RPMmeter.setPerf_Percentage(packet.getRPM());
-        xCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getX()));
-        yCoordValueText.setText(String.valueOf(parent.getAutomatedCar().getY()));
+        Car car = parent.getAutomatedCar();
+
+        xCoordValueText.setText(String.valueOf(car.getPosX()));
+        yCoordValueText.setText(String.valueOf(car.getPosY()));
         currentSpeedText.setText(String.valueOf(packet.getVelocity()) + " KM/H");
         currentRpmText.setText(String.valueOf(packet.getRPM()));
     }
 
     private void RoadSignEventHandling(){
             LastRoadSignIndicator.setText("No sign");
+
+
     }
 
     private void EventHandling() {

@@ -11,12 +11,15 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <jaxb.api.version>2.3.0</jaxb.api.version>
+        <javax.activation.version>1.2.0</javax.activation.version>
     </properties>
 
     <build>
         <plugins>
             <!-- plugin for code coverage calculation -->
             <plugin>
+
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.2</version>
@@ -123,6 +126,35 @@
             <version>2.8.5</version>
         </dependency>
 
+        <!-- XML parser START -->
+
+        <dependency>
+            <groupId>com.sun.activation</groupId>
+            <artifactId>javax.activation</artifactId>
+            <version>${javax.activation.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${jaxb.api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>${jaxb.api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>${jaxb.api.version}</version>
+        </dependency>
+
+        <!-- XML parser END -->
+
+
         <!-- BDD like testing with JUnit parameters -->
         <dependency>
             <groupId>pl.pragmatists</groupId>
@@ -130,15 +162,20 @@
             <version>1.1.1</version>
             <scope>test</scope>
         </dependency>
+        
+        <!--APACHE utils (e.g. StringUtils, ...)-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
+            <type>jar</type>
+        </dependency>
 
         <dependency>
             <groupId>com.github.pyknic</groupId>
             <artifactId>vector</artifactId>
             <version>1.0.0</version>
+
         </dependency>
-
-
-
-
     </dependencies>
 </project>
