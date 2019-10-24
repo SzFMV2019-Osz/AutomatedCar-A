@@ -100,8 +100,10 @@ public class DebugViewer {
 
 
     public void operateSensor(Graphics2D drawer, AutomatedCar car,  AffineTransform t){
-        updateSensorPosition(car);
-        Shape sensor = new Ellipse2D.Double(sensorPosition.getX(), sensorPosition.getY(), SENSOR_DIMENSION, SENSOR_DIMENSION);
-        drawer.fill(t.createTransformedShape(sensor));
+        if(debuggerSwitchedOn){
+            updateSensorPosition(car);
+            Shape sensor = new Ellipse2D.Double(sensorPosition.getX(), sensorPosition.getY(), SENSOR_DIMENSION, SENSOR_DIMENSION);
+            drawer.fill(t.createTransformedShape(sensor));
+        }
     }
 }
