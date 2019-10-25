@@ -157,7 +157,6 @@ public class CourseDisplay extends JPanel {
                 offsets, car.getPolygon(0, 0));
 
         g2d.drawImage(car.getImage(), t1, this);
-        viewer.operateSensor(g2d, car, t1);
-        viewer.DrawSensorTriangle(Color.GREEN, t1);
+        viewer.operateSensor(g2d, car, Color.RED, t1);
     }
 }
