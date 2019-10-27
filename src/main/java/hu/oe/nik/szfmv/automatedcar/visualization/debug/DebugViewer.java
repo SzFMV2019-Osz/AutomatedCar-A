@@ -24,8 +24,8 @@ public class DebugViewer {
     private Color sensorColor = Color.RED;
     private Position sensorPosition;
     private static final int SENSOR_DIMENSION = 8;
-    private Position sensorTriangleUpperTip;
-    private Position sensorTriangleLowerTip;
+    private Position sensorTriangleLeftTip;
+    private Position sensorTriangleRightTip;
 
 
     /**
@@ -89,18 +89,17 @@ public class DebugViewer {
     }
 
 
-    public void DrawSensorTriangle(Color color, AffineTransform t){
+    private void drawSensorTriangle(Color color, AffineTransform t){
         if (debuggerSwitchedOn){
             updateSensorTrianglePosition();
             //graphics2D.setColor(color);
-            Shape upperLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleUpperTip.getX(), sensorTriangleUpperTip.getY());
-            Shape height = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorPosition.getX(), sensorPosition.getY()-200);
-            Shape centralLine = new Line2D.Double(sensorTriangleUpperTip.getX(), sensorTriangleUpperTip.getY(), sensorTriangleLowerTip.getX(), sensorTriangleLowerTip.getY());
-            Shape lowerLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleLowerTip.getX(), sensorTriangleLowerTip.getY());
-            graphics2D.draw(t.createTransformedShape(upperLine));
-            graphics2D.draw(t.createTransformedShape(centralLine));
-            graphics2D.draw(t.createTransformedShape(lowerLine));
-            graphics2D.draw(t.createTransformedShape(height));
+            Shape leftLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
+            Shape baseLine = new Line2D.Double(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY(), sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+            Shape rightLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+
+            graphics2D.draw(t.createTransformedShape(leftLine));
+            graphics2D.draw(t.createTransformedShape(baseLine));
+            graphics2D.draw(t.createTransformedShape(rightLine));
         }
     }
 
@@ -117,23 +116,30 @@ public class DebugViewer {
            The edge of the triangle is always the exact position of the sensor body.
            Since the sensor area is 2 right-angled triangles and we know that the sensor sees in 60° (30° each),
            we know that alpha = 60 °. We also know the sensor position and the length of the central edge = 200.
-           So, since tan(30) = 200/b, from here b = 200/tan(30).
+           So, since tan(60) = 200/b, from here b = 200/tan(60).
          */
-        int sensorLength = 100;
+        int sensorLength = 400;
         int baseAngle = 60;
 
         Position sensorTriangleBasePoint = new Position(sensorPosition.getX(), sensorPosition.getY()-sensorLength);
-        int sensorTriangleBaseHalfLength = (int)(sensorLength/Math.tan(baseAngle));
-        sensorTriangleUpperTip = new Position(sensorTriangleBasePoint.getX()-sensorTriangleBaseHalfLength,sensorTriangleBasePoint.getY());
-        sensorTriangleLowerTip = new Position(sensorTriangleBasePoint.getX() + sensorTriangleBaseHalfLength, sensorTriangleBasePoint.getY());
+        int sensorTriangleBaseHalfLength = (int)(sensorLength/Math.tan(Math.toRadians(baseAngle)));
+        sensorTriangleLeftTip = new Position(sensorTriangleBasePoint.getX()-sensorTriangleBaseHalfLength,sensorTriangleBasePoint.getY());
+        sensorTriangleRightTip = new Position(sensorTriangleBasePoint.getX() + sensorTriangleBaseHalfLength, sensorTriangleBasePoint.getY());
     }
 
 
-    public void operateSensor(Graphics2D drawer, AutomatedCar car,  AffineTransform t){
+    public void operateSensor(Graphics2D drawer, AutomatedCar car, Color color, AffineTransform t){
         if(debuggerSwitchedOn){
+            drawer.setColor(Color.GREEN);
             updateSensorPosition(car);
-            Shape sensor = new Ellipse2D.Double(sensorPosition.getX(), sensorPosition.getY(), SENSOR_DIMENSION, SENSOR_DIMENSION);
-            drawer.fill(t.createTransformedShape(sensor));
+            drawSensorBody(drawer, t);
+            updateSensorTrianglePosition();
+            drawSensorTriangle(color, t);
         }
+    }
+
+    private void drawSensorBody(Graphics2D drawer, AffineTransform t) {
+        Shape sensor = new Ellipse2D.Double(sensorPosition.getX(), sensorPosition.getY(), SENSOR_DIMENSION, SENSOR_DIMENSION);
+        drawer.fill(t.createTransformedShape(sensor));
     }
 }
