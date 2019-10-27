@@ -7,6 +7,7 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
+import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISensorAreaInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -94,7 +95,6 @@ public class CourseDisplay extends JPanel {
 
         offset[0] = (this.width / 2) - (car.getPosX() + (car.getWidth() / 2));
         offset[1] = (this.height / 2) - (car.getPosY() + (car.getHeight() / 2));
-
         return offset;
     }
 
@@ -112,7 +112,6 @@ public class CourseDisplay extends JPanel {
                 break;
             }
         }
-
         return findCar;
     }
 
@@ -149,12 +148,14 @@ public class CourseDisplay extends JPanel {
 
         // Draw car
         AffineTransform t1 = new AffineTransform();
+
         t1.translate(car.getPosX() - car.getReferenceX() + offsets[0], car.getPosY() - car.getReferenceY() + offsets[1]);
         t1.rotate(Math.toRadians(car.getRotation() + 90), car.getReferenceX(), car.getReferenceY());
         viewer.DrawPolygon(car.getReferenceX()-car.getWidth()/2, car.getReferenceY()-car.getHeight()/2, car.getWidth(), car.getHeight(), t1,
                 offsets, car.getPolygon(0, 0));
-
         g2d.drawImage(car.getImage(), t1, this);
-        viewer.operateSensor(g2d, car, Color.RED, t1);
+
+        // Set debug viewer
+        viewer.operateSensor(g2d, car, t1);
     }
 }
