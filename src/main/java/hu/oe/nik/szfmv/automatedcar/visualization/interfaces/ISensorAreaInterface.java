@@ -7,5 +7,6 @@ import java.awt.*;
 public interface ISensorAreaInterface {
     void setSelected(boolean state);
     boolean getSelected();
+    void setStatus(boolean switchedOn);
     void setSensorTriangleColor(Color color);
 }

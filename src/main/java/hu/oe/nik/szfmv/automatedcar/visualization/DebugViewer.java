@@ -1,14 +1,14 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
+import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
 import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDebugColorable;
 import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISensorAreaInterface;
 import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISwitchableDebugViewer;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
-import java.awt.geom.PathIterator;
+import java.awt.geom.*;
 
 
 /**
@@ -17,10 +17,19 @@ import java.awt.geom.PathIterator;
 public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISensorAreaInterface {
 
     private static Color BASE_COLOR = Color.BLUE;
+    private static Color SENSOR_TRIANGLE_BASE_COLOR = Color.RED;
     private Graphics2D graphics2D;
     private DrawingInfo info = new DrawingInfo(BASE_COLOR, 2);
     private boolean sensorTriangleDisplayed = false;
-    private Color sensorTriangleColor = BASE_COLOR;
+    private Color sensorTriangleColor = SENSOR_TRIANGLE_BASE_COLOR;
+
+
+    // sensor
+    private Color sensorColor = Color.RED;
+    private Position sensorPosition;
+    private static final int SENSOR_DIMENSION = 8;
+    private Position sensorTriangleLeftTip;
+    private Position sensorTriangleRightTip;
 
     /**
      * @return The information represening the color and borderline width of the object
@@ -51,9 +60,9 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
      * @param width The width of the object
      * @param height The height of the object
      */
-    void DrawPolygon(int x, int y, int width, int height, AffineTransform t, int[] offset, Shape s){
+    public void DrawPolygon(int x, int y, int width, int height, AffineTransform t, int[] offset, Shape s){
         if (debuggerSwitchedOn){
-            graphics2D.setColor(getDebugColor());
+            graphics2D.setColor(info.getColor());
             graphics2D.setStroke(info.getThickness());
 
             // create a rectangle with the original data and draw the result of applying the transformation
@@ -62,32 +71,76 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         }
     }
 
-    void DrawPolygon(int x, int y, int width, int height, AffineTransform t){
+    public void DrawPolygon(int x, int y, int width, int height, Color color, AffineTransform t){
         if (debuggerSwitchedOn){
-            graphics2D.setColor(getDebugColor());
+            graphics2D.setColor(color);
             graphics2D.setStroke(info.getThickness());
             graphics2D.drawRect(x, y, width, height);
         }
     }
 
 
-    void DrawSensorTriangle(int aX, int aY, int bX, int bY, int cX, int cY, Color color, AffineTransform t){
-        if (debuggerSwitchedOn && sensorTriangleDisplayed){
+    private void drawSensorTriangle(Color color, AffineTransform t){
+        if (debuggerSwitchedOn){
+            updateSensorTrianglePosition();
             graphics2D.setColor(color);
-            graphics2D.drawLine(aX, aY, bX, bY);
-            graphics2D.drawLine(aX, aY, cX, cY);
-            graphics2D.drawLine(bX, bY, cX, cY);
+            Shape leftLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
+            Shape baseLine = new Line2D.Double(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY(), sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+            Shape rightLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+
+            graphics2D.draw(t.createTransformedShape(leftLine));
+            graphics2D.draw(t.createTransformedShape(baseLine));
+            graphics2D.draw(t.createTransformedShape(rightLine));
         }
+    }
+
+
+
+    private void updateSensorPosition(AutomatedCar car){
+        // the center of the car bumper is the same x as the car refX and hal the car refY
+        // the sensor is going to be on the same layer (z) as the car
+        sensorPosition = new Position(car.getReferenceX(), car.getReferenceY() - car.getHeight()/2);
+    }
+
+    private void updateSensorTrianglePosition(){
+        /* Calculating the positions of the sensor triangle using ANAL1 trigonometrikus szögfüggvény: tan(alpha) = a/b
+           The edge of the triangle is always the exact position of the sensor body.
+           Since the sensor area is 2 right-angled triangles and we know that the sensor sees in 60° (30° each),
+           we know that alpha = 60 °. We also know the sensor position and the length of the central edge = 200.
+           So, since tan(60) = 200/b, from here b = 200/tan(60).
+         */
+        int sensorLength = 400;
+        int baseAngle = 60;
+
+        Position sensorTriangleBasePoint = new Position(sensorPosition.getX(), sensorPosition.getY()-sensorLength);
+        int sensorTriangleBaseHalfLength = (int)(sensorLength/Math.tan(Math.toRadians(baseAngle)));
+        sensorTriangleLeftTip = new Position(sensorTriangleBasePoint.getX()-sensorTriangleBaseHalfLength,sensorTriangleBasePoint.getY());
+        sensorTriangleRightTip = new Position(sensorTriangleBasePoint.getX() + sensorTriangleBaseHalfLength, sensorTriangleBasePoint.getY());
+    }
+
+
+    public void operateSensor(Graphics2D drawer, AutomatedCar car, AffineTransform t){
+        if(debuggerSwitchedOn){
+            updateSensorPosition(car);
+            drawSensorBody(drawer, t);
+            updateSensorTrianglePosition();
+            drawSensorTriangle(sensorTriangleColor, t);
+        }
+    }
+
+    private void drawSensorBody(Graphics2D drawer, AffineTransform t) {
+        Shape sensor = new Ellipse2D.Double(sensorPosition.getX(), sensorPosition.getY(), SENSOR_DIMENSION, SENSOR_DIMENSION);
+        drawer.fill(t.createTransformedShape(sensor));
     }
 
     @Override
     public Color getDebugColor() {
-        return info.getColor();
+        return sensorColor;
     }
 
     @Override
     public void setColor(Color debugColor) {
-        info.setColor(debugColor);
+        sensorColor = debugColor;
     }
 
     @Override
@@ -109,6 +162,11 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     @Override
     public boolean getSelected() {
         return this.sensorTriangleDisplayed;
+    }
+
+    @Override
+    public void setStatus(boolean switchedOn) {
+        debuggerSwitchedOn = switchedOn;
     }
 
     @Override
