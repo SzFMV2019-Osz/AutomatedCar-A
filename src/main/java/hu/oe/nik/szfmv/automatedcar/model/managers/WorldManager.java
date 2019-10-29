@@ -1,21 +1,15 @@
 package hu.oe.nik.szfmv.automatedcar.model.managers;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
-import hu.oe.nik.szfmv.automatedcar.model.Position;
-import hu.oe.nik.szfmv.automatedcar.model.References;
-import hu.oe.nik.szfmv.automatedcar.model.World;
-import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.*;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.ArrayList;
-
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * {@link World}-el dolgozó manager, ezen keresztül lehet lekérdezni az abban levő objektumokat.
@@ -24,21 +18,24 @@ public class WorldManager {
 
     private World currentWorld;
     private AutomatedCar automatedCar;
+    private ArrayList<NPC> npcs;
 
     /**
      * Inicializálja a világot a kapott file-ok alapján.
-     * 
-     * @param worldFileName Feldolgozandó world fájl neve, kiterjesztés nélkül is megadható.
+     *
+     * @param worldFileName     Feldolgozandó world fájl neve, kiterjesztés nélkül is megadható.
      * @param referenceFileName Feldolgozandó referencia fájl neve, kiterjesztés nélkül is megadható.
      * @throws NullPointerException Ha valamelyik fájl nem található.
      */
     public WorldManager(String worldFileName, String referenceFileName) {
         currentWorld = XmlParser.parseWorldObjects(worldFileName);
         References refs = XmlParser.parseReferences(referenceFileName);
-        
+
+        npcs = new ArrayList<>();
+
         if (currentWorld != null && currentWorld.getWorldObjects() != null && refs != null) {
             for (IObject iObject : currentWorld.getWorldObjects()) {
-                WorldObject wo = ((WorldObject)iObject);
+                WorldObject wo = ((WorldObject) iObject);
                 Position pos = refs.getReference(wo.getImageFileName());
                 wo.setReferencePosition(pos);
             }
@@ -143,4 +140,8 @@ public class WorldManager {
         this.automatedCar = car;
     }
 
+    public ArrayList<NPC> getNpcs() {
+        return npcs;
+    }
 }
+
