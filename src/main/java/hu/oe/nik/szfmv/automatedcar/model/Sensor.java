@@ -8,7 +8,6 @@ import java.util.List;
 
 public abstract class Sensor implements ISensor {
 
-    public int range = 10000;
     public Position pos = new Position();
 
     /**
@@ -23,10 +22,6 @@ public abstract class Sensor implements ISensor {
      */
     public abstract List<IObject> getAllSensedRelevantObjects(WorldManager currentWorld, Position pointB,
             Position pointC, int offsetX, int offsetY);
-
-    public void setRange(int newRange) {
-        range = newRange;
-    }
 
     public int getPosX() {
         return pos.getX();
