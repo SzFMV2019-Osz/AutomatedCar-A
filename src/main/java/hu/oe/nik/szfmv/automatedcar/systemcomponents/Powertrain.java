@@ -58,19 +58,20 @@ public class Powertrain extends SystemComponent {
     private void calculateMovingVector(InputPacket inputPacket) {
 
 
-        float speed = (float)(Math.sqrt(Math.pow(currentVelocityVector.getX() , 2)+Math.pow(currentVelocityVector.getY() , 2))/3);
-        switch (inputPacket.getGearShiftValue()){
-            case R: speed *= -0.15;
+        float speed = (float) (Math.sqrt(Math.pow(currentVelocityVector.getX(), 2) + Math.pow(currentVelocityVector.getY(), 2)) / 1.8);
+        switch (inputPacket.getGearShiftValue()) {
+            case R:
+                speed *= -0.2;
         }
 
         calculateVelocityVector(inputPacket.getGasPedalValue(), inputPacket.getBreakPedalValue(), inputPacket.getGearShiftValue());
-        float steeringAngle = virtualFunctionBus.inputPacket.getSteeringWheelValue() / (float)100 * (float)35;
+        float steeringAngle = virtualFunctionBus.inputPacket.getSteeringWheelValue() / (float) 100 * (float) 35;
 
-        frontX = (float) (carLocationX + wheelbase/2 * Math.cos(convertDegreeToRadian(rotationAngle)));
-        frontY = (float) (carLocationY + wheelbase/2 * Math.sin(convertDegreeToRadian(rotationAngle)));
+        frontX = (float) (carLocationX + wheelbase / 2 * Math.cos(convertDegreeToRadian(rotationAngle)));
+        frontY = (float) (carLocationY + wheelbase / 2 * Math.sin(convertDegreeToRadian(rotationAngle)));
 
-        backX = (float) (carLocationX - wheelbase/2 * Math.cos(convertDegreeToRadian(rotationAngle)));
-        backY = (float) (carLocationY - wheelbase/2 * Math.sin(convertDegreeToRadian(rotationAngle)));
+        backX = (float) (carLocationX - wheelbase / 2 * Math.cos(convertDegreeToRadian(rotationAngle)));
+        backY = (float) (carLocationY - wheelbase / 2 * Math.sin(convertDegreeToRadian(rotationAngle)));
 
         backX += speed * 1 * Math.cos(convertDegreeToRadian(rotationAngle));
         backY += speed * 1 * Math.sin(convertDegreeToRadian(rotationAngle));
@@ -84,13 +85,13 @@ public class Powertrain extends SystemComponent {
         float oldY = carLocationY;
         carLocationY = (frontY + backY) / 2;
 
-        rotationAngle = (float)(Math.atan2(frontY-backY , frontX-backX) / (float)(Math.PI/180));
+        rotationAngle = (float) (Math.atan2(frontY - backY, frontX - backX) / (float) (Math.PI / 180));
 
-        Vec2f diffVect = Vec2f.of(carLocationX-oldX,carLocationY-oldY);
+        Vec2f diffVect = Vec2f.of(carLocationX - oldX, carLocationY - oldY);
         virtualFunctionBus.powertrainPacket.setMovingVector(diffVect);
     }
 
-    public float getCarRotation(){
+    public float getCarRotation() {
         return this.rotationAngle;
     }
 
@@ -146,7 +147,7 @@ public class Powertrain extends SystemComponent {
     }
 
     private Vec2f calculateResistForceVector(GearShift.POS gearShiftPos) {
-        return (getDirectionUnitVector(gearShiftPos).scale(-1).scale(RESIST_FORCE_CONSTANT)).scale(getDirectionUnitVector(gearShiftPos).scale(currentVelocityVector));
+        return (getDirectionUnitVector(gearShiftPos).scale(-1).scale(RESIST_FORCE_CONSTANT)).scale(getDirectionUnitVector(gearShiftPos).scale(currentVelocityVector)).scale(1.2F);
     }
 
     private Vec2f calculateAccelerationVector(int throttle, int brake, GearShift.POS gearShiftPos) {
@@ -161,7 +162,11 @@ public class Powertrain extends SystemComponent {
             velocityVector = NULL_VECTOR;
         }
         currentVelocityVector = velocityVector;
-        virtualFunctionBus.powertrainPacket.setVelocity((int) currentVelocityVector.magn());
+        if (gearShiftPos == GearShift.POS.D) {
+            virtualFunctionBus.powertrainPacket.setVelocity((int) (currentVelocityVector.magn() * 3));
+        } else if (gearShiftPos == GearShift.POS.R) {
+            virtualFunctionBus.powertrainPacket.setVelocity((int) (currentVelocityVector.magn() / 5));
+        }
     }
 
     private double calculateSteeringLimitation(double steering) {
