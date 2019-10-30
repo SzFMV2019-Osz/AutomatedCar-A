@@ -22,7 +22,7 @@ public class AutomatedCar extends Car {
         super(x, y, imageFileName);
 
         new Driver(virtualFunctionBus);
-        pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(),getHeight());
+        pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(),getHeight(), getWidth());
     }
 
     public void drive() {
@@ -38,6 +38,6 @@ public class AutomatedCar extends Car {
         var movingVector = virtualFunctionBus.powertrainPacket.getMovingVector();
         this.setPosX(this.getPosX() + (int)movingVector.getX());
         this.setPosY(this.getPosY() + (int)movingVector.getY());
-        setRotation(pt.getAutoSzoge());
+        setRotation(pt.getCarRotation());
     }
 }
