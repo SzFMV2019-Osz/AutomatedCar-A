@@ -4,7 +4,7 @@ import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.RoadSensor;
 import hu.oe.nik.szfmv.automatedcar.model.SignSensor;
-import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
@@ -13,6 +13,7 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 
@@ -69,15 +70,15 @@ public class AutomatedCar extends Car {
     }
 
     public void checkCollisions(WorldManager manager, int offsetX, int offsetY) {
-        Position pointA = new Position(this.getPosX() - this.getReferenceX(), this.getPosY() - this.getReferenceY());
-        Position pointB = new Position(pointA.getX() + this.getWidth(), pointA.getY() + this.getHeight());
+        Shape carShape = this.getPolygons(offsetX, offsetY).get(0);
 
-        List<IObject> collidedObjects = manager.getAllCrashableObjectsInRectangle(pointA, pointB, offsetX, offsetY);
+        Position pointA = new Position((int) carShape.getBounds2D().getX(), (int) carShape.getBounds2D().getY());
+        Position pointB = new Position((int) (carShape.getBounds2D().getX() + carShape.getBounds2D().getWidth()), (int) (carShape.getBounds2D().getY() + carShape.getBounds2D().getY()));
+        List<ICrashable> collidedObjects = manager.getAllCrashableObjectsInRectangle(pointA, pointB, offsetX, offsetY);
 
         if (!collidedObjects.isEmpty()) {
-            for (IObject collidedObject : collidedObjects) {
-                Class c = collidedObject.getClass();
-                // (ICrashable) collidedObject.crashed();
+            for (ICrashable collidedObject : collidedObjects) {
+                collidedObject.crashed();
             }
         }
     }

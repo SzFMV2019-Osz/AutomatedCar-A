@@ -157,9 +157,9 @@ public class WorldManager {
      * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a négyzeten belül vannak.
      */
-    public List<IObject> getAllCrashableObjectsInRectangle(Position pointA, Position pointB, int offsetX, int offsetY) {
+    public List<ICrashable> getAllCrashableObjectsInRectangle(Position pointA, Position pointB, int offsetX, int offsetY) {
         List<IObject> results = this.getAllObjectsInRectangle(pointA, pointB, offsetX, offsetY);
-        return results.stream().filter(o -> o instanceof ICrashable).collect(Collectors.toList());
+        return results.stream().filter(o -> o instanceof ICrashable).map(o -> (ICrashable) o).collect(Collectors.toList());
     }
 
     /**
