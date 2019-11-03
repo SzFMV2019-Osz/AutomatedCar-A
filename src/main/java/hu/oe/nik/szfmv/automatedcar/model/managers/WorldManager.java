@@ -7,6 +7,7 @@ import hu.oe.nik.szfmv.automatedcar.model.RoadSensor;
 import hu.oe.nik.szfmv.automatedcar.model.SignSensor;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ISensor;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * {@link World}-el dolgozó manager, ezen keresztül lehet lekérdezni az abban levő objektumokat.
@@ -32,18 +34,18 @@ public class WorldManager {
 
     /**
      * Inicializálja a világot a kapott file-ok alapján.
-     * 
-     * @param worldFileName Feldolgozandó world fájl neve, kiterjesztés nélkül is megadható.
+     *
+     * @param worldFileName     Feldolgozandó world fájl neve, kiterjesztés nélkül is megadható.
      * @param referenceFileName Feldolgozandó referencia fájl neve, kiterjesztés nélkül is megadható.
      * @throws NullPointerException Ha valamelyik fájl nem található.
      */
     public WorldManager(String worldFileName, String referenceFileName) {
-        currentWorld = XmlParser.parseWorldObjects(worldFileName);
+        this.currentWorld = XmlParser.parseWorldObjects(worldFileName);
         References refs = XmlParser.parseReferences(referenceFileName);
-        
-        if (currentWorld != null && currentWorld.getWorldObjects() != null && refs != null) {
-            for (IObject iObject : currentWorld.getWorldObjects()) {
-                WorldObject wo = ((WorldObject)iObject);
+
+        if (this.currentWorld != null && this.currentWorld.getWorldObjects() != null && refs != null) {
+            for (IObject iObject : this.currentWorld.getWorldObjects()) {
+                WorldObject wo = ((WorldObject) iObject);
                 Position pos = refs.getReference(wo.getImageFileName());
                 wo.setReferencePosition(pos);
             }
@@ -52,25 +54,28 @@ public class WorldManager {
 
     /**
      * Hozzáad egy objektumot a világhoz.
+     *
      * @param object Akármilyen objektum ami implementálja az {@link IObject}et.
      */
     public void addObjectToWorld(IObject object) {
-        currentWorld.addObject(object);
+        this.currentWorld.addObject(object);
     }
 
     /**
      * Visszaadja a jelenlegi világot.
+     *
      * @return Jelenlegi világ {@link IWorld}-ként.
      */
     public IWorld getWorld() {
-        return currentWorld;
+        return this.currentWorld;
     }
 
     /**
      * Visszaadja az összes objektumot a három pont között.
-     * @param pointA Első pont.
-     * @param pointB Második pont.
-     * @param pointC Harmadik pont.
+     *
+     * @param pointA  Első pont.
+     * @param pointB  Második pont.
+     * @param pointC  Harmadik pont.
      * @param offsetX X irányú eltolás.
      * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a háromszögön belülre esnek.
@@ -83,8 +88,8 @@ public class WorldManager {
         triangle.addPoint(pointC.getX(), pointC.getY());
 
         List<IObject> inTriangle = new ArrayList<>();
-        for (IObject obj : currentWorld.getWorldObjects()) {
-            if (isObjectInShape(obj.getPolygons(offsetX, offsetY), triangle)) {
+        for (IObject obj : this.currentWorld.getWorldObjects()) {
+            if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), triangle)) {
                 inTriangle.add(obj);
             }
         }
@@ -93,7 +98,8 @@ public class WorldManager {
 
     /**
      * Visszaadja az összes objektumot a ponton.
-     * @param point A pont ahol keressük az objektumokat.
+     *
+     * @param point   A pont ahol keressük az objektumokat.
      * @param offsetX X irányú eltolás.
      * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a ponton vannak.
@@ -102,8 +108,8 @@ public class WorldManager {
         Point pointShape = new Point(point.getX(), point.getY());
 
         List<IObject> onPoint = new ArrayList<>();
-        for (IObject obj : currentWorld.getWorldObjects()) {
-            if (isObjectOnPoint(obj.getPolygons(offsetX, offsetY), pointShape)) {
+        for (IObject obj : this.currentWorld.getWorldObjects()) {
+            if (this.isObjectOnPoint(obj.getPolygons(offsetX, offsetY), pointShape)) {
                 onPoint.add(obj);
             }
         }
@@ -113,8 +119,9 @@ public class WorldManager {
     /**
      * Visszaadja az összes objektumot a négyzeten belül. Ha két víszintes vagy függőleges pontra eső vonalat kapunk
      * akkor pedig a vonalon levőket adja vissza helyesen elvileg!
-     * @param pointA A négyzet egyik pontja.
-     * @param pointB A négyzet másik pontja.
+     *
+     * @param pointA  A négyzet egyik pontja.
+     * @param pointB  A négyzet másik pontja.
      * @param offsetX X irányú eltolás.
      * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a négyzeten belül vannak.
@@ -126,13 +133,13 @@ public class WorldManager {
         Position topLeft = ModelCommonUtil.getTopLeftPoint(pointA, pointB, pointC, pointD);
         Position bottomRight = ModelCommonUtil.getBottomRightPoint(pointA, pointB, pointC, pointD);
         Rectangle rect = ModelCommonUtil.createRectangle(topLeft.getX(), topLeft.getY(),
-                                                        (bottomRight.getX() - topLeft.getX()),
-                                                        (bottomRight.getY() - topLeft.getX()));
+                (bottomRight.getX() - topLeft.getX()),
+                (bottomRight.getY() - topLeft.getX()));
 
         List<IObject> inRectangle = new ArrayList<>();
 
-        for (IObject obj : currentWorld.getWorldObjects()) {
-            if (isObjectInShape(obj.getPolygons(offsetX, offsetY), rect)) {
+        for (IObject obj : this.currentWorld.getWorldObjects()) {
+            if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), rect)) {
                 inRectangle.add(obj);
             }
         }
@@ -141,7 +148,23 @@ public class WorldManager {
     }
 
     /**
+     * Visszaadja az összes objektumot a négyzeten belül. Ha két víszintes vagy függőleges pontra eső vonalat kapunk
+     * akkor pedig a vonalon levőket adja vissza helyesen elvileg!
+     *
+     * @param pointA  A négyzet egyik pontja.
+     * @param pointB  A négyzet másik pontja.
+     * @param offsetX X irányú eltolás.
+     * @param offsetY Y irányú eltolás.
+     * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a négyzeten belül vannak.
+     */
+    public List<ICrashable> getAllCrashableObjectsInRectangle(Position pointA, Position pointB, int offsetX, int offsetY) {
+        List<IObject> results = this.getAllObjectsInRectangle(pointA, pointB, offsetX, offsetY);
+        return results.stream().filter(o -> o instanceof ICrashable).map(o -> (ICrashable) o).collect(Collectors.toList());
+    }
+
+    /**
      * Visszaadja az irányított autót
+     *
      * @return {@link AutomatedCar} referencia az irányíott autóval
      */
     public AutomatedCar getAutomatedCar() {
@@ -150,6 +173,7 @@ public class WorldManager {
 
     /**
      * Beállítja az {@link AutomatedCar} referenciáját
+     *
      * @param car Irányított autó objektuma
      */
     public void setAutomatedCar(AutomatedCar car) {
@@ -158,22 +182,24 @@ public class WorldManager {
 
     /**
      * Használható például arra, hogy az elején beállítsuk a szenzorok alaphelyzetét.
+     *
      * @return az {@link AutomatedCar}-ban levő szenzorok.
      */
     public List<ISensor> getAllCarSensors() {
-        return automatedCar.getSensors();
+        return this.automatedCar.getSensors();
     }
 
     /**
      * Visszaadja az összes érzékelt utat.
+     *
      * @param trianglePointB szenzor háromszög 2. pontja.
      * @param trianglePointC szenzor háromszög 3. pontja.
-     * @param offsetX x offset.
-     * @param offsetY y offset.
+     * @param offsetX        x offset.
+     * @param offsetY        y offset.
      * @return minden sávérzékelő által érzékelt út.
      */
     public List<IObject> getAllSensedRoads(Position trianglePointB, Position trianglePointC, int offsetX, int offsetY) {
-        Optional<ISensor> sensor = automatedCar.getSensors().stream().filter(x -> x instanceof RoadSensor).findFirst();
+        Optional<ISensor> sensor = this.automatedCar.getSensors().stream().filter(x -> x instanceof RoadSensor).findFirst();
         if (sensor.isPresent()) {
             return sensor.get().getAllSensedRelevantObjects(
                     this, trianglePointB, trianglePointC, offsetX, offsetY);
@@ -183,14 +209,15 @@ public class WorldManager {
 
     /**
      * Vissza az összes érzékelt táblát.
+     *
      * @param trianglePointB szenzor háromszög 2. pontja.
      * @param trianglePointC szenzor háromszög 3. pontja.
-     * @param offsetX x offset.
-     * @param offsetY y offset.
+     * @param offsetX        x offset.
+     * @param offsetY        y offset.
      * @return minden táblaérzékelő által érzékelt tábla.
      */
     public List<IObject> getAllSensedSigns(Position trianglePointB, Position trianglePointC, int offsetX, int offsetY) {
-        Optional<ISensor> sensor = automatedCar.getSensors().stream().filter(x -> x instanceof SignSensor).findFirst();
+        Optional<ISensor> sensor = this.automatedCar.getSensors().stream().filter(x -> x instanceof SignSensor).findFirst();
         if (sensor.isPresent()) {
             return sensor.get().getAllSensedRelevantObjects(
                     this, trianglePointB, trianglePointC, offsetX, offsetY);

@@ -16,6 +16,11 @@ public class Tree extends WorldObject implements IStatic, ICrashable {
         return 0;
     }
 
+    @Override
+    public void crashed() {
+
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -30,7 +35,7 @@ public class Tree extends WorldObject implements IStatic, ICrashable {
      */
     @Override
     public void initShape() {
-        int x = this.width / 2 -(15 / 2);
+        int x = this.width / 2 - (15 / 2);
         int y = this.height / 2 - (15 / 2);
         this.polygons.add(new Ellipse2D.Float(x, y, 15, 15));
     }

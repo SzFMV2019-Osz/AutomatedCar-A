@@ -20,27 +20,27 @@ public class Main {
     }
 
     public void run() {
-        init();
-        loop();
+        this.init();
+        this.loop();
     }
 
     private void init() {
+        this.worldManager = new WorldManager("test_world", "reference_points");
         AutomatedCar car = new AutomatedCar(80, 80, "car_2_white.png");
-        worldManager = new WorldManager("test_world", "reference_points");
-        worldManager.setAutomatedCar(car);
+        this.worldManager.setAutomatedCar(car);
 
-        window = new Gui(this.worldManager);
-        window.setVirtualFunctionBus(car.getVirtualFunctionBus());
-        window.addKeyListener(new InputReader(car.getVirtualFunctionBus()));
+        this.window = new Gui(this.worldManager);
+        this.window.setVirtualFunctionBus(car.getVirtualFunctionBus());
+        this.window.addKeyListener(new InputReader(car.getVirtualFunctionBus()));
 
     }
 
     private void loop() {
         while (true) {
             try {
-                worldManager.getAutomatedCar().drive();
+                this.worldManager.getAutomatedCar().drive();
                 // TODO IWorld-öt használjon a drawWorld
-                window.getCourseDisplay().drawWorld((this.worldManager));
+                this.window.getCourseDisplay().drawWorld((this.worldManager));
                 // TODO window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
