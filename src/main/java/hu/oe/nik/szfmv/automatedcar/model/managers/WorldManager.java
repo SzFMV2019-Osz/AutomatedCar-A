@@ -3,9 +3,12 @@ package hu.oe.nik.szfmv.automatedcar.model.managers;
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.References;
+import hu.oe.nik.szfmv.automatedcar.model.RoadSensor;
+import hu.oe.nik.szfmv.automatedcar.model.SignSensor;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.ISensor;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
@@ -15,7 +18,9 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * {@link World}-el dolgozó manager, ezen keresztül lehet lekérdezni az abban levő objektumokat.
@@ -149,6 +154,48 @@ public class WorldManager {
      */
     public void setAutomatedCar(AutomatedCar car) {
         this.automatedCar = car;
+    }
+
+    /**
+     * Használható például arra, hogy az elején beállítsuk a szenzorok alaphelyzetét.
+     * @return az {@link AutomatedCar}-ban levő szenzorok.
+     */
+    public List<ISensor> getAllCarSensors() {
+        return automatedCar.getSensors();
+    }
+
+    /**
+     * Visszaadja az összes érzékelt utat.
+     * @param trianglePointB szenzor háromszög 2. pontja.
+     * @param trianglePointC szenzor háromszög 3. pontja.
+     * @param offsetX x offset.
+     * @param offsetY y offset.
+     * @return minden sávérzékelő által érzékelt út.
+     */
+    public List<IObject> getAllSensedRoads(Position trianglePointB, Position trianglePointC, int offsetX, int offsetY) {
+        Optional<ISensor> sensor = automatedCar.getSensors().stream().filter(x -> x instanceof RoadSensor).findFirst();
+        if (sensor.isPresent()) {
+            return sensor.get().getAllSensedRelevantObjects(
+                    this, trianglePointB, trianglePointC, offsetX, offsetY);
+        }
+        return Collections.emptyList();
+    }
+
+    /**
+     * Vissza az összes érzékelt táblát.
+     * @param trianglePointB szenzor háromszög 2. pontja.
+     * @param trianglePointC szenzor háromszög 3. pontja.
+     * @param offsetX x offset.
+     * @param offsetY y offset.
+     * @return minden táblaérzékelő által érzékelt tábla.
+     */
+    public List<IObject> getAllSensedSigns(Position trianglePointB, Position trianglePointC, int offsetX, int offsetY) {
+        Optional<ISensor> sensor = automatedCar.getSensors().stream().filter(x -> x instanceof SignSensor).findFirst();
+        if (sensor.isPresent()) {
+            return sensor.get().getAllSensedRelevantObjects(
+                    this, trianglePointB, trianglePointC, offsetX, offsetY);
+        }
+        return Collections.emptyList();
     }
 
     private boolean isObjectInShape(List<Shape> polygonsOfObject, Shape shape) {

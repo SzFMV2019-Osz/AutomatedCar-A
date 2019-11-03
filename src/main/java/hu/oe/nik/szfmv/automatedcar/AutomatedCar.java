@@ -1,6 +1,8 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.Car;
+import hu.oe.nik.szfmv.automatedcar.model.RoadSensor;
+import hu.oe.nik.szfmv.automatedcar.model.SignSensor;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
@@ -23,6 +25,12 @@ public class AutomatedCar extends Car {
 
         new Driver(virtualFunctionBus);
         pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(), getHeight());
+
+        roadSensor = new RoadSensor();
+        roadSensor.setPos(getPosX(), getPosY());
+
+        signSensor = new SignSensor();
+        signSensor.setPos(getPosX(), getPosY());
     }
 
     public void drive() {
@@ -39,6 +47,11 @@ public class AutomatedCar extends Car {
         this.setPosX(this.getPosX() + (int)movingVector.getX());
         this.setPosY(this.getPosY() + (int)movingVector.getY());
         setRotation(pt.getAutoSzoge());
+
+        roadSensor.setPos(roadSensor.getPosX() + (int) movingVector.getX(),
+                roadSensor.getPosY() + (int) movingVector.getY());
+        signSensor.setPos(signSensor.getPosX() + (int) movingVector.getX(),
+                signSensor.getPosY() + (int) movingVector.getY());
     }
 
     @Override

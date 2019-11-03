@@ -2,10 +2,13 @@ package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IDynamic;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.ISensor;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 
 import java.awt.Rectangle;
+import java.util.Arrays;
+import java.util.List;
 import javax.xml.bind.Unmarshaller;
 
 /**
@@ -15,6 +18,9 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
 
     private static final int WIDTH_BORDER = 6;
     private static final int HEIGHT_BORDER = 1;
+
+    protected RoadSensor roadSensor;
+    protected SignSensor signSensor;
 
     public Car() { }
 
@@ -33,6 +39,10 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
     public double getWeight() {
         // TODO
         return 0;
+    }
+
+    public List<ISensor> getSensors() {
+        return Arrays.asList(roadSensor, signSensor);
     }
 
     /**
