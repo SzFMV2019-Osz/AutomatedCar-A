@@ -30,8 +30,8 @@ public class Tree extends WorldObject implements IStatic, ICrashable {
      */
     @Override
     public void initShape() {
-        int x = this.width / 2 -(15 / 2);
-        int y = this.height / 2 - (15 / 2);
-        this.polygons.add(new Ellipse2D.Float(x, y, 15, 15));
+        int x = 0 - (15 / 2);
+        int y = 0 - (15 / 2 - 1);
+        this.polygon = new Ellipse2D.Float(x, y, 15, 15);
     }
 }

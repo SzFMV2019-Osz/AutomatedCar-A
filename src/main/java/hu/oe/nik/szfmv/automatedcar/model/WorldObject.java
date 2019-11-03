@@ -17,8 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -62,7 +60,7 @@ public class WorldObject implements IObject {
     protected String imageFileName;
 
     @XmlTransient
-    protected List<Shape> polygons = new ArrayList<>();
+    protected Shape polygon;
 
     public WorldObject() {
         this.transform = new Transform();
@@ -233,23 +231,15 @@ public class WorldObject implements IObject {
      * {@inheritDoc}
      */
     @Override
-    public List<Shape> getPolygons(int offsetX, int offsetY) {
-        List<Shape> transformedList = new ArrayList<>();
-
-        AffineTransform transform = getTransform(offsetX, offsetY);
-
-        for(Shape shape : this.polygons){
-            transformedList.add(transform.createTransformedShape(shape));
-        }
-
-        return transformedList;
+    public Shape getPolygon(int offsetX, int offsetY) {
+        return this.getShapeTransfrom(offsetX, offsetY).createTransformedShape(this.polygon);
     }
 
-    public AffineTransform getTransform(int offsetX, int offsetY) {
+    private AffineTransform getShapeTransfrom(int offsetX, int offsetY) {
+        double theta = Math.toRadians(this.getRotation());
         AffineTransform shapeTransform = new AffineTransform();
-
-        shapeTransform.translate(this.getPosX() - this.getReferenceX() + offsetX, this.getPosY() - this.getReferenceY() + offsetY);
-        shapeTransform.rotate(Math.toRadians(-this.getRotation()), this.getReferenceX(), this.getReferenceY());
+        shapeTransform.rotate(theta);
+        shapeTransform.translate(this.getPosX() + this.getReferenceX() + offsetX, this.getPosX() + this.getReferenceY() + offsetY);
 
         return shapeTransform;
     }
@@ -260,6 +250,6 @@ public class WorldObject implements IObject {
     public void initShape() {
         int x = 0 - (this.width / 2);
         int y = 0 - (this.height / 2);
-        this.polygons.add( new Rectangle(x, y, this.width, this.height));
+        this.polygon = new Rectangle(x, y, this.width, this.height);
     }
 }

@@ -28,6 +28,8 @@ public class Crosswalk extends WorldObject implements IStatic, IBackground {
      */
     @Override
     public void initShape() {
-        this.polygons.add(new Rectangle(WIDTH_BORDER, HEIGHT_BORDER, this.width - WIDTH_BORDER * 2, this.height - HEIGHT_BORDER * 2));
+        int x = 0 - (width / 2 - WIDTH_BORDER);
+        int y = 0 - (height / 2 - HEIGHT_BORDER);
+        this.polygon = new Rectangle(x, y, this.width - WIDTH_BORDER * 2, this.height - HEIGHT_BORDER * 2);
     }
 }

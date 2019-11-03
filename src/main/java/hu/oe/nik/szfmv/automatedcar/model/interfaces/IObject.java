@@ -1,10 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model.interfaces;
 
 import java.awt.Shape;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-
-import java.util.List;
 
 /**
  * A világban megtalálható objektumok közös tulajdonságait írja le.
@@ -45,12 +42,12 @@ public interface IObject {
      * @return elfordulás szögben megadva. Tartomány: 0 - 359
      */
     double getRotation();
-    
+
     /**
      * @return Forgatási pont X koordinátája.
      */
     int getReferenceX();
-    
+
     /**
      * @return Forgatási pont Y koordinátája.
      */
@@ -65,7 +62,5 @@ public interface IObject {
      * Visszadja az objektum alakját
      * @return objektum alakja
      */
-    List<Shape> getPolygons(int offsetX, int offsetY);
-
-    AffineTransform getTransform(int offsetX, int offsetY);
+    Shape getPolygon(int offsetX, int offsetY);
 }
