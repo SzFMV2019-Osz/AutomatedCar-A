@@ -10,7 +10,9 @@ import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISensorAreaInterfac
 import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISwitchableDebugViewer;
 
 import java.awt.*;
-import java.awt.geom.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.util.List;
 
 
@@ -101,6 +103,21 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
             graphics2D.draw(t.createTransformedShape(rightLine));
         }
     }
+    private void drawUltraSoundSensorTriangle( AffineTransform t){
+        if (debuggerSwitchedOn){
+            updateSensorTrianglePosition(100,200);
+            graphics2D.setColor(Color.green);
+
+            Shape leftLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
+            Shape baseLine = new Line2D.Double(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY(), sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+            Shape rightLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+
+            graphics2D.draw(t.createTransformedShape(leftLine));
+            graphics2D.draw(t.createTransformedShape(baseLine));
+            graphics2D.draw(t.createTransformedShape(rightLine));
+        }
+    }
+
 
 
 
@@ -109,15 +126,33 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         // the sensor is going to be on the same layer (z) as the car
         sensorPosition = new Position(car.getReferenceX(), car.getReferenceY() - car.getHeight()/2);
     }
+    private void updateSensorPosition(AutomatedCar car, int number){
+        switch (number){
+            case 1:
+              //  sensorPosition=new Position(0,0);
+                sensorPosition = new Position(0,0);
+                break;
+            case 2:
+                sensorPosition=new Position(car.getReferenceX()*2,0);
+                break;
+            case 3:
+                sensorPosition=new Position(0,car.getReferenceY());
+                break;
+            case 4:
+                sensorPosition=new Position(car.getReferenceX()*4, 0);
+                break;
+        }
 
-    private void updateSensorTrianglePosition(){
+    }
+
+   private void updateSensorTrianglePosition(){
         /* Calculating the positions of the sensor triangle using ANAL1 trigonometrikus szögfüggvény: tan(alpha) = a/b
            The edge of the triangle is always the exact position of the sensor body.
            Since the sensor area is 2 right-angled triangles and we know that the sensor sees in 60° (30° each),
            we know that alpha = 60 °. We also know the sensor position and the length of the central edge = 200.
            So, since tan(60) = 200/b, from here b = 200/tan(60).
          */
-        int sensorLength = 400;
+        int sensorLength = 200;
         int baseAngle = 60;
 
         Position sensorTriangleBasePoint = new Position(sensorPosition.getX(), sensorPosition.getY()-sensorLength);
@@ -126,7 +161,28 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         sensorTriangleRightTip = new Position(sensorTriangleBasePoint.getX() + sensorTriangleBaseHalfLength, sensorTriangleBasePoint.getY());
     }
 
-
+    private void updateSensorTrianglePosition(int angle,int lenght){
+        /* Calculating the positions of the sensor triangle using ANAL1 trigonometrikus szögfüggvény: tan(alpha) = a/b
+           The edge of the triangle is always the exact position of the sensor body.
+           Since the sensor area is 2 right-angled triangles and we know that the sensor sees in 60° (30° each),
+           we know that alpha = 60 °. We also know the sensor position and the length of the central edge = 200.
+           So, since tan(60) = 200/b, from here b = 200/tan(60).
+         */
+        int sensorLength = lenght;
+        int baseAngle = angle;
+        Position sensorTriangleBasePoint = new Position(sensorPosition.getX(), sensorPosition.getY()-sensorLength);
+        int sensorTriangleBaseHalfLength = (int)(sensorLength/Math.cos(baseAngle));
+        sensorTriangleLeftTip = new Position(sensorTriangleBasePoint.getX()-sensorTriangleBaseHalfLength,sensorTriangleBasePoint.getY());
+        sensorTriangleRightTip = new Position(sensorTriangleBasePoint.getX() + sensorTriangleBaseHalfLength, sensorTriangleBasePoint.getY());
+    }
+    public void operateUltraSoundSensor(Graphics2D drawer, AutomatedCar car,int number, AffineTransform t){
+        if(debuggerSwitchedOn){
+            updateSensorPosition(car,number);
+            drawSensorBody(drawer, t);
+            updateSensorTrianglePosition(50,200);
+            drawUltraSoundSensorTriangle(t);
+        }
+    }
     public void operateSensor(Graphics2D drawer, AutomatedCar car, AffineTransform t){
         if(debuggerSwitchedOn){
             updateSensorPosition(car);

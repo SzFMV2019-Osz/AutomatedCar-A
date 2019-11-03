@@ -3,11 +3,10 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.World;
-import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
-import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISensorAreaInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -149,6 +148,7 @@ public class CourseDisplay extends JPanel {
         }
 
         // Draw car
+
         AffineTransform t1 = new AffineTransform();
 
         t1.translate(car.getPosX() - car.getReferenceX() + offsets[0], car.getPosY() - car.getReferenceY() + offsets[1]);
@@ -159,6 +159,43 @@ public class CourseDisplay extends JPanel {
 
         // Set debug viewer
         viewer.operateSensor(g2d, car, t1);
+
+        viewer.operateUltraSoundSensor(g2d, car, 1, t1);
+        viewer.operateUltraSoundSensor(g2d, car, 2, t1);
+
+
+        AffineTransform t2=new AffineTransform();
+        t2.translate(car.getPosX()  - car.getReferenceX()+ offsets[0],  car.getPosY() - car.getReferenceY()+ offsets[1]);
+        t2.rotate(Math.toRadians(car.getRotation()-90),car.getReferenceX(),car.getReferenceY());
+        viewer.operateUltraSoundSensor(g2d, car, 1, t2);
+        viewer.operateUltraSoundSensor(g2d, car, 2, t2);
+
+        AffineTransform t3=new AffineTransform();
+        t3.translate(car.getPosX()  - car.getReferenceX()*2+ offsets[0],  car.getPosY() - car.getReferenceY()/2+ offsets[1]);
+        t3.rotate(Math.toRadians(car.getRotation()),car.getReferenceX()*2,car.getReferenceY()/2);
+
+        viewer.operateUltraSoundSensor(g2d, car, 1, t3);
+
+
+        AffineTransform t4=new AffineTransform();
+        t4.translate(car.getPosX()  - car.getReferenceX()*2+ offsets[0],  car.getPosY() - car.getReferenceY()/2+ offsets[1]);
+        t4.rotate(Math.toRadians(car.getRotation()-180),car.getReferenceX()*2,car.getReferenceY()/2);
+
+        viewer.operateUltraSoundSensor(g2d, car, 1, t4);
+        AffineTransform t5=new AffineTransform();
+        t5.translate(car.getPosX()  - car.getReferenceX()*2+offsets[0],  car.getPosY() - car.getReferenceY()/2+ offsets[1]);
+        t5.rotate(Math.toRadians(car.getRotation()),car.getReferenceX()*2,car.getReferenceY()/2);
+
+        viewer.operateUltraSoundSensor(g2d, car, 4, t5);
+
+        AffineTransform t6=new AffineTransform();
+        t6.translate(car.getPosX()  - car.getReferenceX()*2+ offsets[0],  car.getPosY() - car.getReferenceY()/2+ offsets[1]);
+        t6.rotate(Math.toRadians(car.getRotation()-180),car.getReferenceX()*2,car.getReferenceY()/2);
+
+        viewer.operateUltraSoundSensor(g2d, car, 4, t6);
+
+
+
         viewer.detectObjects(world.getAllObjectsInRectangle(new hu.oe.nik.szfmv.automatedcar.model.Position(0,0),
                 new hu.oe.nik.szfmv.automatedcar.model.Position(this.world.getWidth(),this.world.getHeight())));
     }
