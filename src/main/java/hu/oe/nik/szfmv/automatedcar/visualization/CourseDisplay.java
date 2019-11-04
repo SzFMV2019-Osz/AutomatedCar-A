@@ -157,5 +157,7 @@ public class CourseDisplay extends JPanel {
 
         // Set debug viewer
         viewer.operateSensor(g2d, car, t1);
+        viewer.detectObjects(world.getAllObjectsInRectangle(new hu.oe.nik.szfmv.automatedcar.model.Position(0,0),
+                new hu.oe.nik.szfmv.automatedcar.model.Position(this.world.getWidth(),this.world.getHeight())));
     }
 }

@@ -2,19 +2,22 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
 import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDebugColorable;
+import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDetectedObjects;
 import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISensorAreaInterface;
 import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISwitchableDebugViewer;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.List;
 
 
 /**
  * Displays debugging-related information on the screen
  */
-public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISensorAreaInterface {
+public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISensorAreaInterface, IDetectedObjects {
 
     private static Color BASE_COLOR = Color.BLUE;
     private static Color SENSOR_TRIANGLE_BASE_COLOR = Color.RED;
@@ -30,6 +33,9 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     private static final int SENSOR_DIMENSION = 8;
     private Position sensorTriangleLeftTip;
     private Position sensorTriangleRightTip;
+
+    //"seen" object
+    public List<IObject> SeenObjects;
 
     /**
      * @return The information represening the color and borderline width of the object
@@ -52,6 +58,7 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     }
 
     public DebugViewer() {
+
     }
 
     /**
@@ -84,6 +91,7 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         if (debuggerSwitchedOn){
             updateSensorTrianglePosition();
             graphics2D.setColor(color);
+
             Shape leftLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
             Shape baseLine = new Line2D.Double(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY(), sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
             Shape rightLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
@@ -125,6 +133,19 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
             drawSensorBody(drawer, t);
             updateSensorTrianglePosition();
             drawSensorTriangle(sensorTriangleColor, t);
+        }
+    }
+
+    public void detectObjects(List<IObject> objects){
+        Polygon sensor = new Polygon();
+        sensor.addPoint(sensorPosition.getX(), sensorPosition.getY());
+        sensor.addPoint(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
+        sensor.addPoint(sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+
+        for (IObject object : objects){
+            if (sensor.contains(object.getPosX(), object.getPosY())){
+                SeenObjects.add(object);
+            }
         }
     }
 
