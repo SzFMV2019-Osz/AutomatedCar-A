@@ -83,10 +83,6 @@ public final class ModelCommonUtil {
         Area areaA = new Area(whereIn);
         areaA.intersect(new Area(shape));
         return !areaA.isEmpty();
-        // Line2D-knek 0 a widthje vagy heightja ezért nem adná vissza őket az intersect, ezért kerül rá correction
-        /*return whereIn.getBounds2D().intersects(shape.getBounds2D().getX(),
-                shape.getBounds2D().getY(), shape.getBounds2D().getWidth() + 1, shape.getBounds2D().getHeight() + 1)
-                || whereIn.getBounds2D().contains(shape.getBounds2D());*/
     }
 
     public static boolean isShapeInPolygonRoad(Shape shape, Shape whereIn) {
