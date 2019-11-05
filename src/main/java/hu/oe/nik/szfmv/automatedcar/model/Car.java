@@ -21,6 +21,7 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
 
     protected RoadSensor roadSensor;
     protected SignSensor signSensor;
+    protected boolean crashed;
 
     public Car() {
     }
@@ -46,7 +47,7 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
 
     @Override
     public void crashed() {
-
+        crashed = true;
     }
 
     public List<ISensor> getSensors() {
@@ -98,4 +99,22 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
                 return Consts.RES_IDENTIFIER_COLOR_WHITE_SUFFIX;
         }
     }
+
+    @Override
+    public void setPosY(int y)
+    {
+        if (!crashed) {
+            super.setPosY(y);
+        }
+    }
+
+    @Override
+    public void setPosX(int x)
+    {
+        if (!crashed) {
+            super.setPosX(x);
+        }
+    }
+    
+    
 }

@@ -2,6 +2,7 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
+import hu.oe.nik.szfmv.automatedcar.exceptions.CrashException;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
@@ -55,7 +56,7 @@ public class CourseDisplay extends JPanel {
      * @param g     {@link Graphics} object that can draw to the canvas
      * @param world {@link World} object that describes the virtual world
      */
-    private void paintComponent(Graphics g, WorldManager world) {
+    private void paintComponent(Graphics g, WorldManager world) throws CrashException {
 
         g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
     }
@@ -66,7 +67,7 @@ public class CourseDisplay extends JPanel {
      * @param world {@link World} object that describes the virtual world
      * @return the ready to render doubleBufferedScreen
      */
-    private BufferedImage renderDoubleBufferedScreen(WorldManager world) {
+    private BufferedImage renderDoubleBufferedScreen(WorldManager world) throws CrashException {
         BufferedImage doubleBufferedScreen = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) doubleBufferedScreen.getGraphics();
         Rectangle r = new Rectangle(0, 0, this.width, this.height);
@@ -82,7 +83,7 @@ public class CourseDisplay extends JPanel {
      * Draw objects from the world.
      * @param world World object.
      */
-    public void drawWorld(WorldManager world) {
+    public void drawWorld(WorldManager world) throws CrashException {
         this.world = world.getWorld();
         this.backgroundColor = Integer.valueOf(this.world.getColor().replace("#", "").toUpperCase(),
                 16);
@@ -127,12 +128,12 @@ public class CourseDisplay extends JPanel {
      * @param g2d Buffered image.
      * @param world World object which will be drawn.
      */
-    private void drawObjects(Graphics2D g2d, WorldManager world) {
+    private void drawObjects(Graphics2D g2d, WorldManager world) throws CrashException {
         int[] offsets = getCarOffset(world.getAutomatedCar());
 
         DebugViewer viewer = new DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
-        car.checkCollisions(world, offsets[0], offsets[1]);
+
         for (IObject object : world.getAllObjectsInRectangle(
                 new Position(0 - renderDistance, 0 - renderDistance),
                 new Position(this.width + renderDistance, this.height + renderDistance),
@@ -152,5 +153,7 @@ public class CourseDisplay extends JPanel {
 
         g2d.drawImage(car.getImage(), t1, this);
         //viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
+
+        car.checkCollisions(world, offsets[0], offsets[1]);
     }
 }

@@ -63,6 +63,7 @@ public final class Consts {
     public static final String XML_MS_DURATION_MESSAGE = "Az XML feldolgozása {0} ms-et vett igénybe.";
     public static final String XML_UNKNOWN_TYPE = "Ismeretlen típus található az XML-ben: {0}";
     public static final String XML_WORLD_OBJECT_NUMBER = "Beolvasott WorldObjectek száma: {0}";
+    public static final String CRASH_POPUP_MESSAGE = "Click 'Yes' to modify X coordinate OR click 'No' to modify Y coordinate";
 
     // --- Properties
 
