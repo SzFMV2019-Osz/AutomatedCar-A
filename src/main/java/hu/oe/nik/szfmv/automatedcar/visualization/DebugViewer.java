@@ -105,7 +105,7 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     }
     private void drawUltraSoundSensorTriangle( AffineTransform t){
         if (debuggerSwitchedOn){
-            updateSensorTrianglePosition(100,200);
+            updateSensorTrianglePosition(45,200);
             graphics2D.setColor(Color.green);
 
             Shape leftLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
@@ -171,7 +171,7 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         int sensorLength = lenght;
         int baseAngle = angle;
         Position sensorTriangleBasePoint = new Position(sensorPosition.getX(), sensorPosition.getY()-sensorLength);
-        int sensorTriangleBaseHalfLength = (int)(sensorLength/Math.cos(baseAngle));
+        int sensorTriangleBaseHalfLength = (int)(sensorLength*Math.tan(Math.toRadians(baseAngle)));
         sensorTriangleLeftTip = new Position(sensorTriangleBasePoint.getX()-sensorTriangleBaseHalfLength,sensorTriangleBasePoint.getY());
         sensorTriangleRightTip = new Position(sensorTriangleBasePoint.getX() + sensorTriangleBaseHalfLength, sensorTriangleBasePoint.getY());
     }
@@ -179,7 +179,7 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         if(debuggerSwitchedOn){
             updateSensorPosition(car,number);
             drawSensorBody(drawer, t);
-            updateSensorTrianglePosition(50,200);
+            updateSensorTrianglePosition(45,200);
             drawUltraSoundSensorTriangle(t);
         }
     }
