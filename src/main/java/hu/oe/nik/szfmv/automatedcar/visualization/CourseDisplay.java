@@ -8,6 +8,7 @@ import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
+import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
 import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
 
 import java.awt.*;
@@ -154,6 +155,7 @@ public class CourseDisplay extends JPanel {
         viewer.DrawPolygon(car.getPolygons(offsets[0], offsets[1]));
 
         g2d.drawImage(car.getImage(), t1, this);
+        viewer.setInfo(new DrawingInfo(Color.BLUE, 1));
         viewer.DrawPolygon(cameraTriangle);
         //viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
     }
