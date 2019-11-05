@@ -73,17 +73,11 @@ public class WorldManager {
     /**
      * Visszaadja az összes objektumot a három pont között.
      *
-     * @param pointA  Első pont.
-     * @param pointB  Második pont.
-     * @param pointC  Harmadik pont.
      * @param offsetX X irányú eltolás.
      * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a háromszögön belülre esnek.
      */
-    public List<IObject> getAllObjectsInTriangle(Position pointA, Position pointB, Position pointC,
-                                                 int offsetX, int offsetY) {
-        Polygon triangle = this.generateTriangle(pointA, pointB, pointC);
-
+    public List<IObject> getAllObjectsInTriangle(Shape triangle, int offsetX, int offsetY) {
         List<IObject> inTriangle = new ArrayList<>();
         for (IObject obj : this.currentWorld.getWorldObjects()) {
             if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), triangle)) {
@@ -91,15 +85,6 @@ public class WorldManager {
             }
         }
         return inTriangle;
-    }
-
-    public Polygon generateTriangle(Position pointA, Position pointB, Position pointC) {
-        Polygon triangle = new Polygon();
-        triangle.addPoint(pointA.getX(), pointA.getY());
-        triangle.addPoint(pointB.getX(), pointB.getY());
-        triangle.addPoint(pointC.getX(), pointC.getY());
-
-        return triangle;
     }
 
     /**
@@ -204,11 +189,11 @@ public class WorldManager {
      * @param offsetY        y offset.
      * @return minden sávérzékelő által érzékelt út.
      */
-    public List<IObject> getAllSensedRoads(Position trianglePointB, Position trianglePointC, int offsetX, int offsetY) {
+    public List<IObject> getAllSensedRoads(Shape triangle, int offsetX, int offsetY) {
         Optional<ISensor> sensor = this.automatedCar.getSensors().stream().filter(x -> x instanceof RoadSensor).findFirst();
         if (sensor.isPresent()) {
             return sensor.get().getAllSensedRelevantObjects(
-                    this, trianglePointB, trianglePointC, offsetX, offsetY);
+                    this, triangle, offsetX, offsetY);
         }
         return Collections.emptyList();
     }
@@ -222,11 +207,11 @@ public class WorldManager {
      * @param offsetY        y offset.
      * @return minden táblaérzékelő által érzékelt tábla.
      */
-    public List<IObject> getAllSensedSigns(Position trianglePointB, Position trianglePointC, int offsetX, int offsetY) {
+    public List<IObject> getAllSensedSigns(Shape triangle, int offsetX, int offsetY) {
         Optional<ISensor> sensor = this.automatedCar.getSensors().stream().filter(x -> x instanceof SignSensor).findFirst();
         if (sensor.isPresent()) {
             return sensor.get().getAllSensedRelevantObjects(
-                    this, trianglePointB, trianglePointC, offsetX, offsetY);
+                    this, triangle, offsetX, offsetY);
         }
         return Collections.emptyList();
     }
