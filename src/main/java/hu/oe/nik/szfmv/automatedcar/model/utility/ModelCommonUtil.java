@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -79,6 +80,16 @@ public final class ModelCommonUtil {
      * @return Igaz, ha teljesen vagy részletesen benne van, hamis ha nincs bent vagy csak a szélével érintkezik.
      */
     public static boolean isShapeInPolygon(Shape shape, Shape whereIn) {
+        Area areaA = new Area(whereIn);
+        areaA.intersect(new Area(shape));
+        return !areaA.isEmpty();
+        // Line2D-knek 0 a widthje vagy heightja ezért nem adná vissza őket az intersect, ezért kerül rá correction
+        /*return whereIn.getBounds2D().intersects(shape.getBounds2D().getX(),
+                shape.getBounds2D().getY(), shape.getBounds2D().getWidth() + 1, shape.getBounds2D().getHeight() + 1)
+                || whereIn.getBounds2D().contains(shape.getBounds2D());*/
+    }
+
+    public static boolean isShapeInPolygonRoad(Shape shape, Shape whereIn) {
         // Line2D-knek 0 a widthje vagy heightja ezért nem adná vissza őket az intersect, ezért kerül rá correction
         return whereIn.getBounds2D().intersects(shape.getBounds2D().getX(),
                 shape.getBounds2D().getY(), shape.getBounds2D().getWidth() + 1, shape.getBounds2D().getHeight() + 1)
@@ -87,6 +98,7 @@ public final class ModelCommonUtil {
 
     /**
      * Visszaadja, hogy a pont a shapere belül esik-e.
+     *
      * @param shape Adott shape.
      * @param point Point amire nézünk.
      * @return Igaz ha a polygonon belül van a pont, hamis ha rajta kívül vagy a vonalán.
