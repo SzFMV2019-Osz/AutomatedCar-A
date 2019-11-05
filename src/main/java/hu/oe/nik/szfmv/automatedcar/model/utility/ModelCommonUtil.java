@@ -143,7 +143,7 @@ public final class ModelCommonUtil {
     public static int getRandom(int maxNumber) {
         if (maxNumber < 1) {
             throw new IllegalArgumentException(
-                    MessageFormat.format(Consts.ERROR_LARGER_THAN_ONE, "Maximum"));
+                    MessageFormat.format(Consts.ERROR_GREATER_THAN_ONE, "Maximum"));
         }
         return RND.nextInt(maxNumber) + 1;
     }
