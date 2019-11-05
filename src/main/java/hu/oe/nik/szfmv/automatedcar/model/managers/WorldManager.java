@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.model.managers;
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.References;
+import hu.oe.nik.szfmv.automatedcar.model.Road;
 import hu.oe.nik.szfmv.automatedcar.model.RoadSensor;
 import hu.oe.nik.szfmv.automatedcar.model.SignSensor;
 import hu.oe.nik.szfmv.automatedcar.model.World;
@@ -80,7 +81,7 @@ public class WorldManager {
     public List<IObject> getAllObjectsInTriangle(Shape triangle, int offsetX, int offsetY) {
         List<IObject> inTriangle = new ArrayList<>();
         for (IObject obj : this.currentWorld.getWorldObjects()) {
-            if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), triangle)) {
+            if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), triangle, obj)) {
                 inTriangle.add(obj);
             }
         }
@@ -130,7 +131,19 @@ public class WorldManager {
         List<IObject> inRectangle = new ArrayList<>();
 
         for (IObject obj : this.currentWorld.getWorldObjects()) {
-            if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), rect)) {
+            if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), rect, obj)) {
+                inRectangle.add(obj);
+            }
+        }
+
+        return inRectangle;
+    }
+
+    public List<IObject> getAllObjectsInRectangle(Shape rect, int offsetX, int offsetY) {
+        List<IObject> inRectangle = new ArrayList<>();
+
+        for (IObject obj : this.currentWorld.getWorldObjects()) {
+            if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), rect, obj)) {
                 inRectangle.add(obj);
             }
         }
@@ -142,14 +155,12 @@ public class WorldManager {
      * Visszaadja az összes objektumot a négyzeten belül. Ha két víszintes vagy függőleges pontra eső vonalat kapunk
      * akkor pedig a vonalon levőket adja vissza helyesen elvileg!
      *
-     * @param pointA  A négyzet egyik pontja.
-     * @param pointB  A négyzet másik pontja.
      * @param offsetX X irányú eltolás.
      * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a négyzeten belül vannak.
      */
-    public List<ICrashable> getAllCrashableObjectsInRectangle(Position pointA, Position pointB, int offsetX, int offsetY) {
-        List<IObject> results = this.getAllObjectsInRectangle(pointA, pointB, offsetX, offsetY);
+    public List<ICrashable> getAllCrashableObjectsInRectangle(Shape rect, int offsetX, int offsetY) {
+        List<IObject> results = this.getAllObjectsInRectangle(rect, offsetX, offsetY);
         return results.stream().filter(o -> o instanceof ICrashable).map(o -> (ICrashable) o).collect(Collectors.toList());
     }
 
@@ -216,9 +227,14 @@ public class WorldManager {
         return Collections.emptyList();
     }
 
-    private boolean isObjectInShape(List<Shape> polygonsOfObject, Shape shape) {
+    private boolean isObjectInShape(List<Shape> polygonsOfObject, Shape shape, IObject object) {
+        boolean isRoad = object instanceof Road;
         for (Shape poly : polygonsOfObject) {
-            if (ModelCommonUtil.isShapeInPolygon(poly, shape)) {
+            if (isRoad) {
+                if (ModelCommonUtil.isShapeInPolygonRoad(poly, shape)) {
+                    return true;
+                }
+            } else if (ModelCommonUtil.isShapeInPolygon(poly, shape)) {
                 return true;
             }
         }

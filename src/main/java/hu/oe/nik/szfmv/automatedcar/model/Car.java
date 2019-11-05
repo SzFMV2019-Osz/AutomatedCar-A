@@ -45,7 +45,6 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
 
     @Override
     public void crashed() {
-
     }
 
     public List<ISensor> getSensors() {
@@ -96,5 +95,15 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
             default:
                 return Consts.RES_IDENTIFIER_COLOR_WHITE_SUFFIX;
         }
+    }
+
+    @Override
+    public void setPosY(int y) {
+        super.setPosY(y);
+    }
+
+    @Override
+    public void setPosX(int x) {
+        super.setPosX(x);
     }
 }

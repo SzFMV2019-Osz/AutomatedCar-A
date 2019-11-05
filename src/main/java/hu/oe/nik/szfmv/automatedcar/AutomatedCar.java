@@ -1,6 +1,9 @@
 package hu.oe.nik.szfmv.automatedcar;
 
-import hu.oe.nik.szfmv.automatedcar.model.*;
+import hu.oe.nik.szfmv.automatedcar.exceptions.CrashException;
+import hu.oe.nik.szfmv.automatedcar.model.Car;
+import hu.oe.nik.szfmv.automatedcar.model.RoadSensor;
+import hu.oe.nik.szfmv.automatedcar.model.SignSensor;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
@@ -62,17 +65,13 @@ public class AutomatedCar extends Car {
         return shapeTransform;
     }
 
-    public void checkCollisions(WorldManager manager, int offsetX, int offsetY) {
+    public void checkCollisions(WorldManager manager, int offsetX, int offsetY) throws CrashException {
         Shape carShape = this.getPolygons(offsetX, offsetY).get(0);
 
-        Position pointA = new Position((int) carShape.getBounds2D().getX(), (int) carShape.getBounds2D().getY());
-        Position pointB = new Position((int) (carShape.getBounds2D().getX() + carShape.getBounds2D().getWidth()), (int) (carShape.getBounds2D().getY() + carShape.getBounds2D().getY()));
-        List<ICrashable> collidedObjects = manager.getAllCrashableObjectsInRectangle(pointA, pointB, offsetX, offsetY);
+        List<ICrashable> collidedObjects = manager.getAllCrashableObjectsInRectangle(carShape, offsetX, offsetY);
 
         if (!collidedObjects.isEmpty()) {
-            for (ICrashable collidedObject : collidedObjects) {
-                collidedObject.crashed();
-            }
+            throw new CrashException("Oh oh, you crashed :(");
         }
     }
 

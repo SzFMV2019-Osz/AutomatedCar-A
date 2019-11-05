@@ -57,13 +57,14 @@ public final class Consts {
     public static final String ERROR_XML_WRITING_NOT_ALLOWED = "XML manipuláció/kiírás nem engedélyezett!";
     public static final String ERROR_IN_WORLDOBJECT_PARSING = "A WorldObjectek parseolása közben hiba lépett fel!";
     public static final String ERROR_IN_SHAPE_CREATION = "Nem sikerült a poligon beállítás a következő world objectnél: {0}";
-    public static final String ERROR_LARGER_THAN_ONE = "{0} nagyobb kell legyen 1-nél.";
+    public static final String ERROR_GREATER_THAN_ONE = "{0} nagyobb kell legyen 1-nél.";
 
     // --- Messages
 
     public static final String XML_MS_DURATION_MESSAGE = "Az XML feldolgozása {0} ms-et vett igénybe.";
     public static final String XML_UNKNOWN_TYPE = "Ismeretlen típus található az XML-ben: {0}";
     public static final String XML_WORLD_OBJECT_NUMBER = "Beolvasott WorldObjectek száma: {0}";
+    public static final String CRASH_POPUP_MESSAGE = "Click 'Yes' to modify X coordinate OR click 'No' to modify Y coordinate";
 
     // --- Properties
 
