@@ -26,7 +26,7 @@ public class Main {
     }
 
     private void init() {
-        AutomatedCar car = new AutomatedCar(225, 250, "car_2_white.png");
+        AutomatedCar car = new AutomatedCar(80, 80, "car_2_white.png");
         NPC walkerNPC = new NPC(new Position(1000, 100), 90, "woman.png", "walker_npc_road_1");
         NPC carNPC = new NPC(new Position(220, 824), 180, "car_2_blue.png", "car_npc_road_1");
         worldManager = new WorldManager("test_world", "reference_points");
