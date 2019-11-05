@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar;
 
+import hu.oe.nik.szfmv.automatedcar.exceptions.CrashException;
 import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.RoadSensor;
@@ -69,7 +70,7 @@ public class AutomatedCar extends Car {
         return shapeTransform;
     }
 
-    public void checkCollisions(WorldManager manager, int offsetX, int offsetY) {
+    public void checkCollisions(WorldManager manager, int offsetX, int offsetY) throws CrashException {
         Shape carShape = this.getPolygons(offsetX, offsetY).get(0);
 
         Position pointA = new Position((int) carShape.getBounds2D().getX(), (int) carShape.getBounds2D().getY());
@@ -77,9 +78,7 @@ public class AutomatedCar extends Car {
         List<ICrashable> collidedObjects = manager.getAllCrashableObjectsInRectangle(pointA, pointB, offsetX, offsetY);
 
         if (!collidedObjects.isEmpty()) {
-            for (ICrashable collidedObject : collidedObjects) {
-                this.crashed();
-            }
+            throw new CrashException("Oh oh, you crashed :(");
         }
     }
 }
