@@ -4,7 +4,6 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IDynamic;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ISensor;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
-import hu.oe.nik.szfmv.automatedcar.model.utility.CrashEventParams;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 
 import java.awt.Rectangle;
@@ -47,7 +46,7 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
     }
 
     @Override
-    public void crashed(CrashEventParams crashParams) {
+    public void crashed() {
         crashed = true;
     }
 

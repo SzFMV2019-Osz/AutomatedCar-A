@@ -78,7 +78,7 @@ public class AutomatedCar extends Car {
 
         if (!collidedObjects.isEmpty()) {
             for (ICrashable collidedObject : collidedObjects) {
-                collidedObject.crashed();
+                this.crashed();
             }
         }
     }
