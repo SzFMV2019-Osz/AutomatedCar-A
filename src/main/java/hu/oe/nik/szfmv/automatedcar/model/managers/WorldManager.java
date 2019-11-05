@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.model.managers;
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.References;
+import hu.oe.nik.szfmv.automatedcar.model.Road;
 import hu.oe.nik.szfmv.automatedcar.model.RoadSensor;
 import hu.oe.nik.szfmv.automatedcar.model.SignSensor;
 import hu.oe.nik.szfmv.automatedcar.model.World;
