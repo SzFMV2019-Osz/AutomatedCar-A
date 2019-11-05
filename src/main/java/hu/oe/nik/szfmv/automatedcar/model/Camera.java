@@ -52,13 +52,7 @@ public class Camera {
 
 
     public Shape loop(WorldManager manager, IObject parent, int offsetX, int offsetY, double rotation) {
-        Position pointA = new Position(this.getPosX() + offsetX, this.getPosY() + offsetY);
-        Position pointB = this.generateTriangleLeftPoint(offsetX, offsetY);
-        Position pointC = this.generateTriangleRightPoint(offsetX, offsetY);
-
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(rotation + 90), parent.getPosX() + offsetX, parent.getPosY() + offsetY); //TODO: remove +90 after TeamA3 merge
-        Shape cameraTriangle = transform.createTransformedShape(ModelCommonUtil.generateTriangle(pointA, pointB, pointC));
+        Shape cameraTriangle = this.generateCameraTriangle(parent, offsetX, offsetY, rotation);
 
         for (ISensor sensor : this.sensorList) {
             List<IObject> list = sensor.getAllSensedRelevantObjects(manager, cameraTriangle, offsetX, offsetY);
@@ -71,22 +65,35 @@ public class Camera {
         return cameraTriangle;
     }
 
+    private Shape generateCameraTriangle(IObject parent, int offsetX, int offsetY, double rotation) {
+        Position pointA = new Position(this.getPosX() + offsetX, this.getPosY() + offsetY);
+        Position pointB = this.generateTriangleLeftPoint(offsetX, offsetY);
+        Position pointC = this.generateTriangleRightPoint(offsetX, offsetY);
+
+        AffineTransform transform = new AffineTransform();
+        transform.rotate(Math.toRadians(rotation + 90), parent.getPosX() + offsetX, parent.getPosY() + offsetY); //TODO: remove +90 after TeamA3 merge
+
+        return transform.createTransformedShape(ModelCommonUtil.generateTriangle(pointA, pointB, pointC));
+    }
+
     private Position generateTriangleLeftPoint(int offsetX, int offsetY) {
-        int rangeModifier = this.CAMERA_RANGE * Consts.PIXEL_PER_METERS / 10; // TODO: remove range reduction
+        int rangeModifier = this.calculateRangeModifier();
         Position point = new Position(this.getPosX() + offsetX - this.calculateTriangleSide(rangeModifier, 30), this.getPosY() + offsetY - rangeModifier);
-        //TODO: rotate by car rotation
         return point;
     }
 
     private Position generateTriangleRightPoint(int offsetX, int offsetY) {
-        int rangeModifier = this.CAMERA_RANGE * Consts.PIXEL_PER_METERS / 10; // TODO: remove range reduction
+        int rangeModifier = this.calculateRangeModifier();
         Position point = new Position(this.getPosX() + offsetX + this.calculateTriangleSide(rangeModifier, 30), this.getPosY() + offsetY - rangeModifier);
-        //TODO: rotate by car rotation
         return point;
     }
 
     private int calculateTriangleSide(int b, double angle) {
         double angleInRad = Math.toRadians(angle);
         return (int) (b * Math.tan(angleInRad));
+    }
+
+    private int calculateRangeModifier() {
+        return this.CAMERA_RANGE * Consts.PIXEL_PER_METERS / 10; // TODO: remove range reduction;
     }
 }
