@@ -10,7 +10,7 @@ import javax.xml.bind.Unmarshaller;
 /**
  * Parkoló bólya alaposztály.
  */
-public class ParkingBollard extends WorldObject implements IStatic, ICrashable {
+public class ParkingBollard extends Crashable implements IStatic, ICrashable {
 
     /**
      * Ennél az objektumnál más az objektum neve az XML-ben, mint a hozzá tartozó kép neve.
@@ -23,14 +23,10 @@ public class ParkingBollard extends WorldObject implements IStatic, ICrashable {
         this.position.setZ(2);
     }
 
+    @Override
     public double getWeight() {
         //TODO
         return 0;
-    }
-
-    @Override
-    public void crashed() {
-
     }
 
     /**

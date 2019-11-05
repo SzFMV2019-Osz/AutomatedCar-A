@@ -9,15 +9,11 @@ import javax.xml.bind.Unmarshaller;
 /**
  * Tábla alaposztály.
  */
-public class Sign extends WorldObject implements IStatic, ICrashable {
-
-    public double getWeight() {
-        return 0;
-    }
+public class Sign extends Crashable implements IStatic, ICrashable {
 
     @Override
-    public void crashed() {
-
+    public double getWeight() {
+        return 0;
     }
 
     /**

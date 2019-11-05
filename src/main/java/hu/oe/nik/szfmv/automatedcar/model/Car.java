@@ -14,7 +14,7 @@ import javax.xml.bind.Unmarshaller;
 /**
  * Autó alaposztály.
  */
-public class Car extends WorldObject implements ICrashable, IDynamic {
+public class Car extends Crashable implements ICrashable, IDynamic {
 
     private static final int WIDTH_BORDER = 6;
     private static final int HEIGHT_BORDER = 1;

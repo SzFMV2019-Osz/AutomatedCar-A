@@ -9,16 +9,12 @@ import javax.xml.bind.Unmarshaller;
 /**
  * Fa objektum alaposztály.
  */
-public class Tree extends WorldObject implements IStatic, ICrashable {
+public class Tree extends Crashable implements IStatic, ICrashable {
 
+    @Override
     public double getWeight() {
         //TODO
         return 0;
-    }
-
-    @Override
-    public void crashed() {
-
     }
 
     /**
