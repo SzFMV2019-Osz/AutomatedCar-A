@@ -28,6 +28,11 @@ public class ParkingBollard extends WorldObject implements IStatic, ICrashable {
         return 0;
     }
 
+    @Override
+    public void crashed() {
+
+    }
+
     /**
      * {@inheritDoc}
      */

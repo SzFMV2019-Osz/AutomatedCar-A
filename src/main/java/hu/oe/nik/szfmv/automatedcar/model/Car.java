@@ -22,12 +22,14 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
     protected RoadSensor roadSensor;
     protected SignSensor signSensor;
 
-    public Car() { }
+    public Car() {
+    }
 
     /**
      * Konstruktor manuális létrehozáshoz.
-     * @param x X pozíció.
-     * @param y Y pozíció.
+     *
+     * @param x             X pozíció.
+     * @param y             Y pozíció.
      * @param imageFileName Kép file neve.
      */
     public Car(int x, int y, String imageFileName) {
@@ -36,13 +38,19 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
         this.referencePosition = new Position(this.width / 2, this.height / 2);
     }
 
+    @Override
     public double getWeight() {
         // TODO
         return 0;
     }
 
+    @Override
+    public void crashed() {
+
+    }
+
     public List<ISensor> getSensors() {
-        return Arrays.asList(roadSensor, signSensor);
+        return Arrays.asList(this.roadSensor, this.signSensor);
     }
 
     /**
@@ -58,33 +66,36 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
     public void afterUnmarshal(Unmarshaller u, Object parent) {
         switch (this.imageFileName) {
             case (Consts.RES_IDENTIFIER_CAR_1): {
-                this.imageFileName = generateFilename(1);
+                this.imageFileName = this.generateFilename(1);
                 break;
             }
             case (Consts.RES_IDENTIFIER_CAR_2): {
-                this.imageFileName = generateFilename(2);
+                this.imageFileName = this.generateFilename(2);
                 break;
             }
-            case (Consts.RES_IDENTIFIER_CAR_3):  {
+            case (Consts.RES_IDENTIFIER_CAR_3): {
                 this.imageFileName = Consts.RES_IDENTIFIER_CAR_BLACK;
                 break;
             }
             default: {
-                this.imageFileName = generateFilename(ModelCommonUtil.getRandom(2));
+                this.imageFileName = this.generateFilename(ModelCommonUtil.getRandom(2));
             }
         }
         super.afterUnmarshal(u, parent);
     }
-    
+
     private String generateFilename(int number) {
-        return Consts.RES_IDENTIFIER_CAR_PREFIX + number + getColor();
+        return Consts.RES_IDENTIFIER_CAR_PREFIX + number + this.getColor();
     }
-    
+
     private String getColor() {
         switch (ModelCommonUtil.getRandom(3)) {
-            case 1:  return Consts.RES_IDENTIFIER_COLOR_RED_SUFFIX;
-            case 2:  return Consts.RES_IDENTIFIER_COLOR_BLUE_SUFFIX;
-            default: return Consts.RES_IDENTIFIER_COLOR_WHITE_SUFFIX;
+            case 1:
+                return Consts.RES_IDENTIFIER_COLOR_RED_SUFFIX;
+            case 2:
+                return Consts.RES_IDENTIFIER_COLOR_BLUE_SUFFIX;
+            default:
+                return Consts.RES_IDENTIFIER_COLOR_WHITE_SUFFIX;
         }
     }
 }

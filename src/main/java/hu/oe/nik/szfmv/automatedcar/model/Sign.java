@@ -15,6 +15,11 @@ public class Sign extends WorldObject implements IStatic, ICrashable {
         return 0;
     }
 
+    @Override
+    public void crashed() {
+
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -31,6 +36,6 @@ public class Sign extends WorldObject implements IStatic, ICrashable {
     public void initShape() {
         int x = this.width / 2 - 5;
         int y = this.height / 2 - 5;
-        this.polygons.add(new Ellipse2D.Float(x,y, 10, 10));
+        this.polygons.add(new Ellipse2D.Float(x, y, 10, 10));
     }
 }

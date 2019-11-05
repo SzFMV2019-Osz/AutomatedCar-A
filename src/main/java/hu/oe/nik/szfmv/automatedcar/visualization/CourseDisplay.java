@@ -132,6 +132,7 @@ public class CourseDisplay extends JPanel {
 
         DebugViewer viewer = new DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
+        car.checkCollisions(world, offsets[0], offsets[1]);
         for (IObject object : world.getAllObjectsInRectangle(
                 new Position(0 - renderDistance, 0 - renderDistance),
                 new Position(this.width + renderDistance, this.height + renderDistance),
