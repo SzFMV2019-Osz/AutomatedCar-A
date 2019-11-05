@@ -117,6 +117,15 @@ public final class ModelCommonUtil {
         return p;
     }
 
+    public static Polygon generateTriangle(Position pointA, Position pointB, Position pointC) {
+        Polygon triangle = new Polygon();
+        triangle.addPoint(pointA.getX(), pointA.getY());
+        triangle.addPoint(pointB.getX(), pointB.getY());
+        triangle.addPoint(pointC.getX(), pointC.getY());
+
+        return triangle;
+    }
+
     /**
      * @param topLeftX bal felső sarok X koordinátája
      * @param topLeftY bal felső sarok Y koordinátája
