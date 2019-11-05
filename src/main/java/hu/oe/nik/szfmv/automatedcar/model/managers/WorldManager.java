@@ -82,10 +82,7 @@ public class WorldManager {
      */
     public List<IObject> getAllObjectsInTriangle(Position pointA, Position pointB, Position pointC,
                                                  int offsetX, int offsetY) {
-        Polygon triangle = new Polygon();
-        triangle.addPoint(pointA.getX(), pointA.getY());
-        triangle.addPoint(pointB.getX(), pointB.getY());
-        triangle.addPoint(pointC.getX(), pointC.getY());
+        Polygon triangle = this.generateTriangle(pointA, pointB, pointC);
 
         List<IObject> inTriangle = new ArrayList<>();
         for (IObject obj : this.currentWorld.getWorldObjects()) {
@@ -94,6 +91,15 @@ public class WorldManager {
             }
         }
         return inTriangle;
+    }
+
+    public Polygon generateTriangle(Position pointA, Position pointB, Position pointC) {
+        Polygon triangle = new Polygon();
+        triangle.addPoint(pointA.getX(), pointA.getY());
+        triangle.addPoint(pointB.getX(), pointB.getY());
+        triangle.addPoint(pointC.getX(), pointC.getY());
+
+        return triangle;
     }
 
     /**

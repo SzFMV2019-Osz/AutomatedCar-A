@@ -10,12 +10,10 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 
@@ -42,10 +40,10 @@ public class CourseDisplay extends JPanel {
         //this.width = this.world.getWidth();
         //this.height = this.world.getHeight();
 
-        setDoubleBuffered(true);
-        setLayout(null);
-        setBounds(0, 0, this.width, this.height);
-        parent = pt;
+        this.setDoubleBuffered(true);
+        this.setLayout(null);
+        this.setBounds(0, 0, this.width, this.height);
+        this.parent = pt;
     }
 
 
@@ -57,7 +55,7 @@ public class CourseDisplay extends JPanel {
      */
     private void paintComponent(Graphics g, WorldManager world) {
 
-        g.drawImage(renderDoubleBufferedScreen(world), 0, 0, this);
+        g.drawImage(this.renderDoubleBufferedScreen(world), 0, 0, this);
     }
 
     /**
@@ -70,28 +68,30 @@ public class CourseDisplay extends JPanel {
         BufferedImage doubleBufferedScreen = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = (Graphics2D) doubleBufferedScreen.getGraphics();
         Rectangle r = new Rectangle(0, 0, this.width, this.height);
-        g2d.setPaint(new Color(backgroundColor));
+        g2d.setPaint(new Color(this.backgroundColor));
         g2d.fill(r);
 
-        drawObjects(g2d, world);
+        this.drawObjects(g2d, world);
 
         return doubleBufferedScreen;
     }
 
     /**
      * Draw objects from the world.
+     *
      * @param world World object.
      */
     public void drawWorld(WorldManager world) {
         this.world = world.getWorld();
         this.backgroundColor = Integer.valueOf(this.world.getColor().replace("#", "").toUpperCase(),
                 16);
-        paintComponent(getGraphics(), world);
+        this.paintComponent(this.getGraphics(), world);
 
     }
 
     /**
      * Calculates the offset which will be used to move every object to virtualy center the AutomatedCar.
+     *
      * @param car Automated car which needs to be centered.
      * @return Returns an array. [xOffset, yOffset].
      */
@@ -106,6 +106,7 @@ public class CourseDisplay extends JPanel {
 
     /**
      * Selects the AutomatedCar object from the list and returns with it.
+     *
      * @param objects WorldObjects in an array.
      * @return Returns the AutomatedCar object from the list.
      */
@@ -114,7 +115,7 @@ public class CourseDisplay extends JPanel {
 
         for (WorldObject item : objects) {
             if (item instanceof AutomatedCar) {
-                findCar = (AutomatedCar)item;
+                findCar = (AutomatedCar) item;
                 break;
             }
         }
@@ -124,18 +125,20 @@ public class CourseDisplay extends JPanel {
 
     /**
      * Draw every object to the world. Center the car object and offset the others according to this.
-     * @param g2d Buffered image.
+     *
+     * @param g2d   Buffered image.
      * @param world World object which will be drawn.
      */
     private void drawObjects(Graphics2D g2d, WorldManager world) {
-        int[] offsets = getCarOffset(world.getAutomatedCar());
+        int[] offsets = this.getCarOffset(world.getAutomatedCar());
 
         DebugViewer viewer = new DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
         car.checkCollisions(world, offsets[0], offsets[1]);
+        Polygon cameraTriangle = car.checkCamera(world, offsets[0], offsets[1]);
         for (IObject object : world.getAllObjectsInRectangle(
-                new Position(0 - renderDistance, 0 - renderDistance),
-                new Position(this.width + renderDistance, this.height + renderDistance),
+                new Position(0 - this.renderDistance, 0 - this.renderDistance),
+                new Position(this.width + this.renderDistance, this.height + this.renderDistance),
                 offsets[0], offsets[1])) {
             AffineTransform t = object.getTransform(offsets[0], offsets[1]);
 
@@ -149,6 +152,9 @@ public class CourseDisplay extends JPanel {
         // Draw car
         AffineTransform t1 = car.getTransform(offsets[0], offsets[1]);
         viewer.DrawPolygon(car.getPolygons(offsets[0], offsets[1]));
+        List<Shape> tempList = new ArrayList<Shape>();
+        tempList.add(t1.createTransformedShape(cameraTriangle));
+        viewer.DrawPolygon(tempList);
 
         g2d.drawImage(car.getImage(), t1, this);
         //viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
