@@ -127,7 +127,7 @@ class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISensorAre
     }
 
 
-    public void operateSensor(Graphics2D drawer, AutomatedCar car, AffineTransform t){
+    public void operateFrontalRadarSensor(Graphics2D drawer, AutomatedCar car, AffineTransform t){
         if(debuggerSwitchedOn){
             updateSensorPosition(car);
             drawSensorBody(drawer, t);

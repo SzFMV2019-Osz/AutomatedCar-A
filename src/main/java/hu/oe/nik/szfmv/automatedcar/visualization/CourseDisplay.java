@@ -7,7 +7,6 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
-import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISensorAreaInterface;
 
 import javax.swing.*;
 import java.awt.*;
@@ -156,7 +155,7 @@ public class CourseDisplay extends JPanel {
         g2d.drawImage(car.getImage(), t1, this);
 
         // Set debug viewer
-        viewer.operateSensor(g2d, car, t1);
+        viewer.operateFrontalRadarSensor(g2d, car, t1);
         viewer.detectObjects(world.getAllObjectsInRectangle(new hu.oe.nik.szfmv.automatedcar.model.Position(0,0),
                 new hu.oe.nik.szfmv.automatedcar.model.Position(this.world.getWidth(),this.world.getHeight())));
     }
