@@ -3,16 +3,16 @@ package hu.oe.nik.szfmv.automatedcar.model;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IBackground;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
 
-import javax.xml.bind.Unmarshaller;
 import java.awt.Rectangle;
+import javax.xml.bind.Unmarshaller;
 
 /**
  * Gyalogos átkelőhely alaposztály.
  */
 public class Crosswalk extends WorldObject implements IStatic, IBackground {
 
-    private final int WIDTH_BORDER = 4;
-    private final int HEIGHT_BORDER = 4;
+    private static final int WIDTH_BORDER = 4;
+    private static final int HEIGHT_BORDER = 4;
 
     /**
      * {@inheritDoc}

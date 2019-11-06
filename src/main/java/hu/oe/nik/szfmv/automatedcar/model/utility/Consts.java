@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
+@SuppressWarnings("ALL")
 public final class Consts {
 
     // --- Values
@@ -7,6 +8,7 @@ public final class Consts {
     public static final double MIN_DEGREE = 0;
     public static final double MAX_DEGREE = 360;
     public static final String DEFAULT_VALUE_FOR_REFERENCE = "0";
+    public static final int PIXEL_PER_METERS = 50;
 
     // --- Resources
 
@@ -32,6 +34,14 @@ public final class Consts {
     public static final String RES_IDENTIFIER_CROSSWALK = "crosswalk";
     public static final String RES_IDENTIFIER_SIGN = "roadsign";
     public static final String RES_IDENTIFIER_CAR = "car";
+    public static final String RES_IDENTIFIER_CAR_1 = "car1";
+    public static final String RES_IDENTIFIER_CAR_2 = "car2";
+    public static final String RES_IDENTIFIER_CAR_3 = "car3";
+    public static final String RES_IDENTIFIER_CAR_PREFIX = "car_";
+    public static final String RES_IDENTIFIER_CAR_BLACK = "car_3_black";
+    public static final String RES_IDENTIFIER_COLOR_RED_SUFFIX = "_red";
+    public static final String RES_IDENTIFIER_COLOR_WHITE_SUFFIX = "_white";
+    public static final String RES_IDENTIFIER_COLOR_BLUE_SUFFIX = "_blue";
     public static final String RES_IDENTIFIER_BOLLARD = "parking_bollard";
     public static final String XML_ATTRIBUTE_TYPE = "type";
     public static final String XML_ATTRIBUTE_NAME = "name";
@@ -47,12 +57,14 @@ public final class Consts {
     public static final String ERROR_XML_WRITING_NOT_ALLOWED = "XML manipuláció/kiírás nem engedélyezett!";
     public static final String ERROR_IN_WORLDOBJECT_PARSING = "A WorldObjectek parseolása közben hiba lépett fel!";
     public static final String ERROR_IN_SHAPE_CREATION = "Nem sikerült a poligon beállítás a következő world objectnél: {0}";
+    public static final String ERROR_GREATER_THAN_ONE = "{0} nagyobb kell legyen 1-nél.";
 
     // --- Messages
 
     public static final String XML_MS_DURATION_MESSAGE = "Az XML feldolgozása {0} ms-et vett igénybe.";
     public static final String XML_UNKNOWN_TYPE = "Ismeretlen típus található az XML-ben: {0}";
     public static final String XML_WORLD_OBJECT_NUMBER = "Beolvasott WorldObjectek száma: {0}";
+    public static final String CRASH_POPUP_MESSAGE = "Click 'Yes' to modify X coordinate OR click 'No' to modify Y coordinate";
 
     // --- Properties
 
