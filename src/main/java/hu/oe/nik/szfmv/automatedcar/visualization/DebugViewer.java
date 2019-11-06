@@ -129,17 +129,14 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     private void updateSensorPosition(AutomatedCar car, int number){
         switch (number){
             case 1:
-              //  sensorPosition=new Position(0,0);
+
                 sensorPosition = new Position(0,0);
                 break;
             case 2:
-                sensorPosition=new Position(car.getReferenceX()*2,0);
+                sensorPosition=new Position(car.getWidth(),0);
                 break;
             case 3:
-                sensorPosition=new Position(0,car.getReferenceY());
-                break;
-            case 4:
-                sensorPosition=new Position(car.getReferenceX()*4, 0);
+                sensorPosition=new Position(car.getHeight(), 0);
                 break;
         }
 
