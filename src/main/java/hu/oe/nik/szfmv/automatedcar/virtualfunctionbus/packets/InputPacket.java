@@ -15,12 +15,16 @@ public class InputPacket implements OutgoingInputPacket {
     private boolean accState = false;
     private boolean laneKeepingState = false;
     private boolean parkingState = false;
+    private boolean debugon=true;
     private double accTimegap = 0.8;
     private int accSpeed = 50;
 
     public void setGasPedalValue(int value) {
         gasPedalValue = value;
     }
+    @Override
+    public boolean getDebugOn(){return debugon;}
+    public void setDebugOn(){debugon=!debugon; }
 
     @Override
     public int getGasPedalValue() {

@@ -11,6 +11,7 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
 import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -30,6 +31,8 @@ public class CourseDisplay extends JPanel {
     private Gui parent;
     private IWorld world;
     private int renderDistance = 300;
+    private boolean showDebugSensors;
+    private InputPacket inputPacket;
 
     /**
      * Initialize the course display
@@ -46,6 +49,8 @@ public class CourseDisplay extends JPanel {
         this.setLayout(null);
         this.setBounds(0, 0, this.width, this.height);
         this.parent = pt;
+        showDebugSensors=false;
+
     }
 
 
@@ -83,10 +88,11 @@ public class CourseDisplay extends JPanel {
      *
      * @param world World object.
      */
-    public void drawWorld(WorldManager world) throws CrashException {
+    public void drawWorld(WorldManager world, InputPacket inputPacket) throws CrashException {
         this.world = world.getWorld();
         this.backgroundColor = Integer.valueOf(this.world.getColor().replace("#", "").toUpperCase(),
                 16);
+        this.inputPacket=inputPacket;
         this.paintComponent(this.getGraphics(), world);
 
     }
@@ -159,6 +165,7 @@ public class CourseDisplay extends JPanel {
         g2d.drawImage(car.getImage(), t1, this);
 
         viewer.setInfo(new DrawingInfo(Color.BLUE, 4));
+        viewer.setDebuggerSwitchedOn(inputPacket.getDebugOn());
         viewer.DrawPolygon(car.getCameraTriangle(offsets[0], offsets[1]));
         for (List<Shape> shape : sensedObjects) {
             viewer.DrawPolygon(shape);
@@ -174,4 +181,6 @@ public class CourseDisplay extends JPanel {
 
         car.checkCollisions(world, offsets[0], offsets[1]);
     }
+
 }
+

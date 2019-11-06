@@ -56,7 +56,7 @@ public class Main {
                     npc.move();
                 }
                 // TODO IWorld-öt használjon a drawWorld
-                this.window.getCourseDisplay().drawWorld((this.worldManager));
+                this.window.getCourseDisplay().drawWorld((this.worldManager),window.getVirtualFunctionBus().inputPacket);
                 // TODO window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
