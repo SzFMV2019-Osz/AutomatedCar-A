@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.model;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 
+import java.awt.Rectangle;
 import java.util.List;
 
 public class NPC extends WorldObject implements ICrashable {
