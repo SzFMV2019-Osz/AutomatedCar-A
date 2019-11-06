@@ -3,7 +3,10 @@ package hu.oe.nik.szfmv.automatedcar;
 import hu.oe.nik.szfmv.automatedcar.exceptions.CrashException;
 import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.model.Camera;
+import hu.oe.nik.szfmv.automatedcar.model.Position;
+import hu.oe.nik.szfmv.automatedcar.model.UltraSound;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
@@ -23,6 +26,7 @@ public class AutomatedCar extends Car {
 
     private static final int REFRESH_RATE = 10;
     private Powertrain pt;
+    private IObject closestObject;
 
     @XmlTransient
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
@@ -114,8 +118,28 @@ public class AutomatedCar extends Car {
     public List<List<Shape>> checkUltraSound(WorldManager manager, int offsetX, int offsetY) {
         List<List<Shape>> ultraSoundObjects = new ArrayList<>();
         for (int i = 0; i < ultraSounds.size(); i++) {
-            ultraSoundObjects.addAll(ultraSounds.get(i).loop(manager, this, offsetX, offsetY).stream().map(o -> o.getPolygons(offsetX, offsetY)).collect(Collectors.toList()));
+            List<IObject> objects = ultraSounds.get(i).loop(manager, this, offsetX, offsetY);
+            ultraSoundObjects.addAll(objects.stream().map(o -> o.getPolygons(offsetX, offsetY)).collect(Collectors.toList()));
+            for (int j = 0; j < objects.size(); j++) {
+                Position objectPos = new Position(objects.get(j).getPosX(), objects.get(j).getPosY());
+                Position carPos = new Position(this.getPosX(), this.getPosY());
+                Position closestObjPos;
+                if(closestObject != null) {
+                    closestObjPos = new Position(closestObject.getPosX(), closestObject.getPosY());
+                } else {
+                    closestObjPos = new Position(objects.get(j).getPosX(), objects.get(j).getPosY());
+                    closestObject = objects.get(j);
+                }
+
+                double distanceOfObject = Math.sqrt(Math.pow(carPos.getX() - objectPos.getX(),2) + Math.pow(carPos.getY() - objectPos.getY(),2));
+                double distanceOfClosest = Math.sqrt(Math.pow(carPos.getX() - closestObjPos.getX(),2) + Math.pow(carPos.getY() - closestObjPos.getY(),2));
+
+                if(distanceOfObject<distanceOfClosest) {
+                    closestObject = objects.get(j);
+                }
+            }
         }
+        System.out.println(closestObject);
         return ultraSoundObjects;
     }
 

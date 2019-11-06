@@ -1,6 +1,5 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
-import hu.oe.nik.szfmv.automatedcar.UltraSound;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IDynamic;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ISensor;
@@ -9,7 +8,6 @@ import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.xml.bind.Unmarshaller;
 
