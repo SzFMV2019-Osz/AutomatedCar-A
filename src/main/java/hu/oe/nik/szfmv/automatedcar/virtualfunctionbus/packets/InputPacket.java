@@ -16,6 +16,8 @@ public class InputPacket implements OutgoingInputPacket {
     private boolean laneKeepingState = false;
     private boolean parkingState = false;
     private boolean debugon=true;
+    private boolean debugCamon = true;
+    private boolean debugUltraon = true;
     private double accTimegap = 0.8;
     private int accSpeed = 50;
 
@@ -25,6 +27,25 @@ public class InputPacket implements OutgoingInputPacket {
     @Override
     public boolean getDebugOn(){return debugon;}
     public void setDebugOn(){debugon=!debugon; }
+
+
+    @Override
+    public boolean getDebugCameraOn() {
+        return this.debugCamon;
+    }
+
+    public void setDebugCameraOn() {
+        this.debugCamon = !this.debugCamon;
+    }
+
+    @Override
+    public boolean getDebugUltrasoundOn() {
+        return this.debugUltraon;
+    }
+
+    public void setDebugUltrasoundOn() {
+        this.debugUltraon = !this.debugUltraon;
+    }
 
     @Override
     public int getGasPedalValue() {

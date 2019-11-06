@@ -113,6 +113,12 @@ public class InputManager extends SystemComponent {
             case KeyEvent.VK_I:
                 inputPacket.setDebugOn();
                 break;
+            case KeyEvent.VK_K:
+                this.inputPacket.setDebugCameraOn();
+                break;
+            case KeyEvent.VK_U:
+                this.inputPacket.setDebugUltrasoundOn();
+                break;
         }
     }
 }
