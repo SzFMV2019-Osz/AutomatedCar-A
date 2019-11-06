@@ -22,9 +22,9 @@ public class UltraSound {
         this.sensorList = new ArrayList<>();
         this.rotation = rotation;
 
-        SignSensor signSensor = new SignSensor();
-        signSensor.setPos(x + offsetX, y + offsetY);
-        this.sensorList.add(signSensor);
+        UltraSoundSensor crashSensor = new UltraSoundSensor();
+        crashSensor.setPos(x + offsetX, y + offsetY);
+        this.sensorList.add(crashSensor);
 
         this.pos = new Position(x + offsetX, y + offsetY);
     }
