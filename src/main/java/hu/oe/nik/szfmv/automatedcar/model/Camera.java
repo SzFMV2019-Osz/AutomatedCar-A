@@ -58,6 +58,7 @@ public class Camera {
             List<IObject> list = sensor.getAllSensedRelevantObjects(manager, cameraTriangle, offsetX, offsetY);
 
             if (!list.isEmpty()) {
+                sensor.handleSensedObjects(list);
                 System.out.println("Objects found");
             }
         }

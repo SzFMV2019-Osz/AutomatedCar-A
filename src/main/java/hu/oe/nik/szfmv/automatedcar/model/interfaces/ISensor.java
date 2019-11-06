@@ -8,6 +8,8 @@ import java.util.List;
 public interface ISensor {
 
     List<IObject> getAllSensedRelevantObjects(WorldManager currentWorld, Shape triangle, int offsetX, int offsetY);
+    
+    void handleSensedObjects(List<IObject> sensedObjects);
 
     int getPosX();
 
