@@ -2,17 +2,19 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
+import hu.oe.nik.szfmv.automatedcar.model.Ultrasound;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
 import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDebugColorable;
 import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDetectedObjects;
 import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISensorAreaInterface;
 import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISwitchableDebugViewer;
+import org.w3c.dom.css.Rect;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
+import java.awt.geom.*;
+import java.io.Console;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,9 +37,11 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     private static final int SENSOR_DIMENSION = 8;
     private Position sensorTriangleLeftTip;
     private Position sensorTriangleRightTip;
+    private Position carPosition;
 
     //"seen" object
     public List<IObject> SeenObjects;
+    private Ultrasound ultrasoundSensor = new Ultrasound();
 
     /**
      * @return The information represening the color and borderline width of the object
@@ -88,7 +92,6 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         }
     }
 
-
     private void drawSensorTriangle(Color color, AffineTransform t){
         if (debuggerSwitchedOn){
             updateSensorTrianglePosition();
@@ -103,6 +106,11 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
             graphics2D.draw(t.createTransformedShape(rightLine));
         }
     }
+
+    Position absoluteBasePoint;
+    Position absoluteLeftPoint;
+    Position absoluteRightPoint;
+
     private void drawUltraSoundSensorTriangle( AffineTransform t){
         if (debuggerSwitchedOn){
             updateSensorTrianglePosition(45,200);
@@ -118,14 +126,12 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         }
     }
 
-
-
-
     private void updateSensorPosition(AutomatedCar car){
         // the center of the car bumper is the same x as the car refX and hal the car refY
         // the sensor is going to be on the same layer (z) as the car
         sensorPosition = new Position(car.getReferenceX(), car.getReferenceY() - car.getHeight()/2);
     }
+    private Position referencePointCar;
     private void updateSensorPosition(AutomatedCar car, int number){
         switch (number){
             case 1:
@@ -139,7 +145,8 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
                 sensorPosition=new Position(car.getHeight(), 0);
                 break;
         }
-
+        carPosition = new Position(car.getPosX(), car.getPosY());
+        referencePointCar = new Position(car.getReferenceX(), car.getReferenceY());
     }
 
    private void updateSensorTrianglePosition(){
@@ -169,9 +176,15 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         int baseAngle = angle;
         Position sensorTriangleBasePoint = new Position(sensorPosition.getX(), sensorPosition.getY()-sensorLength);
         int sensorTriangleBaseHalfLength = (int)(sensorLength*Math.tan(Math.toRadians(baseAngle)));
-        sensorTriangleLeftTip = new Position(sensorTriangleBasePoint.getX()-sensorTriangleBaseHalfLength,sensorTriangleBasePoint.getY());
+        sensorTriangleLeftTip = new Position(sensorTriangleBasePoint.getX() - sensorTriangleBaseHalfLength, sensorTriangleBasePoint.getY());
         sensorTriangleRightTip = new Position(sensorTriangleBasePoint.getX() + sensorTriangleBaseHalfLength, sensorTriangleBasePoint.getY());
+
+        absoluteBasePoint = new Position(carPosition.getX() - referencePointCar.getX(), carPosition.getY() + referencePointCar.getY());
+        absoluteLeftPoint = new Position(absoluteBasePoint.getX() + sensorTriangleBaseHalfLength, absoluteBasePoint.getY() - sensorTriangleLeftTip.getY());
+        absoluteRightPoint = new Position(absoluteBasePoint.getX() + sensorTriangleBaseHalfLength, absoluteBasePoint.getY() + sensorTriangleRightTip.getY());
+        ultrasoundSensor.saveTriangle(absoluteBasePoint, absoluteLeftPoint, absoluteRightPoint);
     }
+
     public void operateUltraSoundSensor(Graphics2D drawer, AutomatedCar car,int number, AffineTransform t){
         if(debuggerSwitchedOn){
             updateSensorPosition(car,number);
@@ -199,6 +212,27 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
             if (sensor.contains(object.getPosX(), object.getPosY())){
                 SeenObjects.add(object);
             }
+        }
+    }
+
+    public void detectUltraSoundObjects(List<IObject> objects){
+        ultrasoundSensor.resetDetectedObjects();
+
+        for (int i = 0; i < ultrasoundSensor.sensors.length; i++) {
+            Polygon sensor = new Polygon();
+            List<IObject> detectedObjects = new ArrayList<>();
+            sensor.addPoint(ultrasoundSensor.sensors[i].getBase().getX(), ultrasoundSensor.sensors[i].getBase().getY());
+            sensor.addPoint(ultrasoundSensor.sensors[i].getLeft().getX(), ultrasoundSensor.sensors[i].getLeft().getY());
+            sensor.addPoint(ultrasoundSensor.sensors[i].getRight().getX(), ultrasoundSensor.sensors[i].getRight().getY());
+
+            for (IObject object : objects) {
+
+                if (sensor.contains(object.getPosX(), object.getPosY())){
+                    detectedObjects.add(object);
+                    System.out.println(i + " "+object);
+                }
+            }
+            ultrasoundSensor.addDetectedObjects(detectedObjects);
         }
     }
 

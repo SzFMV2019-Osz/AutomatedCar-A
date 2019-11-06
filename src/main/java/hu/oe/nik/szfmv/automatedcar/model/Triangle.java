@@ -1,6 +1,9 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import java.awt.*;
+
 public class Triangle {
+    /*
     int aX, aY, bX, bY, cX, cY;
 
     public int getaX() {
@@ -65,5 +68,37 @@ public class Triangle {
            bY = aY + height * (int)Math.sin(Math.toRadians((double)(outerDegree + (degree /2))));
            cX = aX + height * (int)Math.cos(Math.toRadians((double)(outerDegree - (degree /2))));
            cY = aY + height * (int)Math.sin(Math.toRadians((double)(outerDegree - (degree /2))));
+    } */
+
+    private Position base;
+    private Position left;
+    private Position right;
+
+    public Triangle() {
+        base = new Position();
+        base = new Position();
+        base = new Position();
+    }
+
+    public void setBase(Position value) {
+        base = value;
+    }
+    public void setLeft(Position value) {
+        left = value;
+    }
+    public void setRight(Position value) {
+        right = value;
+    }
+
+    public Position getBase() {
+        return base;
+    }
+
+    public Position getLeft() {
+        return left;
+    }
+
+    public Position getRight() {
+        return right;
     }
 }

@@ -191,5 +191,8 @@ public class CourseDisplay extends JPanel {
 
         viewer.detectObjects(world.getAllObjectsInRectangle(new hu.oe.nik.szfmv.automatedcar.model.Position(0,0),
                 new hu.oe.nik.szfmv.automatedcar.model.Position(this.world.getWidth(),this.world.getHeight())));
+
+        viewer.detectUltraSoundObjects(world.getAllObjectsInRectangle(new hu.oe.nik.szfmv.automatedcar.model.Position(0,0),
+                new hu.oe.nik.szfmv.automatedcar.model.Position(this.world.getWidth(),this.world.getHeight())));
     }
 }
