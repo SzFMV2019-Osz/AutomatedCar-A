@@ -11,7 +11,7 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import javax.xml.bind.annotation.XmlTransient;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
@@ -24,13 +24,14 @@ public class AutomatedCar extends Car {
     private static final int REFRESH_RATE = 10;
     private Powertrain pt;
 
+    @XmlTransient
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
 
     public AutomatedCar(int x, int y, String imageFileName) {
         super(x, y, imageFileName);
 
-        new Driver(this.virtualFunctionBus);
-        this.pt = new Powertrain(this.virtualFunctionBus, REFRESH_RATE, x, y, (float) this.getRotation(), this.getHeight());
+        new Driver(virtualFunctionBus);
+        pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(),getHeight(), getWidth());
         this.camera = new Camera(x, y);
         this.ultraSounds.add( new UltraSound(x,y,-44,-104,90)); //front-left
         this.ultraSounds.add( new UltraSound(x,y,+44,-104,90)); //front-right
@@ -52,11 +53,10 @@ public class AutomatedCar extends Car {
     }
 
     private void calculatePositionAndOrientation() {
-        var movingVector = this.virtualFunctionBus.powertrainPacket.getMovingVector();
-        this.setPosX(this.getPosX() + (int) movingVector.getX());
-        this.setPosY(this.getPosY() + (int) movingVector.getY());
-        this.setRotation(this.pt.getAutoSzoge());
-
+        var movingVector = virtualFunctionBus.powertrainPacket.getMovingVector();
+        this.setPosX(this.getPosX() + (int)movingVector.getX());
+        this.setPosY(this.getPosY() + (int)movingVector.getY());
+        setRotation(pt.getCarRotation());
         this.camera.setPos(this.camera.getPosX() + (int) movingVector.getX(),
                 this.camera.getPosY() + (int) movingVector.getY());
 

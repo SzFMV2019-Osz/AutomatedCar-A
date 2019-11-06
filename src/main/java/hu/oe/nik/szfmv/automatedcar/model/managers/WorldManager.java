@@ -7,6 +7,7 @@ import hu.oe.nik.szfmv.automatedcar.model.Road;
 import hu.oe.nik.szfmv.automatedcar.model.RoadSensor;
 import hu.oe.nik.szfmv.automatedcar.model.SignSensor;
 import hu.oe.nik.szfmv.automatedcar.model.World;
+import hu.oe.nik.szfmv.automatedcar.model.NPC;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
@@ -32,6 +33,7 @@ public class WorldManager {
 
     private World currentWorld;
     private AutomatedCar automatedCar;
+    private ArrayList<NPC> npcs;
 
     /**
      * Inicializálja a világot a kapott file-ok alapján.
@@ -43,6 +45,8 @@ public class WorldManager {
     public WorldManager(String worldFileName, String referenceFileName) {
         this.currentWorld = XmlParser.parseWorldObjects(worldFileName);
         References refs = XmlParser.parseReferences(referenceFileName);
+
+        npcs = new ArrayList<>();
 
         if (this.currentWorld != null && this.currentWorld.getWorldObjects() != null && refs != null) {
             for (IObject iObject : this.currentWorld.getWorldObjects()) {
@@ -85,6 +89,7 @@ public class WorldManager {
                 inTriangle.add(obj);
             }
         }
+
         return inTriangle;
     }
 
@@ -105,6 +110,7 @@ public class WorldManager {
                 onPoint.add(obj);
             }
         }
+
         return onPoint;
     }
 
@@ -192,6 +198,10 @@ public class WorldManager {
      */
     public void setAutomatedCar(AutomatedCar car) {
         this.automatedCar = car;
+    }
+
+    public ArrayList<NPC> getNpcs() {
+        return npcs;
     }
 
     /**
