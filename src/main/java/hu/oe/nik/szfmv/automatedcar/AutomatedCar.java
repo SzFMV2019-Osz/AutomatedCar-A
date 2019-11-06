@@ -17,7 +17,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class AutomatedCar extends Car {
     private static final Logger LOGGER = LogManager.getLogger();
@@ -74,7 +78,11 @@ public class AutomatedCar extends Car {
         }
     }
 
-    public Shape checkCamera(WorldManager manager, int offsetX, int offsetY) {
-        return this.camera.loop(manager, this, offsetX, offsetY, this.getRotation());
+    public List<List<Shape>> checkCamera(WorldManager manager, int offsetX, int offsetY) {
+        return this.camera.loop(manager, this, offsetX, offsetY).stream().map(o -> o.getPolygons(offsetX, offsetY)).collect(Collectors.toList());
+    }
+
+    public Shape getCameraTriangle(int offsetX, int offetY) {
+        return  this.camera.generateCameraTriangle(this, offsetX, offetY);
     }
 }
