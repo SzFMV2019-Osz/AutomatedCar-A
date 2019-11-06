@@ -9,4 +9,6 @@ public interface ICrashable {
      * @return Objektum tömege.
      */
     double getWeight();
+
+    void crashed();
 }

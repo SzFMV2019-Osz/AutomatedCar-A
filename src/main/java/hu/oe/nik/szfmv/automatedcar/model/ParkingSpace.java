@@ -4,19 +4,18 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IBackground;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 
-import javax.xml.bind.Unmarshaller;
 import java.awt.Rectangle;
-import java.awt.geom.Area;
+import javax.xml.bind.Unmarshaller;
 
 /**
  * Parkolóhely alaposztály.
  */
 public class ParkingSpace extends WorldObject implements IStatic, IBackground {
-    private final int LEFT_BORDER = 4;
-    private final int RIGHT_BORDER = 14;
-    private final int TOP_BORDER = 10;
-    private final int BOTTOM_BORDER = 4;
-    private final int BORDER = 10;
+    private static final int LEFT_BORDER = 4;
+    private static final int RIGHT_BORDER = 14;
+    private static final int TOP_BORDER = 10;
+    private static final int BOTTOM_BORDER = 4;
+    private static final int BORDER = 10;
 
     /**
      * {@inheritDoc}
@@ -50,7 +49,8 @@ public class ParkingSpace extends WorldObject implements IStatic, IBackground {
         int parkingSpaceHeight = (this.height - this.TOP_BORDER - this.BOTTOM_BORDER) / 2;
 
         this.polygons.add(new Rectangle(this.LEFT_BORDER, this.TOP_BORDER, parkingSpaceWidth, parkingSpaceHeight));
-        this.polygons.add(new Rectangle(this.LEFT_BORDER, parkingSpaceHeight + this.TOP_BORDER, parkingSpaceWidth, parkingSpaceHeight));
+        this.polygons.add(new Rectangle(
+                this.LEFT_BORDER, parkingSpaceHeight + this.TOP_BORDER, parkingSpaceWidth, parkingSpaceHeight));
     }
 
     private void init90Shape() {
@@ -58,7 +58,9 @@ public class ParkingSpace extends WorldObject implements IStatic, IBackground {
         int parkingSpaceHeight = (this.height - this.BORDER) / 3;
 
         this.polygons.add(new Rectangle(0, 0, parkingSpaceWidth, parkingSpaceHeight));
-        this.polygons.add(new Rectangle(0, parkingSpaceHeight + this.TOP_BORDER, parkingSpaceWidth, parkingSpaceHeight));
-        this.polygons.add(new Rectangle(0, (parkingSpaceHeight + this.TOP_BORDER) * 2, parkingSpaceWidth, parkingSpaceHeight));
+        this.polygons.add(new Rectangle(
+                0, parkingSpaceHeight + this.TOP_BORDER, parkingSpaceWidth, parkingSpaceHeight));
+        this.polygons.add(new Rectangle(
+                0, (parkingSpaceHeight + this.TOP_BORDER) * 2, parkingSpaceWidth, parkingSpaceHeight));
     }
 }
