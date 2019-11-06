@@ -2,12 +2,10 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
+import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
-import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDebugColorable;
-import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDetectedObjects;
-import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISensorAreaInterface;
-import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISwitchableDebugViewer;
+import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.*;
 
 import java.awt.*;
 import java.awt.geom.*;
@@ -17,7 +15,7 @@ import java.util.List;
 /**
  * Displays debugging-related information on the screen
  */
-public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISensorAreaInterface, IDetectedObjects {
+public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISensorAreaInterface, IDetectedObjects, IRadarClosestObject {
 
     private static Color BASE_COLOR = Color.BLUE;
     private static Color SENSOR_TRIANGLE_BASE_COLOR = Color.RED;
@@ -193,5 +191,30 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     @Override
     public void setSensorTriangleColor(Color color) {
         this.sensorTriangleColor = color;
+    }
+
+    @Override
+    public WorldObject getClosestObjectInLane() {
+
+        //If we do not found any objects yet, return null.
+        if (this.SeenObjects == null) {
+            return null;
+        }
+
+        WorldObject closest = null;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (IObject object : this.SeenObjects) {
+            double a = Math.pow(object.getPosX() - sensorPosition.getX(), 2);
+            double b = Math.pow(object.getPosY() - sensorPosition.getY(), 2);
+            double distance = Math.sqrt(a + b);
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closest = (WorldObject)object;
+            }
+        }
+
+        return closest;
     }
 }
