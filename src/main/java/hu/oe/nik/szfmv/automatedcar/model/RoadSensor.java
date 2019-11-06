@@ -24,4 +24,14 @@ public class RoadSensor extends Sensor {
         }
         return relevantObjects;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void handleSensedObjects(List<IObject> sensedObjects) {
+        for (IObject sensedObject : sensedObjects) {
+            // TODO feldolgozás
+        }
+    }
 }
