@@ -1,4 +1,4 @@
-package hu.oe.nik.szfmv.automatedcar;
+package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.SignSensor;

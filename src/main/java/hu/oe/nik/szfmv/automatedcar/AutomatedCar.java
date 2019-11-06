@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar;
 import hu.oe.nik.szfmv.automatedcar.exceptions.CrashException;
 import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.model.Camera;
+import hu.oe.nik.szfmv.automatedcar.model.UltraSound;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
