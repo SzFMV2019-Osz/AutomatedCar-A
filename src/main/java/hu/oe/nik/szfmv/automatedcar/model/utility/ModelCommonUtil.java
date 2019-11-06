@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.Polygon;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,6 +25,7 @@ public final class ModelCommonUtil {
 
     /**
      * Betölt egy képet a nyersanyagok közül.
+     *
      * @param name Kép neve kiterjesztés nélkül (pl. bycicle).
      * @return Az adott kép {@link BufferedImage}-ként.
      * @throws IOException Ha nem olvasható a fájl/mappa, pl. jogosultságok hiányában.
@@ -45,6 +47,7 @@ public final class ModelCommonUtil {
 
     /**
      * Visszaadja a rotáció értéket egy bemeneti mátrix alapján.
+     *
      * @param m11 Matrix 1,1 helyen levő értéke.
      * @param m12 Matrix 1,2 helyen levő értéke.
      * @param m21 Matrix 2,1 helyen levő értéke.
@@ -62,6 +65,7 @@ public final class ModelCommonUtil {
 
     /**
      * Belső függvény a mátrixból fok számolásnak.
+     *
      * @param m11 Matrix 1,1 helyen levő értéke.
      * @param m12 Matrix 1,2 helyen levő értéke.
      * @param m21 Matrix 2,1 helyen levő értéke.
@@ -75,7 +79,8 @@ public final class ModelCommonUtil {
 
     /**
      * Visszaadja, hogy az adott shape benne van-e a másikban.
-     * @param shape Adott shape.
+     *
+     * @param shape   Adott shape.
      * @param whereIn Shape amiben keressük.
      * @return Igaz, ha teljesen vagy részletesen benne van, hamis ha nincs bent vagy csak a szélével érintkezik.
      */
@@ -125,11 +130,20 @@ public final class ModelCommonUtil {
         return p;
     }
 
+    public static Polygon generateTriangle(Position pointA, Position pointB, Position pointC) {
+        Polygon triangle = new Polygon();
+        triangle.addPoint(pointA.getX(), pointA.getY());
+        triangle.addPoint(pointB.getX(), pointB.getY());
+        triangle.addPoint(pointC.getX(), pointC.getY());
+
+        return triangle;
+    }
+
     /**
      * @param topLeftX bal felső sarok X koordinátája
      * @param topLeftY bal felső sarok Y koordinátája
-     * @param width négyszög szélessége
-     * @param height négyszög magasssága
+     * @param width    négyszög szélessége
+     * @param height   négyszög magasssága
      * @return generált négyszög
      */
     public static Rectangle createRectangle(int topLeftX, int topLeftY, int width, int height) {

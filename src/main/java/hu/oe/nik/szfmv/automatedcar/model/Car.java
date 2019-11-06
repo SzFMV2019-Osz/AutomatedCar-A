@@ -19,8 +19,7 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
     private static final int WIDTH_BORDER = 6;
     private static final int HEIGHT_BORDER = 1;
 
-    protected RoadSensor roadSensor;
-    protected SignSensor signSensor;
+    protected Camera camera;
 
     public Car() {
     }
@@ -49,7 +48,7 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
     }
 
     public List<ISensor> getSensors() {
-        return Arrays.asList(this.roadSensor, this.signSensor);
+        return this.camera.getSensors();
     }
 
     /**

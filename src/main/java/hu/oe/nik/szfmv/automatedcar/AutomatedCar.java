@@ -2,10 +2,12 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.exceptions.CrashException;
 import hu.oe.nik.szfmv.automatedcar.model.Car;
-import hu.oe.nik.szfmv.automatedcar.model.RoadSensor;
-import hu.oe.nik.szfmv.automatedcar.model.SignSensor;
+import hu.oe.nik.szfmv.automatedcar.model.Camera;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
+import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
+import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
@@ -13,7 +15,7 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 
@@ -30,12 +32,7 @@ public class AutomatedCar extends Car {
 
         new Driver(this.virtualFunctionBus);
         this.pt = new Powertrain(this.virtualFunctionBus, REFRESH_RATE, x, y, (float) this.getRotation(), this.getHeight());
-
-        this.roadSensor = new RoadSensor();
-        this.roadSensor.setPos(this.getPosX(), this.getPosY());
-
-        this.signSensor = new SignSensor();
-        this.signSensor.setPos(this.getPosX(), this.getPosY());
+        this.camera = new Camera(x, y);
     }
 
     public void drive() {
@@ -53,10 +50,8 @@ public class AutomatedCar extends Car {
         this.setPosY(this.getPosY() + (int) movingVector.getY());
         this.setRotation(this.pt.getAutoSzoge());
 
-        this.roadSensor.setPos(this.roadSensor.getPosX() + (int) movingVector.getX(),
-                this.roadSensor.getPosY() + (int) movingVector.getY());
-        this.signSensor.setPos(this.signSensor.getPosX() + (int) movingVector.getX(),
-                this.signSensor.getPosY() + (int) movingVector.getY());
+        this.camera.setPos(this.camera.getPosX() + (int) movingVector.getX(),
+                this.camera.getPosY() + (int) movingVector.getY());
     }
 
     @Override
@@ -77,5 +72,9 @@ public class AutomatedCar extends Car {
         if (!collidedObjects.isEmpty()) {
             throw new CrashException("Oh oh, you crashed :(");
         }
+    }
+
+    public Shape checkCamera(WorldManager manager, int offsetX, int offsetY) {
+        return this.camera.loop(manager, this, offsetX, offsetY, this.getRotation());
     }
 }

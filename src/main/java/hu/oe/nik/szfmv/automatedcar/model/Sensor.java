@@ -4,6 +4,7 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ISensor;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 
+import java.awt.Shape;
 import java.util.List;
 
 public abstract class Sensor implements ISensor {
@@ -13,26 +14,27 @@ public abstract class Sensor implements ISensor {
     /**
      * Visszaad egy objektum listát ami elemeit a szenzor érzékelte és számára relevánsak.
      * A háromszög egyik pontja a szenzor önmaga.
+     *
      * @param currentWorld manager.
-     * @param pointB háromszög második pontja.
-     * @param pointC háromszög harmadik pontja.
-     * @param offsetX x offset.
-     * @param offsetY y offset.
+     * @param offsetX      x offset.
+     * @param offsetY      y offset.
      * @return releváns IObjectek listája.
      */
-    public abstract List<IObject> getAllSensedRelevantObjects(WorldManager currentWorld, Position pointB,
-            Position pointC, int offsetX, int offsetY);
+    public abstract List<IObject> getAllSensedRelevantObjects(WorldManager currentWorld, Shape triangle, int offsetX, int offsetY);
 
+    @Override
     public int getPosX() {
-        return pos.getX();
+        return this.pos.getX();
     }
 
+    @Override
     public int getPosY() {
-        return pos.getY();
+        return this.pos.getY();
     }
 
+    @Override
     public void setPos(int x, int y) {
-        pos.setX(x);
-        pos.setY(y);
+        this.pos.setX(x);
+        this.pos.setY(y);
     }
 }

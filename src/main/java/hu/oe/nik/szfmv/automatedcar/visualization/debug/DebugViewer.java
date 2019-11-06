@@ -70,14 +70,21 @@ public class DebugViewer {
         }
     }
 
-    public void DrawPolygon(int x, int y, int width, int height, Color color, AffineTransform t){
-        if (debuggerSwitchedOn){
-            graphics2D.setColor(color);
-            graphics2D.setStroke(info.getThickness());
-            graphics2D.drawRect(x, y, width, height);
+    public void DrawPolygon(Shape shape) {
+        if (this.debuggerSwitchedOn) {
+            this.graphics2D.setColor(this.info.getColor());
+            this.graphics2D.setStroke(this.info.getThickness());
+            this.graphics2D.draw(shape);
         }
     }
 
+    public void DrawPolygon(int x, int y, int width, int height, Color color, AffineTransform t) {
+        if (this.debuggerSwitchedOn) {
+            this.graphics2D.setColor(color);
+            this.graphics2D.setStroke(this.info.getThickness());
+            this.graphics2D.drawRect(x, y, width, height);
+        }
+    }
 
     public void DrawSensorTriangle(int aX, int aY, int bX, int bY, int cX, int cY, Color color, AffineTransform t){
         if (debuggerSwitchedOn){
