@@ -66,6 +66,23 @@ public class AutomatedCar extends Car {
         }
     }
 
+    /**
+     * Moves the car by the coordinates, DO NOT use outside error handling
+     *
+     * @param x
+     * @param y
+     */
+    public void moveCarByPos(int x, int y) {
+        this.setPosX(this.getPosX() + x);
+        this.setPosY(this.getPosY() + y);
+        this.camera.setPos(this.camera.getPosX() + x, this.camera.getPosY() + y);
+
+        for (int i = 0; i < this.ultraSounds.size(); i++) {
+            this.ultraSounds.get(i).setPos(this.ultraSounds.get(i).getPosX() + x,
+                    this.ultraSounds.get(i).getPosY() + y);
+        }
+    }
+
     @Override
     public AffineTransform getTransform(int offsetX, int offsetY) {
         AffineTransform shapeTransform = new AffineTransform();
