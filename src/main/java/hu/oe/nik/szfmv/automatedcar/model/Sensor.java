@@ -23,7 +23,7 @@ public abstract class Sensor implements ISensor {
     public abstract List<IObject> getAllSensedRelevantObjects(WorldManager currentWorld, Shape triangle, int offsetX, int offsetY);
 
     /**
-     * Lekezeli az érzékelt objektumat.
+     * Lekezeli az érzékelt objektumokat.
      * 
      * @param sensedObjects érzékelt objektumok
      */
