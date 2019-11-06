@@ -37,8 +37,6 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
      */
     @Override
     public void initShape() {
-        int x = 0 - (this.width / 2 - WIDTH_BORDER);
-        int y = 0 - (this.height / 2 - HEIGHT_BORDER);
-        this.polygon = new Rectangle(x, y, this.width - WIDTH_BORDER * 2, this.height - HEIGHT_BORDER * 2);
+        this.polygons.add(new Rectangle(WIDTH_BORDER, HEIGHT_BORDER, this.width - WIDTH_BORDER * 2, this.height - HEIGHT_BORDER * 2));
     }
 }

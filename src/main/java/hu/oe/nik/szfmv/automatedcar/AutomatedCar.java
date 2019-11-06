@@ -7,6 +7,7 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.xml.bind.annotation.XmlTransient;
+import java.awt.geom.AffineTransform;
 
 public class AutomatedCar extends Car {
 
@@ -22,7 +23,7 @@ public class AutomatedCar extends Car {
         super(x, y, imageFileName);
 
         new Driver(virtualFunctionBus);
-        pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(),getHeight());
+        pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(),getHeight(), getWidth());
     }
 
     public void drive() {
@@ -38,6 +39,16 @@ public class AutomatedCar extends Car {
         var movingVector = virtualFunctionBus.powertrainPacket.getMovingVector();
         this.setPosX(this.getPosX() + (int)movingVector.getX());
         this.setPosY(this.getPosY() + (int)movingVector.getY());
-        setRotation(pt.getAutoSzoge());
+        setRotation(pt.getCarRotation());
+    }
+
+    @Override
+    public AffineTransform getTransform(int offsetX, int offsetY) {
+        AffineTransform shapeTransform = new AffineTransform();
+
+        shapeTransform.translate(this.getPosX() - this.getReferenceX() + offsetX, this.getPosY() - this.getReferenceY() + offsetY);
+        shapeTransform.rotate(Math.toRadians(this.getRotation() + 90), this.getReferenceX(), this.getReferenceY());
+
+        return shapeTransform;
     }
 }
