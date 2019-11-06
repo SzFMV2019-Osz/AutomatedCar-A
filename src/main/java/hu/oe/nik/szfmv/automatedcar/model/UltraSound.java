@@ -100,6 +100,6 @@ public class UltraSound {
     }
 
     private int calculateRangeModifier() {
-        return 80 * Consts.PIXEL_PER_METERS / 10; // TODO: remove range reduction;
+        return 30 * Consts.PIXEL_PER_METERS / 10; // TODO: remove range reduction;
     }
 }
