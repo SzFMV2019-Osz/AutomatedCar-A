@@ -22,6 +22,13 @@ public abstract class Sensor implements ISensor {
      */
     public abstract List<IObject> getAllSensedRelevantObjects(WorldManager currentWorld, Shape triangle, int offsetX, int offsetY);
 
+    /**
+     * Lekezeli az érzékelt objektumat.
+     * 
+     * @param sensedObjects érzékelt objektumok
+     */
+    public abstract void handleSensedObjects(List<IObject> sensedObjects);
+
     @Override
     public int getPosX() {
         return this.pos.getX();
