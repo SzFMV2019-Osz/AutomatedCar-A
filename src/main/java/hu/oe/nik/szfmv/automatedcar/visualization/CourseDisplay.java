@@ -136,7 +136,7 @@ public class CourseDisplay extends JPanel {
 
         DebugViewer viewer = new DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
-        Shape cameraTriangle = car.checkCamera(world, offsets[0], offsets[1]);
+        List<List<Shape>> sensedObjects = car.checkCamera(world, offsets[0], offsets[1]);
         for (IObject object : world.getAllObjectsInRectangle(
                 new Position(0 - this.renderDistance, 0 - this.renderDistance),
                 new Position(this.width + this.renderDistance, this.height + this.renderDistance),
@@ -155,8 +155,11 @@ public class CourseDisplay extends JPanel {
         viewer.DrawPolygon(car.getPolygons(offsets[0], offsets[1]));
 
         g2d.drawImage(car.getImage(), t1, this);
-        viewer.setInfo(new DrawingInfo(Color.BLUE, 1));
-        viewer.DrawPolygon(cameraTriangle);
+        viewer.setInfo(new DrawingInfo(Color.BLUE, 4));
+        viewer.DrawPolygon(car.getCameraTriangle(offsets[0], offsets[1]));
+        for (List<Shape> shape : sensedObjects) {
+            viewer.DrawPolygon(shape);
+        }
         //viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
 
         car.checkCollisions(world, offsets[0], offsets[1]);

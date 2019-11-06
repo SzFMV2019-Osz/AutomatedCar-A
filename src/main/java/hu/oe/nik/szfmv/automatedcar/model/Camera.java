@@ -51,8 +51,10 @@ public class Camera {
     }
 
 
-    public Shape loop(WorldManager manager, IObject parent, int offsetX, int offsetY, double rotation) {
-        Shape cameraTriangle = this.generateCameraTriangle(parent, offsetX, offsetY, rotation);
+    public List<IObject> loop(WorldManager manager, IObject parent, int offsetX, int offsetY) {
+        Shape cameraTriangle = this.generateCameraTriangle(parent, offsetX, offsetY);
+
+        List<IObject> sensedObjects = new ArrayList<>();
 
         for (ISensor sensor : this.sensorList) {
             List<IObject> list = sensor.getAllSensedRelevantObjects(manager, cameraTriangle, offsetX, offsetY);
@@ -60,19 +62,21 @@ public class Camera {
             if (!list.isEmpty()) {
                 sensor.handleSensedObjects(list);
                 System.out.println("Objects found");
+
+                sensedObjects.addAll(list);
             }
         }
 
-        return cameraTriangle;
+        return sensedObjects;
     }
 
-    private Shape generateCameraTriangle(IObject parent, int offsetX, int offsetY, double rotation) {
+    public Shape generateCameraTriangle(IObject parent, int offsetX, int offsetY) {
         Position pointA = new Position(this.getPosX() + offsetX, this.getPosY() + offsetY);
         Position pointB = this.generateTriangleLeftPoint(offsetX, offsetY);
         Position pointC = this.generateTriangleRightPoint(offsetX, offsetY);
 
         AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(rotation + 90), parent.getPosX() + offsetX, parent.getPosY() + offsetY); //TODO: remove +90 after TeamA3 merge
+        transform.rotate(Math.toRadians(parent.getRotation() + 90), parent.getPosX() + offsetX, parent.getPosY() + offsetY); //TODO: remove +90 after TeamA3 merge
 
         return transform.createTransformedShape(ModelCommonUtil.generateTriangle(pointA, pointB, pointC));
     }
