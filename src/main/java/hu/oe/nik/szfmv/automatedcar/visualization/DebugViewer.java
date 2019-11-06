@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Displays debugging-related information on the screen
  */
-class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISensorAreaInterface, IDetectedObjects {
+public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISensorAreaInterface, IDetectedObjects {
 
     private static Color BASE_COLOR = Color.BLUE;
     private static Color SENSOR_TRIANGLE_BASE_COLOR = Color.RED;
