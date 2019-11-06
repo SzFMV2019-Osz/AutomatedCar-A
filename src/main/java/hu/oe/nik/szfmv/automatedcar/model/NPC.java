@@ -30,6 +30,14 @@ public class NPC extends WorldObject implements ICrashable {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void initShape() {
+        this.polygons.add(new Rectangle(0, 0, this.width, this.height));
+    }
+
     private void moveInTurningPointDirection(TurningPoint currentTurningPoint) {
         setPosX(getPosX() + getTurningPointDirection(getPosX(), currentTurningPoint.getPosition().getX()) * currentTurningPoint.getMovingSpeed());
         setPosY(getPosY() + getTurningPointDirection(getPosY(), currentTurningPoint.getPosition().getY()) * currentTurningPoint.getMovingSpeed());
