@@ -164,6 +164,18 @@ public class WorldManager {
         return results.stream().filter(o -> o instanceof ICrashable).map(o -> (ICrashable) o).collect(Collectors.toList());
     }
 
+    public List<ICrashable> getAllCrashableObjectsInTriangle(Shape triangle, int offsetX, int offsetY) {
+        List<ICrashable> inTriangle = new ArrayList<>();
+        for (IObject obj : this.currentWorld.getWorldObjects()) {
+            if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), triangle, obj)) {
+                if(obj instanceof  ICrashable) {
+                    inTriangle.add((ICrashable) obj);
+                }
+            }
+        }
+        return inTriangle;
+    }
+
     /**
      * Visszaadja az irányított autót
      *

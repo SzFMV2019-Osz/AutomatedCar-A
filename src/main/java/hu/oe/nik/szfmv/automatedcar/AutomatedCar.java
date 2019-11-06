@@ -4,10 +4,7 @@ import hu.oe.nik.szfmv.automatedcar.exceptions.CrashException;
 import hu.oe.nik.szfmv.automatedcar.model.Car;
 import hu.oe.nik.szfmv.automatedcar.model.Camera;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
-import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
-import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
-import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
@@ -18,9 +15,7 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class AutomatedCar extends Car {
@@ -37,6 +32,14 @@ public class AutomatedCar extends Car {
         new Driver(this.virtualFunctionBus);
         this.pt = new Powertrain(this.virtualFunctionBus, REFRESH_RATE, x, y, (float) this.getRotation(), this.getHeight());
         this.camera = new Camera(x, y);
+        this.ultraSounds.add( new UltraSound(x,y,-44,-104,90)); //front-left
+        this.ultraSounds.add( new UltraSound(x,y,+44,-104,90)); //front-right
+        this.ultraSounds.add( new UltraSound(x,y,-44,-104,-90)); //back-right
+        this.ultraSounds.add( new UltraSound(x,y,+44,-104,-90)); //back left
+        this.ultraSounds.add( new UltraSound(x,y,+104,-44,0)); //left side front
+        this.ultraSounds.add( new UltraSound(x,y,-104,-44,0)); //left side back
+        this.ultraSounds.add( new UltraSound(x,y,+104,-44,180)); //right side back
+        this.ultraSounds.add( new UltraSound(x,y,-104,-44,180)); //right side front
     }
 
     public void drive() {
@@ -56,6 +59,11 @@ public class AutomatedCar extends Car {
 
         this.camera.setPos(this.camera.getPosX() + (int) movingVector.getX(),
                 this.camera.getPosY() + (int) movingVector.getY());
+
+        for (int i = 0; i < ultraSounds.size(); i++) {
+            ultraSounds.get(i).setPos(this.ultraSounds.get(i).getPosX() + (int) movingVector.getX(),
+                    this.ultraSounds.get(i).getPosY() + (int) movingVector.getY());
+        }
     }
 
     @Override
@@ -84,5 +92,21 @@ public class AutomatedCar extends Car {
 
     public Shape getCameraTriangle(int offsetX, int offetY) {
         return  this.camera.generateCameraTriangle(this, offsetX, offetY);
+    }
+
+    public List<List<Shape>> checkUltraSound(WorldManager manager, int offsetX, int offsetY) {
+        List<List<Shape>> ultraSoundObjects = new ArrayList<>();
+        for (int i = 0; i < ultraSounds.size(); i++) {
+            ultraSoundObjects.addAll(ultraSounds.get(i).loop(manager, this, offsetX, offsetY).stream().map(o -> o.getPolygons(offsetX, offsetY)).collect(Collectors.toList()));
+        }
+        return ultraSoundObjects;
+    }
+
+    public List<Shape> getUltraSoundTriangle(int offsetX, int offsetY) {
+        List<Shape> ultraSoundShapes = new ArrayList<>();
+        for (int i = 0; i < ultraSounds.size(); i++) {
+            ultraSoundShapes.add(ultraSounds.get(i).generateCameraTriangle(this, offsetX, offsetY));
+        }
+        return ultraSoundShapes;
     }
 }
