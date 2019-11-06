@@ -85,14 +85,14 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     }
 
 
-    private void drawSensorTriangle(Color color, AffineTransform t){
+    public void drawSensorTriangle(Color color, AffineTransform t, Position centerEdge, Position leftEdge, Position rightEdge){
         if (debuggerSwitchedOn){
             updateSensorTrianglePosition();
             graphics2D.setColor(color);
 
-            Shape leftLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
-            Shape baseLine = new Line2D.Double(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY(), sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
-            Shape rightLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+            Shape leftLine = new Line2D.Double(centerEdge.getX(), centerEdge.getY(), leftEdge.getX(), leftEdge.getY());
+            Shape baseLine = new Line2D.Double(leftEdge.getX(), leftEdge.getY(), rightEdge.getX(), rightEdge.getY());
+            Shape rightLine = new Line2D.Double(centerEdge.getX(), centerEdge.getY(), rightEdge.getX(), rightEdge.getY());
 
             graphics2D.draw(t.createTransformedShape(leftLine));
             graphics2D.draw(t.createTransformedShape(baseLine));
@@ -125,12 +125,17 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     }
 
 
-    public void operateSensor(Graphics2D drawer, AutomatedCar car, AffineTransform t){
+    public void operateFrontalRadarSensor(Graphics2D drawer, AutomatedCar car, AffineTransform t){
         if(debuggerSwitchedOn){
             updateSensorPosition(car);
             drawSensorBody(drawer, t);
             updateSensorTrianglePosition();
-            drawSensorTriangle(sensorTriangleColor, t);
+
+            Position centerPosition = new Position(sensorPosition.getX(), sensorPosition.getY());
+            Position leftPosition = new Position(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
+            Position rightPosition = new Position(sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+
+            drawSensorTriangle(sensorTriangleColor, t, centerPosition, leftPosition, rightPosition);
         }
     }
 
