@@ -121,7 +121,7 @@ public class XmlParser {
 
             JAXBContext jaxbContext = createJAXBContext(TurningPoints.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            turningPoints = (TurningPoints) jaxbUnmarshaller.unmarshal(getFileByName(xmlFileName));
+            turningPoints = (TurningPoints) jaxbUnmarshaller.unmarshal(ModelCommonUtil.getFileFromName(xmlFileName));
         } catch (NullPointerException e) {
             logger.warn(Consts.ERROR_IN_PROCESSING + " " + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
             throw new NullPointerException(Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);

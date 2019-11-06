@@ -14,7 +14,7 @@ public class NPC extends WorldObject implements ICrashable {
         this.turningPoints = XmlParser.parseTurningPoints(roadFileName).turningPoints;
         this.setRotation(startRotation);
         this.position.setZ(2);
-        this.referencePosition = new Position(this.width / 2, this.height / 2);
+        this.referencePosition = new Position(this.width, this.height);
     }
 
     public void move() {
@@ -60,5 +60,10 @@ public class NPC extends WorldObject implements ICrashable {
     @Override
     public double getWeight() {
         return 0;
+    }
+
+    @Override
+    public void crashed() {
+
     }
 }
