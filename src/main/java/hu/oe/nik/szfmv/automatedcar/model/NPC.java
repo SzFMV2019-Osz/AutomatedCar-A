@@ -1,10 +1,11 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 
 import java.util.List;
 
-public class NPC extends WorldObject {
+public class NPC extends WorldObject implements ICrashable {
     private int index = 0;
     private List<TurningPoint> turningPoints;
 
@@ -54,5 +55,10 @@ public class NPC extends WorldObject {
 
     private int getTurningPointDirection(int currentCoordinate, int nextCoordinate) {
         return Integer.compare(nextCoordinate, currentCoordinate);
+    }
+
+    @Override
+    public double getWeight() {
+        return 0;
     }
 }
