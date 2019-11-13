@@ -140,7 +140,7 @@ public class CourseDisplay extends JPanel {
     private void drawObjects(Graphics2D g2d, WorldManager world) throws CrashException {
         int[] offsets = getCarOffset(world.getAutomatedCar());
 
-        DebugViewer viewer = new DebugViewer(g2d);
+        hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer viewer = new hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
         List<List<Shape>> sensedObjects = car.checkCamera(world, offsets[0], offsets[1]);
         List<List<Shape>> soundObjects = car.checkUltraSound(world, offsets[0], offsets[1]);
@@ -176,8 +176,9 @@ public class CourseDisplay extends JPanel {
 
         // Set debug viewer
         viewer.operateFrontalRadarSensor(g2d, car, t1);
-        viewer.detectObjects(world.getAllObjectsInRectangle(new hu.oe.nik.szfmv.automatedcar.model.Position(0,0),
-                new hu.oe.nik.szfmv.automatedcar.model.Position(this.world.getWidth(),this.world.getHeight())));
+        viewer.detectObjects(world.getAllObjectsInRectangle(new Position(0 - this.renderDistance, 0 - this.renderDistance),
+                new Position(this.width + this.renderDistance, this.height + this.renderDistance),
+                offsets[0], offsets[1]));
         for (List<Shape> shape : soundObjects) {
             viewer.DrawPolygon(shape);
         }
