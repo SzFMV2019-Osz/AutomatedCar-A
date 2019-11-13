@@ -2,19 +2,20 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
+import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
-import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IDebugColorable;
-import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISensorAreaInterface;
-import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.ISwitchableDebugViewer;
+import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.*;
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.List;
 
 
 /**
  * Displays debugging-related information on the screen
  */
-public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISensorAreaInterface {
+public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISensorAreaInterface, IDetectedObjects, IRadarClosestObject {
 
     private static Color BASE_COLOR = Color.BLUE;
     private static Color SENSOR_TRIANGLE_BASE_COLOR = Color.RED;
@@ -30,6 +31,9 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     private static final int SENSOR_DIMENSION = 8;
     private Position sensorTriangleLeftTip;
     private Position sensorTriangleRightTip;
+
+    //"seen" object
+    public List<IObject> SeenObjects;
 
     /**
      * @return The information represening the color and borderline width of the object
@@ -52,6 +56,7 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     }
 
     public DebugViewer() {
+
     }
 
     /**
@@ -80,13 +85,14 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     }
 
 
-    private void drawSensorTriangle(Color color, AffineTransform t){
+    public void drawSensorTriangle(Color color, AffineTransform t, Position centerEdge, Position leftEdge, Position rightEdge){
         if (debuggerSwitchedOn){
             updateSensorTrianglePosition();
             graphics2D.setColor(color);
-            Shape leftLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
-            Shape baseLine = new Line2D.Double(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY(), sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
-            Shape rightLine = new Line2D.Double(sensorPosition.getX(), sensorPosition.getY(), sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+
+            Shape leftLine = new Line2D.Double(centerEdge.getX(), centerEdge.getY(), leftEdge.getX(), leftEdge.getY());
+            Shape baseLine = new Line2D.Double(leftEdge.getX(), leftEdge.getY(), rightEdge.getX(), rightEdge.getY());
+            Shape rightLine = new Line2D.Double(centerEdge.getX(), centerEdge.getY(), rightEdge.getX(), rightEdge.getY());
 
             graphics2D.draw(t.createTransformedShape(leftLine));
             graphics2D.draw(t.createTransformedShape(baseLine));
@@ -119,12 +125,30 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     }
 
 
-    public void operateSensor(Graphics2D drawer, AutomatedCar car, AffineTransform t){
+    public void operateFrontalRadarSensor(Graphics2D drawer, AutomatedCar car, AffineTransform t){
         if(debuggerSwitchedOn){
             updateSensorPosition(car);
             drawSensorBody(drawer, t);
             updateSensorTrianglePosition();
-            drawSensorTriangle(sensorTriangleColor, t);
+
+            Position centerPosition = new Position(sensorPosition.getX(), sensorPosition.getY());
+            Position leftPosition = new Position(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
+            Position rightPosition = new Position(sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+
+            drawSensorTriangle(sensorTriangleColor, t, centerPosition, leftPosition, rightPosition);
+        }
+    }
+
+    public void detectObjects(List<IObject> objects){
+        Polygon sensor = new Polygon();
+        sensor.addPoint(sensorPosition.getX(), sensorPosition.getY());
+        sensor.addPoint(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
+        sensor.addPoint(sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+
+        for (IObject object : objects){
+            if (sensor.contains(object.getPosX(), object.getPosY())){
+                SeenObjects.add(object);
+            }
         }
     }
 
@@ -172,5 +196,30 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     @Override
     public void setSensorTriangleColor(Color color) {
         this.sensorTriangleColor = color;
+    }
+
+    @Override
+    public WorldObject getClosestObjectInLane() {
+
+        //If we do not found any objects yet, return null.
+        if (this.SeenObjects == null) {
+            return null;
+        }
+
+        WorldObject closest = null;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (IObject object : this.SeenObjects) {
+            double a = Math.pow(object.getPosX() - sensorPosition.getX(), 2);
+            double b = Math.pow(object.getPosY() - sensorPosition.getY(), 2);
+            double distance = Math.sqrt(a + b);
+
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closest = (WorldObject)object;
+            }
+        }
+
+        return closest;
     }
 }
