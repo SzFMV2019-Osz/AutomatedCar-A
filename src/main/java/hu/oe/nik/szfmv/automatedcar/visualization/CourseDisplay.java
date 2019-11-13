@@ -10,7 +10,7 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
-import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
+import hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import java.awt.*;
