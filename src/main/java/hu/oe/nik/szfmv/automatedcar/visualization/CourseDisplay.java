@@ -174,6 +174,10 @@ public class CourseDisplay extends JPanel {
         viewer.setInfo(new DrawingInfo(Color.GREEN, 4));
         viewer.DrawPolygon(car.getUltraSoundTriangle(offsets[0], offsets[1]));
 
+        // Set debug viewer
+        viewer.operateFrontalRadarSensor(g2d, car, t1);
+        viewer.detectObjects(world.getAllObjectsInRectangle(new hu.oe.nik.szfmv.automatedcar.model.Position(0,0),
+                new hu.oe.nik.szfmv.automatedcar.model.Position(this.world.getWidth(),this.world.getHeight())));
         for (List<Shape> shape : soundObjects) {
             viewer.DrawPolygon(shape);
         }
@@ -181,6 +185,4 @@ public class CourseDisplay extends JPanel {
 
         car.checkCollisions(world, offsets[0], offsets[1]);
     }
-
 }
-
