@@ -1,11 +1,14 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.model.World;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputReader;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.List;
 
 public class Main {
 
@@ -38,7 +41,10 @@ public class Main {
     private void loop() {
         while (true) {
             try {
-                worldManager.getAutomatedCar().drive();
+                AutomatedCar car = worldManager.getAutomatedCar();
+                car.operateSensors(worldManager); // sensors need world data, first we init sensors and start driving afterwards only
+                car.drive();
+
                 // TODO IWorld-öt használjon a drawWorld
                 window.getCourseDisplay().drawWorld((this.worldManager) );
                 // TODO window.getCourseDisplay().refreshFrame();
