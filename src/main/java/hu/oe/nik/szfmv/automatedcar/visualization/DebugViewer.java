@@ -50,6 +50,23 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         this.graphics2D = graphics;
     }
 
+    /**
+     * @return If debugger is switched on or not
+     */
+    public boolean isDebuggerSwitchedOn() {
+        return this.debuggerSwitchedOn;
+    }
+
+    /**
+     * @param debuggerSwitchedOn Flag indicating if debugger is switched on or not
+     */
+    public void setDebuggerSwitchedOn(boolean debuggerSwitchedOn) {
+        this.debuggerSwitchedOn = debuggerSwitchedOn;
+    }
+
+    public DebugViewer() {
+
+    }
 
     /**
      * @param x The x of coordinate of the center of the object
@@ -130,6 +147,37 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
             drawSensorTriangle(sensorTriangleColor, t, centerPosition, leftPosition, rightPosition);
         }
     }
+    public void DrawPolygon(List<Shape> shapes) {
+        if (debuggerSwitchedOn){
+            graphics2D.setColor(info.getColor());
+            graphics2D.setStroke(info.getThickness());
+
+            // create a rectangle with the original data and draw the result of applying the transformation
+            for(Shape shape : shapes) {
+                graphics2D.draw(shape);
+            }
+        }
+    }
+
+
+
+    public void DrawPolygon(Shape shape) {
+        if (this.debuggerSwitchedOn) {
+            this.graphics2D.setColor(this.info.getColor());
+            this.graphics2D.setStroke(this.info.getThickness());
+            this.graphics2D.draw(shape);
+        }
+    }
+
+    public void DrawSensorTriangle(int aX, int aY, int bX, int bY, int cX, int cY, Color color, AffineTransform t){
+        if (debuggerSwitchedOn){
+            graphics2D.setColor(color);
+            graphics2D.drawLine(aX, aY, bX, bY);
+            graphics2D.drawLine(aX, aY, cX, cY);
+            graphics2D.drawLine(bX, bY, cX, cY);
+        }
+    }
+
 
     // this is now in Radar, under syscomponents
     //public void detectObjects(List<IObject> objects){

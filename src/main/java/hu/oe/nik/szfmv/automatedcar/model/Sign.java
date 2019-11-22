@@ -3,8 +3,8 @@ package hu.oe.nik.szfmv.automatedcar.model;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
 
-import javax.xml.bind.Unmarshaller;
 import java.awt.geom.Ellipse2D;
+import javax.xml.bind.Unmarshaller;
 
 /**
  * Tábla alaposztály.
@@ -13,6 +13,11 @@ public class Sign extends WorldObject implements IStatic, ICrashable {
 
     public double getWeight() {
         return 0;
+    }
+
+    @Override
+    public void crashed() {
+
     }
 
     /**
@@ -29,6 +34,8 @@ public class Sign extends WorldObject implements IStatic, ICrashable {
      */
     @Override
     public void initShape() {
-        this.polygon = new Ellipse2D.Float(-5, -5, 10, 10);
+        int x = this.width / 2 - 5;
+        int y = this.height / 2 - 5;
+        this.polygons.add(new Ellipse2D.Float(x, y, 10, 10));
     }
 }

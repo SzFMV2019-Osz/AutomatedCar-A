@@ -18,17 +18,6 @@ public class Radar extends SystemComponent implements IRadar {
 
     @Override
     public void loop() {
-        IObject closest = getClosestObjectInLane();
-        List<IObject> seen = getDetectedObjects();
-        if(seen.isEmpty()){
-            System.out.println("NO OBJECTS IN PROXIMITY");
-        }
-        else {
-            for (IObject obj: getDetectedObjects() ) {
-                System.out.print(obj.toString() + ",");
-            }
-        }
-        System.out.println( "Closest: " + (closest != null ? closest.toString() : "NONE"));
     }
 
     private Position sensorPosition;

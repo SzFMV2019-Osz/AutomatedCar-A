@@ -3,19 +3,28 @@ package hu.oe.nik.szfmv.automatedcar.model.managers;
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.References;
+import hu.oe.nik.szfmv.automatedcar.model.Road;
+import hu.oe.nik.szfmv.automatedcar.model.RoadSensor;
+import hu.oe.nik.szfmv.automatedcar.model.SignSensor;
 import hu.oe.nik.szfmv.automatedcar.model.World;
+import hu.oe.nik.szfmv.automatedcar.model.NPC;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.ISensor;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 
+import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.Shape;
 import java.util.ArrayList;
-
+import java.util.Collections;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * {@link World}-el dolgozó manager, ezen keresztül lehet lekérdezni az abban levő objektumokat.
@@ -24,21 +33,24 @@ public class WorldManager {
 
     private World currentWorld;
     private AutomatedCar automatedCar;
+    private ArrayList<NPC> npcs;
 
     /**
      * Inicializálja a világot a kapott file-ok alapján.
-     * 
-     * @param worldFileName Feldolgozandó world fájl neve, kiterjesztés nélkül is megadható.
+     *
+     * @param worldFileName     Feldolgozandó world fájl neve, kiterjesztés nélkül is megadható.
      * @param referenceFileName Feldolgozandó referencia fájl neve, kiterjesztés nélkül is megadható.
      * @throws NullPointerException Ha valamelyik fájl nem található.
      */
     public WorldManager(String worldFileName, String referenceFileName) {
-        currentWorld = XmlParser.parseWorldObjects(worldFileName);
+        this.currentWorld = XmlParser.parseWorldObjects(worldFileName);
         References refs = XmlParser.parseReferences(referenceFileName);
-        
-        if (currentWorld != null && currentWorld.getWorldObjects() != null && refs != null) {
-            for (IObject iObject : currentWorld.getWorldObjects()) {
-                WorldObject wo = ((WorldObject)iObject);
+
+        npcs = new ArrayList<>();
+
+        if (this.currentWorld != null && this.currentWorld.getWorldObjects() != null && refs != null) {
+            for (IObject iObject : this.currentWorld.getWorldObjects()) {
+                WorldObject wo = ((WorldObject) iObject);
                 Position pos = refs.getReference(wo.getImageFileName());
                 wo.setReferencePosition(pos);
             }
@@ -47,35 +59,33 @@ public class WorldManager {
 
     /**
      * Hozzáad egy objektumot a világhoz.
+     *
      * @param object Akármilyen objektum ami implementálja az {@link IObject}et.
      */
     public void addObjectToWorld(IObject object) {
-        currentWorld.addObject(object);
+        this.currentWorld.addObject(object);
     }
 
     /**
      * Visszaadja a jelenlegi világot.
+     *
      * @return Jelenlegi világ {@link IWorld}-ként.
      */
     public IWorld getWorld() {
-        return currentWorld;
+        return this.currentWorld;
     }
 
     /**
-     * Visszaadja az összes objektumot a három pont között. TODO majd változni fog poligonok definiálása után
-     * @param pointA Első pont.
-     * @param pointB Második pont.
-     * @param pointC Harmadik pont.
+     * Visszaadja az összes objektumot a három pont között.
+     *
+     * @param offsetX X irányú eltolás.
+     * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a háromszögön belülre esnek.
      */
-    public List<IObject> getAllObjectsInTriangle(Position pointA, Position pointB, Position pointC) {
+    public List<IObject> getAllObjectsInTriangle(Shape triangle, int offsetX, int offsetY) {
         List<IObject> inTriangle = new ArrayList<>();
-
-        Position pos = new Position();
-        for (IObject obj : currentWorld.getWorldObjects()) {
-            pos.setX(obj.getPosX());
-            pos.setY(obj.getPosY());
-            if (ModelCommonUtil.isPointInTriangle(pointA, pointB, pointC, pos)) {
+        for (IObject obj : this.currentWorld.getWorldObjects()) {
+            if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), triangle, obj)) {
                 inTriangle.add(obj);
             }
         }
@@ -84,15 +94,19 @@ public class WorldManager {
     }
 
     /**
-     * Visszaadja az összes objektumot a ponton. TODO majd változni fog poligonok definiálása után
-     * @param point A pont ahol keressük az objektumokat.
+     * Visszaadja az összes objektumot a ponton.
+     *
+     * @param point   A pont ahol keressük az objektumokat.
+     * @param offsetX X irányú eltolás.
+     * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a ponton vannak.
      */
-    public List<IObject> getAllObjectsOnPoint(Position point) {
-        List<IObject> onPoint = new ArrayList<>();
+    public List<IObject> getAllObjectsOnPoint(Position point, int offsetX, int offsetY) {
+        Point pointShape = new Point(point.getX(), point.getY());
 
-        for (IObject obj : currentWorld.getWorldObjects()) {
-            if (obj.getPosX() == point.getX() && obj.getPosY() == point.getY()) {
+        List<IObject> onPoint = new ArrayList<>();
+        for (IObject obj : this.currentWorld.getWorldObjects()) {
+            if (this.isObjectOnPoint(obj.getPolygons(offsetX, offsetY), pointShape)) {
                 onPoint.add(obj);
             }
         }
@@ -101,25 +115,41 @@ public class WorldManager {
     }
 
     /**
-     * Visszaadja az összes objektumot a négyzeten belül. TODO majd változni fog poligonok után (ez csak kicsit)
-     * @param pointA A négyzet egyik pontja.
-     * @param pointB A négyzet másik pontja.
+     * Visszaadja az összes objektumot a négyzeten belül. Ha két víszintes vagy függőleges pontra eső vonalat kapunk
+     * akkor pedig a vonalon levőket adja vissza helyesen elvileg!
+     *
+     * @param pointA  A négyzet egyik pontja.
+     * @param pointB  A négyzet másik pontja.
+     * @param offsetX X irányú eltolás.
+     * @param offsetY Y irányú eltolás.
      * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a négyzeten belül vannak.
      */
-    public List<IObject> getAllObjectsInRectangle(Position pointA, Position pointB) {
-        // @TODO: rectangle létrehozást kiemelni a ModelCommonUtilba
+    public List<IObject> getAllObjectsInRectangle(Position pointA, Position pointB, int offsetX, int offsetY) {
         Position pointC = new Position(pointA.getX(), pointB.getY());
         Position pointD = new Position(pointB.getX(), pointA.getY());
 
         Position topLeft = ModelCommonUtil.getTopLeftPoint(pointA, pointB, pointC, pointD);
         Position bottomRight = ModelCommonUtil.getBottomRightPoint(pointA, pointB, pointC, pointD);
-        Rectangle rect = new Rectangle(topLeft.getX(), topLeft.getY(), (bottomRight.getX() - topLeft.getX()),
+        Rectangle rect = ModelCommonUtil.createRectangle(topLeft.getX(), topLeft.getY(),
+                (bottomRight.getX() - topLeft.getX()),
                 (bottomRight.getY() - topLeft.getX()));
 
         List<IObject> inRectangle = new ArrayList<>();
 
-        for (IObject obj : currentWorld.getWorldObjects()) {
-            if (rect.contains(obj.getPosX(), obj.getPosY())) {
+        for (IObject obj : this.currentWorld.getWorldObjects()) {
+            if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), rect, obj)) {
+                inRectangle.add(obj);
+            }
+        }
+
+        return inRectangle;
+    }
+
+    public List<IObject> getAllObjectsInRectangle(Shape rect, int offsetX, int offsetY) {
+        List<IObject> inRectangle = new ArrayList<>();
+
+        for (IObject obj : this.currentWorld.getWorldObjects()) {
+            if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), rect, obj)) {
                 inRectangle.add(obj);
             }
         }
@@ -128,7 +158,33 @@ public class WorldManager {
     }
 
     /**
+     * Visszaadja az összes objektumot a négyzeten belül. Ha két víszintes vagy függőleges pontra eső vonalat kapunk
+     * akkor pedig a vonalon levőket adja vissza helyesen elvileg!
+     *
+     * @param offsetX X irányú eltolás.
+     * @param offsetY Y irányú eltolás.
+     * @return {@link IObject} lista amiben benne vannak a szűrt objectek amik a négyzeten belül vannak.
+     */
+    public List<ICrashable> getAllCrashableObjectsInRectangle(Shape rect, int offsetX, int offsetY) {
+        List<IObject> results = this.getAllObjectsInRectangle(rect, offsetX, offsetY);
+        return results.stream().filter(o -> o instanceof ICrashable).map(o -> (ICrashable) o).collect(Collectors.toList());
+    }
+
+    public List<IObject> getAllCrashableObjectsInTriangle(Shape triangle, int offsetX, int offsetY) {
+        List<IObject> inTriangle = new ArrayList<>();
+        for (IObject obj : this.currentWorld.getWorldObjects()) {
+            if (this.isObjectInShape(obj.getPolygons(offsetX, offsetY), triangle, obj)) {
+                if(obj instanceof  ICrashable) {
+                    inTriangle.add(obj);
+                }
+            }
+        }
+        return inTriangle;
+    }
+
+    /**
      * Visszaadja az irányított autót
+     *
      * @return {@link AutomatedCar} referencia az irányíott autóval
      */
     public AutomatedCar getAutomatedCar() {
@@ -137,10 +193,82 @@ public class WorldManager {
 
     /**
      * Beállítja az {@link AutomatedCar} referenciáját
+     *
      * @param car Irányított autó objektuma
      */
     public void setAutomatedCar(AutomatedCar car) {
         this.automatedCar = car;
     }
 
+    public ArrayList<NPC> getNpcs() {
+        return npcs;
+    }
+
+    /**
+     * Használható például arra, hogy az elején beállítsuk a szenzorok alaphelyzetét.
+     *
+     * @return az {@link AutomatedCar}-ban levő szenzorok.
+     */
+    public List<ISensor> getAllCarSensors() {
+        return this.automatedCar.getSensors();
+    }
+
+    /**
+     * Visszaadja az összes érzékelt utat.
+     *
+     * @param trianglePointB szenzor háromszög 2. pontja.
+     * @param trianglePointC szenzor háromszög 3. pontja.
+     * @param offsetX        x offset.
+     * @param offsetY        y offset.
+     * @return minden sávérzékelő által érzékelt út.
+     */
+    public List<IObject> getAllSensedRoads(Shape triangle, int offsetX, int offsetY) {
+        Optional<ISensor> sensor = this.automatedCar.getSensors().stream().filter(x -> x instanceof RoadSensor).findFirst();
+        if (sensor.isPresent()) {
+            return sensor.get().getAllSensedRelevantObjects(
+                    this, triangle, offsetX, offsetY);
+        }
+        return Collections.emptyList();
+    }
+
+    /**
+     * Vissza az összes érzékelt táblát.
+     *
+     * @param trianglePointB szenzor háromszög 2. pontja.
+     * @param trianglePointC szenzor háromszög 3. pontja.
+     * @param offsetX        x offset.
+     * @param offsetY        y offset.
+     * @return minden táblaérzékelő által érzékelt tábla.
+     */
+    public List<IObject> getAllSensedSigns(Shape triangle, int offsetX, int offsetY) {
+        Optional<ISensor> sensor = this.automatedCar.getSensors().stream().filter(x -> x instanceof SignSensor).findFirst();
+        if (sensor.isPresent()) {
+            return sensor.get().getAllSensedRelevantObjects(
+                    this, triangle, offsetX, offsetY);
+        }
+        return Collections.emptyList();
+    }
+
+    private boolean isObjectInShape(List<Shape> polygonsOfObject, Shape shape, IObject object) {
+        boolean isRoad = object instanceof Road;
+        for (Shape poly : polygonsOfObject) {
+            if (isRoad) {
+                if (ModelCommonUtil.isShapeInPolygonRoad(poly, shape)) {
+                    return true;
+                }
+            } else if (ModelCommonUtil.isShapeInPolygon(poly, shape)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isObjectOnPoint(List<Shape> polygonsOfObject, Point point) {
+        for (Shape poly : polygonsOfObject) {
+            if (ModelCommonUtil.isShapeOnPoint(poly, point)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
