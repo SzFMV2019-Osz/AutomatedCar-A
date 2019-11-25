@@ -56,9 +56,6 @@ public class Main {
     private void loop() {
         while (true) {
             try {
-                AutomatedCar car = worldManager.getAutomatedCar();
-                car.drive();
-
                 this.worldManager.getAutomatedCar().drive();
                 for (NPC npc : worldManager.getNpcs()) {
                     npc.move();
