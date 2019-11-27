@@ -99,6 +99,6 @@ public class Camera {
     }
 
     private int calculateRangeModifier() {
-        return this.CAMERA_RANGE * Consts.PIXEL_PER_METERS / 10; // TODO: remove range reduction;
+        return this.CAMERA_RANGE * Consts.PIXEL_PER_METERS;
     }
 }

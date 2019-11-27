@@ -3,6 +3,7 @@ package hu.oe.nik.szfmv.automatedcar.model;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 
+import java.awt.Rectangle;
 import java.util.List;
 
 public class NPC extends WorldObject implements ICrashable {
@@ -28,6 +29,14 @@ public class NPC extends WorldObject implements ICrashable {
                 turnInTurningPointDirection(currentTurningPoint);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void initShape() {
+        this.polygons.add(new Rectangle(0, 0, this.width, this.height));
     }
 
     private void moveInTurningPointDirection(TurningPoint currentTurningPoint) {

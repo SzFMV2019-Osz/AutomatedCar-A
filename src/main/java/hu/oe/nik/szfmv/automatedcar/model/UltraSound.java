@@ -1,4 +1,4 @@
-package hu.oe.nik.szfmv.automatedcar;
+package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.SignSensor;
@@ -22,9 +22,9 @@ public class UltraSound {
         this.sensorList = new ArrayList<>();
         this.rotation = rotation;
 
-        SignSensor signSensor = new SignSensor();
-        signSensor.setPos(x + offsetX, y + offsetY);
-        this.sensorList.add(signSensor);
+        UltraSoundSensor crashSensor = new UltraSoundSensor();
+        crashSensor.setPos(x + offsetX, y + offsetY);
+        this.sensorList.add(crashSensor);
 
         this.pos = new Position(x + offsetX, y + offsetY);
     }
@@ -100,6 +100,6 @@ public class UltraSound {
     }
 
     private int calculateRangeModifier() {
-        return 80 * Consts.PIXEL_PER_METERS / 10; // TODO: remove range reduction;
+        return 30 * Consts.PIXEL_PER_METERS / 10; // TODO: remove range reduction;
     }
 }

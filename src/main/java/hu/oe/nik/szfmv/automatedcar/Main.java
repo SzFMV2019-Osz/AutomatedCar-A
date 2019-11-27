@@ -56,7 +56,7 @@ public class Main {
                     npc.move();
                 }
                 // TODO IWorld-öt használjon a drawWorld
-                this.window.getCourseDisplay().drawWorld((this.worldManager));
+                this.window.getCourseDisplay().drawWorld((this.worldManager),window.getVirtualFunctionBus().inputPacket);
                 // TODO window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
@@ -76,10 +76,10 @@ public class Main {
 
         AutomatedCar car = this.worldManager.getAutomatedCar();
         if (result == 1) {
-            car.setPosY(car.getPosY() - 100);
+            car.moveCarByPos(0, -100);
             LOGGER.info("Result: " + result + ". Y coordinate modified!");
         } else {
-            car.setPosX(car.getPosX() - 100);
+            car.moveCarByPos(-100, 0);
             LOGGER.info("Result: " + result + ". X coordinate modified!");
         }
         // key reset (hajlamosak beragadni a gombok a dialog felugrásakor)
