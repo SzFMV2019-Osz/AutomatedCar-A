@@ -1,4 +1,4 @@
-package hu.oe.nik.szfmv.automatedcar.visualization.interfaces;
+package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 

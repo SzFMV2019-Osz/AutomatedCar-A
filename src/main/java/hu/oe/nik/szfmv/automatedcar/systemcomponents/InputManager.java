@@ -2,7 +2,6 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
-
 import java.awt.event.KeyEvent;
 
 public class InputManager extends SystemComponent {
@@ -44,19 +43,19 @@ public class InputManager extends SystemComponent {
 
     public void HandleSyncKeys(int pressedKey, boolean trigger) {
         switch (pressedKey) {
-            case KeyEvent.VK_UP:
+            case KeyEvent.VK_W:
                 gasPedal.Trigger(trigger);
                 break;
 
-            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_S:
                 breakPedal.Trigger(trigger);
                 break;
 
-            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_D:
                 rightSteering.Trigger(trigger);
                 break;
 
-            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_A:
                 leftSteering.Trigger(trigger);
                 break;
         }
@@ -69,12 +68,12 @@ public class InputManager extends SystemComponent {
                 inputPacket.setAccTimegap(acc.ReturnTimeGap());
                 break;
 
-            case KeyEvent.VK_ADD:
+            case KeyEvent.VK_UP:
                 acc.Plus();
                 inputPacket.setAccSpeed(acc.getReferenceSpeed());
                 break;
 
-            case KeyEvent.VK_SUBTRACT:
+            case KeyEvent.VK_DOWN:
                 acc.Minus();
                 inputPacket.setAccSpeed(acc.getReferenceSpeed());
                 break;
@@ -89,11 +88,11 @@ public class InputManager extends SystemComponent {
                 inputPacket.setLaneKeepingState();
                 break;
 
-            case KeyEvent.VK_NUMPAD1:
+            case KeyEvent.VK_LEFT:
                 inputPacket.setLeftSignValue(!inputPacket.getLeftSignalValue());
                 break;
 
-            case KeyEvent.VK_NUMPAD2:
+            case KeyEvent.VK_RIGHT:
                 inputPacket.setRightSignValue(!inputPacket.getRightSignalValue());
                 break;
 
@@ -102,14 +101,23 @@ public class InputManager extends SystemComponent {
                 inputPacket.setGearShiftValue(gearShift.GetCurrentState());
                 break;
 
-            case KeyEvent.VK_W:
+            case KeyEvent.VK_E:
                 gearShift.Decrement();
                 inputPacket.setGearShiftValue(gearShift.GetCurrentState());
                 break;
 
-            case KeyEvent.VK_A:
+            case KeyEvent.VK_O:
                 acc.Resume();
                 inputPacket.setAccState(acc.isOn);
+                break;
+            case KeyEvent.VK_I:
+                inputPacket.setDebugOn();
+                break;
+            case KeyEvent.VK_K:
+                this.inputPacket.setDebugCameraOn();
+                break;
+            case KeyEvent.VK_U:
+                this.inputPacket.setDebugUltrasoundOn();
                 break;
         }
     }

@@ -1,8 +1,8 @@
 package hu.oe.nik.szfmv.automatedcar.xml.converter;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * XML feldolgozáshoz konverter. A beolvasott String-et Doublelé alakítja.

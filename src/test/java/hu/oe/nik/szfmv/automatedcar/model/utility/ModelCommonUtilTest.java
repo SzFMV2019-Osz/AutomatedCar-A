@@ -1,10 +1,21 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import hu.oe.nik.szfmv.automatedcar.model.Position;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.Rectangle;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -17,6 +28,13 @@ public class ModelCommonUtilTest {
     Position pointB;
     Position pointC;
     Position pointD;
+    Polygon triangle;
+    Rectangle rectangle;
+    Polygon smallLine;
+    Rectangle rectangleFarAway;
+    Point point;
+    int[] invalidNumbersForRandom = new int[] {0, -1, -235, -542};
+    int[] properNumbersForRandom = new int[] {123, 1, 5, 86};
 
     @BeforeEach
     public void init() {
@@ -25,6 +43,16 @@ public class ModelCommonUtilTest {
         this.pointC = new Position(0, 1);
         this.pointD = new Position(0, 0);
 
+        triangle = new Polygon();
+        triangle.addPoint(-1, 2);
+        triangle.addPoint(-1, -3);
+        triangle.addPoint(2, 2);
+        rectangle = new Rectangle(0, 0, 1, 2);
+        smallLine = new Polygon();
+        smallLine.addPoint(0,0);
+        smallLine.addPoint(1,1);
+        rectangleFarAway = new Rectangle(2, 2, 2 ,1);
+        point = new Point(0,0);
     }
 
     @Test
@@ -75,16 +103,6 @@ public class ModelCommonUtilTest {
     }
 
     @Test
-    public void pointInTriangle() {
-        assertEquals(true, ModelCommonUtil.isPointInTriangle(this.pointA, this.pointB, this.pointC, this.pointD));
-    }
-
-    @Test
-    public void pointNotInTriangle() {
-        assertEquals(false, ModelCommonUtil.isPointInTriangle(this.pointA, this.pointC, this.pointD, this.pointB));
-    }
-
-    @Test
     public void existingTopLeftPoint() {
         Position point = ModelCommonUtil.getTopLeftPoint(this.pointC, this.pointD);
         assertEquals(this.pointD.getX(), point.getX());
@@ -110,5 +128,51 @@ public class ModelCommonUtilTest {
         Position point = ModelCommonUtil.getBottomRightPoint(this.pointB, this.pointC);
         assertEquals(1, point.getX());
         assertEquals(1, point.getY());
+    }
+
+    @Test
+    public void shapeInPolygon() {
+        assertTrue(ModelCommonUtil.isShapeInPolygon(smallLine, triangle));
+    }
+
+    @Test
+    public void shapeOnEdgeOfPolygon() {
+        assertFalse(ModelCommonUtil.isShapeInPolygon(rectangleFarAway, rectangle));
+    }
+
+    @Test
+    public void shapeIntersectsWithPolygon() {
+        assertTrue(ModelCommonUtil.isShapeInPolygon(triangle, rectangle));
+    }
+
+    @Test
+    public void shapeOutsidePolygon() {
+        assertFalse(ModelCommonUtil.isShapeInPolygon(rectangle, rectangleFarAway));
+    }
+
+    @Test
+    public void pointInPolygon() {
+        assertTrue(ModelCommonUtil.isShapeOnPoint(triangle, point));
+    }
+
+    @Test
+    public void pointOutsideOfPolygon() {
+        assertFalse(ModelCommonUtil.isShapeOnPoint(rectangleFarAway, point));
+    }
+
+    @Test
+    public void getRandom_ThrowsIllegalArgumentException_WhenCalledWith_NumbersLowerThanOne() {
+        for (int num : invalidNumbersForRandom) {
+            assertThrows(IllegalArgumentException.class, () -> ModelCommonUtil.getRandom(num));
+        }
+    }
+
+    @Test
+    public void getRandom_ReturnProperNumber_WhenCalledWith_NumbersGreaterOrEqualsOne() {
+        for (int num : properNumbersForRandom) {
+            int random = ModelCommonUtil.getRandom(num);
+            assertTrue(random > 0);
+            assertTrue(random <= num);
+        }
     }
 }

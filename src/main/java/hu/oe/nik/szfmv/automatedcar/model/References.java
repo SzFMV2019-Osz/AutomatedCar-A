@@ -2,6 +2,10 @@ package hu.oe.nik.szfmv.automatedcar.model;
 
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.xml.converter.ReferenceConverter;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +16,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
-
 
 /**
  * Referenciapontokat tároló objektum.
@@ -51,7 +52,7 @@ public class References {
      * @return {@link Position} - X és Y pontok, itt kell forgatni a képet
      */
     public Position getReference(String fileName) {
-        if ( !StringUtils.endsWith(fileName, Consts.SUFFIX_IMAGE)) {
+        if (!StringUtils.endsWith(fileName, Consts.SUFFIX_IMAGE)) {
             fileName += Consts.SUFFIX_IMAGE;
         }
         if (this.references.containsKey(fileName)) {

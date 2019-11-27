@@ -4,22 +4,25 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IBackground;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IStatic;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 
-import javax.xml.bind.Unmarshaller;
-import java.awt.Shape;
 import java.awt.Rectangle;
-import java.awt.Polygon;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.Unmarshaller;
 
 /**
  * Út alaposztály.
  */
 public class Road extends WorldObject implements IStatic, IBackground {
 
-    private final int BORDER = 10;
-    private final int ROAD_WIDTH = 325;
-    private final int SMALL_CIRCLE_DIAMETER = 350;
+    private static final int BORDER = 10;
+    private static final int ROAD_WIDTH = 325;
+    private static final int SMALL_CIRCLE_DIAMETER = 350;
 
     /**
      * {@inheritDoc}
@@ -27,9 +30,6 @@ public class Road extends WorldObject implements IStatic, IBackground {
     @Override
     public void initShape() {
         switch (this.imageFileName) {
-            case Consts.RES_IDENTIFIER_ROAD_STRAIGHT:
-                this.roadShapeStraight();
-                break;
             case Consts.RES_IDENTIFIER_ROAD_90_LEFT:
                 this.roadShape90Left();
                 break;
@@ -62,89 +62,116 @@ public class Road extends WorldObject implements IStatic, IBackground {
     }
 
     private void roadShapeStraight() {
-        this.polygon = new Rectangle(this.BORDER, 0, this.width - (this.BORDER * 2), this.height);
-        Rectangle line = new Rectangle(this.width / 2 - 1, 0, 2, this.height);
-        ((Rectangle) this.polygon).add(line);
+        this.polygons.add(new Line2D.Float(this.BORDER, 0, this.BORDER , this.height));
+        this.polygons.add(new Line2D.Float(this.width / 2, 0, this.width / 2, this.height));
+        this.polygons.add(new Line2D.Float(this.width - this.BORDER, 0, this.width - this.BORDER , this.height));
     }
 
     private void roadShape90Left() {
-        Polygon smallArc = this.createSmall90Arc();
-        Polygon middleArc = this.createMiddle90Arc();
-        Polygon bigArc = this.createBig90Arc();
+        Path2D.Float smallArc = this.createSmall90Arc();
+        Path2D.Float middleArc = this.createMiddle90Arc();
+        Path2D.Float bigArc = this.createBig90Arc();
 
-        this.polygon = new Area(bigArc);
-        ((Area) this.polygon).add(new Area(middleArc));
-        ((Area) this.polygon).add(new Area(smallArc));
+        this.polygons.add(bigArc);
+        this.polygons.add(middleArc);
+        this.polygons.add(smallArc);
     }
 
     private void roadShape90Right() {
         this.roadShape90Left();
-        this.polygon = mirrorAlongX(525, this.polygon);
+        this.polygons = mirrorList(this.width, this.polygons);
     }
 
     private void roadShape45Left() {
-        Polygon smallArc = this.createSmall45Arc();
-        Polygon middleArc = this.createMiddle45Arc();
-        Polygon bigArc = this.createBig45Arc();
+        Path2D.Float smallArc = this.createSmall45Arc();
+        Path2D.Float middleArc = this.createMiddle45Arc();
+        Path2D.Float bigArc = this.createBig45Arc();
 
-        this.polygon = new Area(bigArc);
-        ((Area) this.polygon).add(new Area(middleArc));
-        ((Area) this.polygon).add(new Area(smallArc));
+        this.polygons.add(bigArc);
+        this.polygons.add(middleArc);
+        this.polygons.add(smallArc);
     }
 
     private void roadShape45Right() {
         this.roadShape45Left();
-        this.polygon = mirrorAlongX(401, this.polygon);
+        this.polygons = mirrorList(this.width, this.polygons);
     }
 
-    private Polygon createSmall90Arc() {
-        return new Polygon(new int[]{0, -27, -80, -187}, new int[]{0, -100, -150, -187}, 4);
+    private Path2D.Float createSmall90Arc() {
+        return this.createArc(new int[]{185, 155, 100, 0}, new int[]{525, 420, 368, 340}, 4);
     }
 
-    private Polygon createMiddle90Arc() {
-        return new Polygon(new int[]{163, 138, 68, -41, -187}, new int[]{0, -135, -240, -320, -350}, 5);
+    private Path2D.Float createMiddle90Arc() {
+        return this.createArc(new int[]{350, 323, 255, 144, 0}, new int[]{525, 393, 287, 207, 175}, 5);
     }
 
-    private Polygon createBig90Arc() {
-        return new Polygon(new int[]{323, 303, 233, 126, -26, -187}, new int[]{0, -157, -293, -407, -487, -510}, 6);
+    private Path2D.Float createBig90Arc() {
+        return this.createArc(new int[]{510, 474, 422, 288, 169, 0}, new int[]{525, 329, 236, 102, 42, 15}, 6);
     }
 
-    private Polygon createSmall45Arc() {
-        return new Polygon(new int[]{12, 0, -41}, new int[]{0, -73, -131}, 3);
+    private Path2D.Float createSmall45Arc() {
+        return this.createArc(new int[]{63, 51, 10}, new int[]{371, 303, 240}, 3);
     }
 
-    private Polygon createMiddle45Arc() {
-        return new Polygon(new int[]{176, 162, 132, 74}, new int[]{0, -97, -169, -247}, 4);
+    private Path2D.Float createMiddle45Arc() {
+        return this.createArc(new int[]{225, 212, 183, 122}, new int[]{371, 275, 202, 124}, 4);
     }
 
-    private Polygon createBig45Arc() {
-        return new Polygon(new int[]{339, 321, 275, 189}, new int[]{0, -131, -247, -360}, 4);
+    private Path2D.Float createBig45Arc() {
+        return this.createArc(new int[]{388, 371, 321, 239}, new int[]{371, 238, 120, 0}, 4);
     }
 
     private void roadShapeTJunctionRight() {
-        this.polygon = new Rectangle(this.BORDER, 0, this.ROAD_WIDTH, this.height);
-        Rectangle line = new Rectangle(this.width / 2 - 1, 0, 2, this.height);
-        int x = this.BORDER + this.ROAD_WIDTH;
-        Rectangle secondRoad = new Rectangle(x, (this.height / 2) - (this.ROAD_WIDTH / 2), this.width - x, this.ROAD_WIDTH);
-        ((Rectangle) this.polygon).add(line);
-        ((Rectangle) this.polygon).add((secondRoad));
+        this.polygons.add(new Line2D.Float(this.BORDER, 0, this.BORDER, this.height));
+        this.polygons.add(new Line2D.Float(
+                this.BORDER + this.ROAD_WIDTH / 2, 0, this.BORDER + this.ROAD_WIDTH / 2, this.height));
+
+        this.polygons.add(new Line2D.Float(
+                this.BORDER * 2 + this.ROAD_WIDTH, 0, this.BORDER * 2 + this.ROAD_WIDTH, 350));
+        this.polygons.add(new Line2D.Float(
+                this.BORDER * 2 + this.ROAD_WIDTH, 1050, this.BORDER * 2 + this.ROAD_WIDTH, this.height));
+
+        this.polygons.add(new Line2D.Float(525, 540, 875, 540));
+        this.polygons.add(new Line2D.Float(525, 700, 875, 700));
+        this.polygons.add(new Line2D.Float(525, 860, 875, 860));
+
+        this.polygons.add(this.createArc(new int[]{340, 420, 524}, new int[]{350, 450, 536}, 3));
+        this.polygons.add(this.createArc(new int[]{340, 420, 524}, new int[]{1050, 946, 868}, 3));
     }
 
     private void roadShapeTJunctionLeft() {
         this.roadShapeTJunctionRight();
-        this.polygon = mirrorAlongX(875, this.polygon);
+        this.polygons = mirrorList(this.width, this.polygons);
     }
 
     private void roadShapeCrossroad() {
-        this.polygon = new Rectangle(0, -this.BORDER, this.width, -this.ROAD_WIDTH);
-        ((Rectangle) this.polygon).add(this.createCrossroadRoad());
+        int x = 535;
+        this.polygons.add(new Line2D.Float(x, 0, x, this.height));
+        this.polygons.add(new Line2D.Float(x + this.ROAD_WIDTH / 2, 0, x + this.ROAD_WIDTH / 2, this.height));
+
+        this.polygons.add(new Line2D.Float(x * 2 + this.ROAD_WIDTH, 0, x * 2 + this.ROAD_WIDTH, 350));
+        this.polygons.add(new Line2D.Float(x * 2 + this.ROAD_WIDTH, 1050, x * 2 + this.ROAD_WIDTH, this.height));
+
+        this.polygons.add(new Line2D.Float(x + 525, 540, x + 875, 540));
+        this.polygons.add(new Line2D.Float(x + 525, 700, x + 875, 700));
+        this.polygons.add(new Line2D.Float(x + 525, 860, x + 875, 860));
+
+        this.polygons.add(new Line2D.Float(0, 540, 345, 540));
+        this.polygons.add(new Line2D.Float(0, 700, 345, 700));
+        this.polygons.add(new Line2D.Float(0, 860, 345, 860));
+
+        this.polygons.add(this.createArc(new int[]{x + 340, x + 420, x + 524}, new int[]{350, 450, 536}, 3));
+        this.polygons.add(this.createArc(new int[]{x + 340, x + 420, x + 524}, new int[]{1050, 946, 868}, 3));
+
+        this.polygons.add(this.createArc(new int[]{348, 450, 537}, new int[]{350, 450, 536}, 3));
+        this.polygons.add(this.createArc(new int[]{348, 450, 537}, new int[]{1050, 946, 868}, 3));
     }
 
     private void roadShapeRotary() {
-        this.polygon = new Rectangle(0, -this.BORDER, this.width, -this.ROAD_WIDTH);
+        this.polygons.add(new Rectangle(0, -this.BORDER, this.width, -this.ROAD_WIDTH));
 
-        ((Rectangle) this.polygon).add(this.createCrossroadRoad());
-        ((Area) this.polygon).add(this.createEllipses());
+        this.polygons.add(this.createCrossroadRoad());
+        this.polygons.add(this.createEllipses());
     }
 
     private Rectangle createCrossroadRoad() {
@@ -178,12 +205,30 @@ public class Road extends WorldObject implements IStatic, IBackground {
         return new Ellipse2D.Float(x, y, this.SMALL_CIRCLE_DIAMETER, this.SMALL_CIRCLE_DIAMETER);
     }
 
+    private Path2D.Float createArc(int[] x, int[] y, int n) {
+        Path2D.Float arc = new Path2D.Float();
+        arc.moveTo(x[0], y[0]);
+        for (int i = 1; i < n; i++) {
+            arc.lineTo(x[i], y[i]);
+        }
+
+        return arc;
+    }
+
+    private static List<Shape> mirrorList(double x, List<Shape> objects) {
+        List<Shape> mirroredObjects = new ArrayList<>();
+
+        for (Shape object : objects) {
+            mirroredObjects.add(mirrorAlongX(x, object));
+        }
+
+        return mirroredObjects;
+    }
 
     private static Shape mirrorAlongX(double x, Shape shape) {
         AffineTransform at = new AffineTransform();
         at.translate(x, 0);
         at.scale(-1, 1);
-        at.translate(-x, 0);
         return at.createTransformedShape(shape);
     }
 

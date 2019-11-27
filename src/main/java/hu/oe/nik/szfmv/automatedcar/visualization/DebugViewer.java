@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Displays debugging-related information on the screen
  */
-public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISensorAreaInterface, IDetectedObjects, IRadarClosestObject {
+public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISensorAreaInterface {
 
     private static Color BASE_COLOR = Color.BLUE;
     private static Color SENSOR_TRIANGLE_BASE_COLOR = Color.RED;
@@ -29,11 +29,6 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
     private Color sensorColor = Color.RED;
     private Position sensorPosition;
     private static final int SENSOR_DIMENSION = 8;
-    private Position sensorTriangleLeftTip;
-    private Position sensorTriangleRightTip;
-
-    //"seen" object
-    public List<IObject> SeenObjects;
 
     /**
      * @return The information represening the color and borderline width of the object
@@ -53,6 +48,20 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
 
     DebugViewer(Graphics2D graphics) {
         this.graphics2D = graphics;
+    }
+
+    /**
+     * @return If debugger is switched on or not
+     */
+    public boolean isDebuggerSwitchedOn() {
+        return this.debuggerSwitchedOn;
+    }
+
+    /**
+     * @param debuggerSwitchedOn Flag indicating if debugger is switched on or not
+     */
+    public void setDebuggerSwitchedOn(boolean debuggerSwitchedOn) {
+        this.debuggerSwitchedOn = debuggerSwitchedOn;
     }
 
     public DebugViewer() {
@@ -87,7 +96,7 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
 
     public void drawSensorTriangle(Color color, AffineTransform t, Position centerEdge, Position leftEdge, Position rightEdge){
         if (debuggerSwitchedOn){
-            updateSensorTrianglePosition();
+            //updateSensorTrianglePosition();
             graphics2D.setColor(color);
 
             Shape leftLine = new Line2D.Double(centerEdge.getX(), centerEdge.getY(), leftEdge.getX(), leftEdge.getY());
@@ -100,36 +109,36 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         }
     }
 
-
-
     private void updateSensorPosition(AutomatedCar car){
         // the center of the car bumper is the same x as the car refX and hal the car refY
         // the sensor is going to be on the same layer (z) as the car
-        sensorPosition = new Position(car.getReferenceX(), car.getReferenceY() - car.getHeight()/2);
+        sensorPosition = car.getRadar().getSensorPosition();
     }
 
-    private void updateSensorTrianglePosition(){
-        /* Calculating the positions of the sensor triangle using ANAL1 trigonometrikus szögfüggvény: tan(alpha) = a/b
-           The edge of the triangle is always the exact position of the sensor body.
-           Since the sensor area is 2 right-angled triangles and we know that the sensor sees in 60° (30° each),
-           we know that alpha = 60 °. We also know the sensor position and the length of the central edge = 200.
-           So, since tan(60) = 200/b, from here b = 200/tan(60).
-         */
-        int sensorLength = 400;
-        int baseAngle = 60;
+    //private void updateSensorTrianglePosition(AutomatedCar car){
+    //    /* Calculating the positions of the sensor triangle using ANAL1 trigonometrikus szögfüggvény: tan(alpha) = a/b
+    //       The edge of the triangle is always the exact position of the sensor body.
+    //       Since the sensor area is 2 right-angled triangles and we know that the sensor sees in 60° (30° each),
+    //       we know that alpha = 60 °. We also know the sensor position and the length of the central edge = 200.
+    //       So, since tan(60) = 200/b, from here b = 200/tan(60).
+    //     */
+    //    //int sensorLength = 400;
+    //    //int baseAngle = 60;
+//
+    //    Position sensorTriangleBasePoint = new Position(sensorPosition.getX(), sensorPosition.getY()-sensorLength);
+    //    int sensorTriangleBaseHalfLength = (int)(sensorLength/Math.tan(Math.toRadians(baseAngle)));
+    //    sensorTriangleLeftTip = new Position(sensorTriangleBasePoint.getX()-sensorTriangleBaseHalfLength,sensorTriangleBasePoint.getY());
+    //    sensorTriangleRightTip = new Position(sensorTriangleBasePoint.getX() + sensorTriangleBaseHalfLength, sensorTriangleBasePoint.getY());
+    //}
 
-        Position sensorTriangleBasePoint = new Position(sensorPosition.getX(), sensorPosition.getY()-sensorLength);
-        int sensorTriangleBaseHalfLength = (int)(sensorLength/Math.tan(Math.toRadians(baseAngle)));
-        sensorTriangleLeftTip = new Position(sensorTriangleBasePoint.getX()-sensorTriangleBaseHalfLength,sensorTriangleBasePoint.getY());
-        sensorTriangleRightTip = new Position(sensorTriangleBasePoint.getX() + sensorTriangleBaseHalfLength, sensorTriangleBasePoint.getY());
-    }
 
-
-    public void operateFrontalRadarSensor(Graphics2D drawer, AutomatedCar car, AffineTransform t){
+    public void displayRadarSensorArea(Graphics2D drawer, AutomatedCar car, AffineTransform t){
         if(debuggerSwitchedOn){
             updateSensorPosition(car);
             drawSensorBody(drawer, t);
-            updateSensorTrianglePosition();
+
+            Position sensorTriangleLeftTip = car.getRadar().getRadarAreaLeftTip();
+            Position sensorTriangleRightTip = car.getRadar().getRadarAreaRightTip();
 
             Position centerPosition = new Position(sensorPosition.getX(), sensorPosition.getY());
             Position leftPosition = new Position(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
@@ -138,19 +147,51 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
             drawSensorTriangle(sensorTriangleColor, t, centerPosition, leftPosition, rightPosition);
         }
     }
+    public void DrawPolygon(List<Shape> shapes) {
+        if (debuggerSwitchedOn){
+            graphics2D.setColor(info.getColor());
+            graphics2D.setStroke(info.getThickness());
 
-    public void detectObjects(List<IObject> objects){
-        Polygon sensor = new Polygon();
-        sensor.addPoint(sensorPosition.getX(), sensorPosition.getY());
-        sensor.addPoint(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
-        sensor.addPoint(sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
-
-        for (IObject object : objects){
-            if (sensor.contains(object.getPosX(), object.getPosY())){
-                SeenObjects.add(object);
+            // create a rectangle with the original data and draw the result of applying the transformation
+            for(Shape shape : shapes) {
+                graphics2D.draw(shape);
             }
         }
     }
+
+
+
+    public void DrawPolygon(Shape shape) {
+        if (this.debuggerSwitchedOn) {
+            this.graphics2D.setColor(this.info.getColor());
+            this.graphics2D.setStroke(this.info.getThickness());
+            this.graphics2D.draw(shape);
+        }
+    }
+
+    public void DrawSensorTriangle(int aX, int aY, int bX, int bY, int cX, int cY, Color color, AffineTransform t){
+        if (debuggerSwitchedOn){
+            graphics2D.setColor(color);
+            graphics2D.drawLine(aX, aY, bX, bY);
+            graphics2D.drawLine(aX, aY, cX, cY);
+            graphics2D.drawLine(bX, bY, cX, cY);
+        }
+    }
+
+
+    // this is now in Radar, under syscomponents
+    //public void detectObjects(List<IObject> objects){
+    //    Polygon sensor = new Polygon();
+    //    sensor.addPoint(sensorPosition.getX(), sensorPosition.getY());
+    //    sensor.addPoint(sensorTriangleLeftTip.getX(), sensorTriangleLeftTip.getY());
+    //    sensor.addPoint(sensorTriangleRightTip.getX(), sensorTriangleRightTip.getY());
+//
+    //    for (IObject object : objects){
+    //        if (sensor.contains(object.getPosX(), object.getPosY())){
+    //            SeenObjects.add(object);
+    //        }
+    //    }
+    //}
 
     private void drawSensorBody(Graphics2D drawer, AffineTransform t) {
         Shape sensor = new Ellipse2D.Double(sensorPosition.getX(), sensorPosition.getY(), SENSOR_DIMENSION, SENSOR_DIMENSION);
@@ -198,28 +239,5 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         this.sensorTriangleColor = color;
     }
 
-    @Override
-    public WorldObject getClosestObjectInLane() {
 
-        //If we do not found any objects yet, return null.
-        if (this.SeenObjects == null) {
-            return null;
-        }
-
-        WorldObject closest = null;
-        double closestDistance = Double.MAX_VALUE;
-
-        for (IObject object : this.SeenObjects) {
-            double a = Math.pow(object.getPosX() - sensorPosition.getX(), 2);
-            double b = Math.pow(object.getPosY() - sensorPosition.getY(), 2);
-            double distance = Math.sqrt(a + b);
-
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closest = (WorldObject)object;
-            }
-        }
-
-        return closest;
-    }
 }
