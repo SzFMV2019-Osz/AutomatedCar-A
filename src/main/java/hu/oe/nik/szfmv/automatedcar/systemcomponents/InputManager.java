@@ -109,8 +109,7 @@ public class InputManager extends SystemComponent {
                 break;
 
             case KeyEvent.VK_O:
-                acc.Resume();
-                inputPacket.setAccState(acc.isOn);
+                acc.turnOn();
                 break;
         }
     }

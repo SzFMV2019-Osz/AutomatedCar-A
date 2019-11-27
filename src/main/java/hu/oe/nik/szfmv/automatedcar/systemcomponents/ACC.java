@@ -57,8 +57,22 @@ public class ACC extends SystemComponent {
         return referenceSpeed;
     }
 
+    void turnOn() {
+        virtualFunctionBus.inputPacket.setAccState(true);
+        virtualFunctionBus.inputPacket.setAccSpeed(selectNewAccSpeed());
+    }
+
     void turnOff() {
         virtualFunctionBus.inputPacket.setAccState(false);
+    }
+
+    private int selectNewAccSpeed() {
+        var currentVelocity = virtualFunctionBus.powertrainPacket.getVelocity();
+        if (currentVelocity >= 30 && currentVelocity <= 160) {
+            return currentVelocity;
+        } else {
+            return virtualFunctionBus.inputPacket.getAccSpeed();
+        }
     }
 
     @Override
