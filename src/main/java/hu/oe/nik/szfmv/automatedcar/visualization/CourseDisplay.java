@@ -143,10 +143,11 @@ public class CourseDisplay extends JPanel {
         hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer viewer = new hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
         car.setCarOffset(offsets[0], offsets[1]);
-        car.operateSensors(world); // sensors need world data, first we init sensors and start driving afterwards only
+        car.operateSensors(world, offsets[0], offsets[1]); // sensors need world data, first we init sensors and start driving afterwards only
 
         List<List<Shape>> sensedObjects = car.checkCamera(world, offsets[0], offsets[1]);
         List<List<Shape>> soundObjects = car.checkUltraSound(world, offsets[0], offsets[1]);
+
         viewer.setDebuggerSwitchedOn(this.inputPacket.getDebugOn());
         //draw world
         for (IObject object : world.getAllObjectsInRectangle(
@@ -180,7 +181,6 @@ public class CourseDisplay extends JPanel {
         // Set debug viewer
         viewer.displayRadarSensorArea(g2d, car, t1);
 
-        viewer.displayRadarSensorArea(g2d, car, t1);
         for (List<Shape> shape : soundObjects) {
             viewer.DrawPolygon(shape);
         }
