@@ -4,7 +4,13 @@ import hu.oe.nik.szfmv.automatedcar.systemcomponents.GearShift.POS;
 
 public interface OutgoingInputPacket {
     int getGasPedalValue();
-    public boolean getDebugOn();
+
+    boolean getDebugOn();
+
+    boolean getDebugCameraOn();
+
+    boolean getDebugUltrasoundOn();
+
     int getBreakPedalValue();
 
     int getRightSteeringWheelValue();

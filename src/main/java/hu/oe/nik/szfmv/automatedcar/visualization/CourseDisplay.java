@@ -10,7 +10,7 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
-import hu.oe.nik.szfmv.automatedcar.visualization.debug.DebugViewer;
+import hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import java.awt.*;
@@ -140,10 +140,11 @@ public class CourseDisplay extends JPanel {
     private void drawObjects(Graphics2D g2d, WorldManager world) throws CrashException {
         int[] offsets = getCarOffset(world.getAutomatedCar());
 
-        DebugViewer viewer = new DebugViewer(g2d);
+        hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer viewer = new hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
         List<List<Shape>> sensedObjects = car.checkCamera(world, offsets[0], offsets[1]);
         List<List<Shape>> soundObjects = car.checkUltraSound(world, offsets[0], offsets[1]);
+        viewer.setDebuggerSwitchedOn(this.inputPacket.getDebugOn());
         //draw world
         for (IObject object : world.getAllObjectsInRectangle(
                 new Position(0 - this.renderDistance, 0 - this.renderDistance),
@@ -161,19 +162,23 @@ public class CourseDisplay extends JPanel {
         // Draw car
         AffineTransform t1 = car.getTransform(offsets[0], offsets[1]);
         viewer.DrawPolygon(car.getPolygons(offsets[0], offsets[1]));
-
+        viewer.setDebuggerSwitchedOn(this.inputPacket.getDebugCameraOn());
         g2d.drawImage(car.getImage(), t1, this);
-
         viewer.setInfo(new DrawingInfo(Color.BLUE, 4));
-        viewer.setDebuggerSwitchedOn(inputPacket.getDebugOn());
         viewer.DrawPolygon(car.getCameraTriangle(offsets[0], offsets[1]));
         for (List<Shape> shape : sensedObjects) {
             viewer.DrawPolygon(shape);
         }
+        viewer.setDebuggerSwitchedOn(this.inputPacket.getDebugUltrasoundOn());
         //TODO: UltraSound shapes, get ultrasound offset
         viewer.setInfo(new DrawingInfo(Color.GREEN, 4));
         viewer.DrawPolygon(car.getUltraSoundTriangle(offsets[0], offsets[1]));
 
+        // Set debug viewer
+        viewer.operateFrontalRadarSensor(g2d, car, t1);
+        viewer.detectObjects(world.getAllObjectsInRectangle(new Position(0 - this.renderDistance, 0 - this.renderDistance),
+                new Position(this.width + this.renderDistance, this.height + this.renderDistance),
+                offsets[0], offsets[1]));
         for (List<Shape> shape : soundObjects) {
             viewer.DrawPolygon(shape);
         }
@@ -181,6 +186,4 @@ public class CourseDisplay extends JPanel {
 
         car.checkCollisions(world, offsets[0], offsets[1]);
     }
-
 }
-
