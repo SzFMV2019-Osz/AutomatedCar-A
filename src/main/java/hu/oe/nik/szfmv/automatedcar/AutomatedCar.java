@@ -13,6 +13,7 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.*;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.AEBState;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 
 import org.apache.logging.log4j.LogManager;
@@ -60,15 +61,20 @@ public class AutomatedCar extends Car {
 
 
     public void operateSensors(WorldManager manager, int xOffset, int yOffset){
-        // set radar
+        // Radar
         radar.updateSensorPosition(this);
 
         // the radar is a proxy connecting the model functionality with any other component
         Shape triangle = ModelCommonUtil.generateTriangle(radar.getSensorPosition(), radar.getRadarAreaLeftTip(),radar.getRadarAreaRightTip());
         radar.setDetectedObjects(manager.getAllObjectsInTriangle(triangle,xOffset,yOffset));
+
+        // AEB
         ClosestObject closest = radar.getClosestObjectInLane();
         emergencyBrake.setClosest(closest);
+        emergencyBrake.decideIfReachedSuboptimalBarrier(virtualFunctionBus.powertrainPacket.getVelocity());
 
+        //todo: detecting and signaling 70 km/h
+        //System.out.println(virtualFunctionBus.emergencyBrakePacket.isAebNotOptimal() ? "AEB SUB" : "AEB OPTIMAL");
         // todo: emergency brake state
         //if(closest != null){
         //    System.out.println("CLOSEST: " + closest.getClosestObject() + " WITH DISTANCE " + radar.getClosestObjectInLane().getDistanceFromCar());
