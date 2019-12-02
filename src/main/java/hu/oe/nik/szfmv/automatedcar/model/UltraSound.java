@@ -1,5 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.model;
 
+import hu.oe.nik.szfmv.automatedcar.model.Position;
+import hu.oe.nik.szfmv.automatedcar.model.SignSensor;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ISensor;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
@@ -11,26 +13,20 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Camera {
-    private static final int CAMERA_RANGE = 80;
-    private static final int CAMERA_OFFSET = 40;
-
-    public Position pos = new Position();
+public class UltraSound {
+    public Position pos;
     private List<ISensor> sensorList;
+    private int rotation;
 
-    public Camera(int x, int y) {
+    public UltraSound(int x, int y, int offsetX, int offsetY, int rotation) {
         this.sensorList = new ArrayList<>();
+        this.rotation = rotation;
 
+        UltraSoundSensor crashSensor = new UltraSoundSensor();
+        crashSensor.setPos(x + offsetX, y + offsetY);
+        this.sensorList.add(crashSensor);
 
-        RoadSensor roadSensor = new RoadSensor();
-        roadSensor.setPos(x, y - CAMERA_OFFSET);
-        this.sensorList.add(roadSensor);
-
-        SignSensor signSensor = new SignSensor();
-        signSensor.setPos(x, y - CAMERA_OFFSET);
-        this.sensorList.add(signSensor);
-
-        this.pos = new Position(x, y - CAMERA_OFFSET);
+        this.pos = new Position(x + offsetX, y + offsetY);
     }
 
     public int getPosX() {
@@ -46,22 +42,25 @@ public class Camera {
         this.pos.setY(y);
     }
 
+    public int getRotation() {
+        return  rotation;
+    }
+
     public List<ISensor> getSensors() {
         return this.sensorList;
     }
 
-
     public List<IObject> loop(WorldManager manager, IObject parent, int offsetX, int offsetY) {
-        Shape cameraTriangle = this.generateCameraTriangle(parent, offsetX, offsetY);
+        Shape ultraSound = this.generateCameraTriangle(parent, offsetX, offsetY);
 
         List<IObject> sensedObjects = new ArrayList<>();
 
         for (ISensor sensor : this.sensorList) {
-            List<IObject> list = sensor.getAllSensedRelevantObjects(manager, cameraTriangle, offsetX, offsetY);
+            List<IObject> list = sensor.getAllSensedRelevantObjects(manager, ultraSound, offsetX, offsetY);
 
             if (!list.isEmpty()) {
                 sensor.handleSensedObjects(list);
-                System.out.println("Objects found");
+                System.out.println("UltraSound Triggered");
 
                 sensedObjects.addAll(list);
             }
@@ -70,26 +69,28 @@ public class Camera {
         return sensedObjects;
     }
 
+    //Todo: Create ultraSound
     public Shape generateCameraTriangle(IObject parent, int offsetX, int offsetY) {
         Position pointA = new Position(this.getPosX() + offsetX, this.getPosY() + offsetY);
         Position pointB = this.generateTriangleLeftPoint(offsetX, offsetY);
         Position pointC = this.generateTriangleRightPoint(offsetX, offsetY);
 
         AffineTransform transform = new AffineTransform();
-        transform.rotate(Math.toRadians(parent.getRotation() + 90), parent.getPosX() + offsetX, parent.getPosY() + offsetY); //TODO: remove +90 after TeamA3 merge
+        transform.translate(0, 0);
+        transform.rotate(Math.toRadians(parent.getRotation() + rotation), parent.getPosX() + offsetX, parent.getPosY() + offsetY);
 
         return transform.createTransformedShape(ModelCommonUtil.generateTriangle(pointA, pointB, pointC));
     }
 
     private Position generateTriangleLeftPoint(int offsetX, int offsetY) {
         int rangeModifier = this.calculateRangeModifier();
-        Position point = new Position(this.getPosX() + offsetX - this.calculateTriangleSide(rangeModifier, 30), this.getPosY() + offsetY - rangeModifier);
+        Position point = new Position(this.getPosX() + offsetX - this.calculateTriangleSide(rangeModifier, 50), this.getPosY() + offsetY - rangeModifier);
         return point;
     }
 
     private Position generateTriangleRightPoint(int offsetX, int offsetY) {
         int rangeModifier = this.calculateRangeModifier();
-        Position point = new Position(this.getPosX() + offsetX + this.calculateTriangleSide(rangeModifier, 30), this.getPosY() + offsetY - rangeModifier);
+        Position point = new Position(this.getPosX() + offsetX + this.calculateTriangleSide(rangeModifier, 50), this.getPosY() + offsetY - rangeModifier);
         return point;
     }
 
@@ -99,6 +100,6 @@ public class Camera {
     }
 
     private int calculateRangeModifier() {
-        return this.CAMERA_RANGE * Consts.PIXEL_PER_METERS;
+        return 30 * Consts.PIXEL_PER_METERS / 10; // TODO: remove range reduction;
     }
 }

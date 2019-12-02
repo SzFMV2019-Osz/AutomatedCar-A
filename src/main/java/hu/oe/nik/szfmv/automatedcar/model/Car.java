@@ -7,7 +7,7 @@ import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 
 import java.awt.Rectangle;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.Unmarshaller;
 
@@ -20,6 +20,7 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
     private static final int HEIGHT_BORDER = 1;
 
     protected Camera camera;
+    protected List<UltraSound> ultraSounds = new ArrayList<>();
 
     public Car() {
     }

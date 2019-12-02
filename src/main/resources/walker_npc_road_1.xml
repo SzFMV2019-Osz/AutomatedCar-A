@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TurningPoints>
+    <TurningPoint x="1000" y="100" movingDirection="0" movingSpeed="2" turningDirection="1" turningSpeed="10"/>
+    <TurningPoint x="1600" y="100" movingDirection="90" movingSpeed="2" turningDirection="-1" turningSpeed="10"/>
+    <TurningPoint x="1600" y="600" movingDirection="0" movingSpeed="2" turningDirection="-1" turningSpeed="10"/>
+    <TurningPoint x="1600" y="100" movingDirection="180" movingSpeed="2" turningDirection="1" turningSpeed="10"/>
+    <TurningPoint x="1000" y="100" movingDirection="270" movingSpeed="2" turningDirection="1" turningSpeed="10"/>
+</TurningPoints>
