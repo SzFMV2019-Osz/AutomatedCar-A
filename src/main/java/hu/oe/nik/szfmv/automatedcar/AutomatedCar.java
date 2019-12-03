@@ -12,10 +12,8 @@ import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.IRadar;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Radar;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.*;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.AEBState;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 
 import org.apache.logging.log4j.LogManager;
@@ -36,6 +34,7 @@ public class AutomatedCar extends Car {
     private Powertrain pt;
     private Radar radar;
     private IObject closestObject;
+    private AutomatedEmergencyBrake emergencyBrake;
 
     @XmlTransient
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
@@ -47,6 +46,7 @@ public class AutomatedCar extends Car {
         pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(),getHeight(),getWidth());
         radar = new Radar(virtualFunctionBus);
         this.camera = new Camera(x, y);
+        this.emergencyBrake = new AutomatedEmergencyBrake(virtualFunctionBus);
     }
 
     public void setCarOffset(int x, int y){
@@ -54,18 +54,33 @@ public class AutomatedCar extends Car {
     }
 
     public void drive() {
+
         virtualFunctionBus.loop();
         calculatePositionAndOrientation();
     }
 
 
-    public void operateSensors(WorldManager manager){
-        // set radar
+    public void operateSensors(WorldManager manager, int xOffset, int yOffset){
+        // Radar
         radar.updateSensorPosition(this);
 
         // the radar is a proxy connecting the model functionality with any other component
         Shape triangle = ModelCommonUtil.generateTriangle(radar.getSensorPosition(), radar.getRadarAreaLeftTip(),radar.getRadarAreaRightTip());
-        radar.setDetectedObjects(manager.getAllObjectsInTriangle(triangle,this.carOffset[0],this.carOffset[1]));
+        radar.setDetectedObjects(manager.getAllObjectsInTriangle(triangle,xOffset,yOffset));
+
+        // AEB
+        ClosestObject closest = radar.getClosestObjectInLane();
+        emergencyBrake.setClosest(closest);
+        emergencyBrake.decideIfReachedSuboptimalBarrier(virtualFunctionBus.powertrainPacket.getVelocity());
+
+        //todo: detecting and signaling 70 km/h
+        //System.out.println(virtualFunctionBus.emergencyBrakePacket.isAebNotOptimal() ? "AEB SUB" : "AEB OPTIMAL");
+        // todo: emergency brake state
+        //if(closest != null){
+        //    System.out.println("CLOSEST: " + closest.getClosestObject() + " WITH DISTANCE " + radar.getClosestObjectInLane().getDistanceFromCar());
+        //    System.out.println("AEB: " + virtualFunctionBus.emergencyBrakePacket.getState().toString());
+        //}
+
     }
 
     public IRadar getRadar(){
@@ -132,6 +147,8 @@ public class AutomatedCar extends Car {
         return this.camera.loop(manager, this, offsetX, offsetY).stream().map(o -> o.getPolygons(offsetX, offsetY)).collect(Collectors.toList());
     }
 
+
+
     public Shape getCameraTriangle(int offsetX, int offetY) {
         return  this.camera.generateCameraTriangle(this, offsetX, offetY);
     }
@@ -160,7 +177,7 @@ public class AutomatedCar extends Car {
                 }
             }
         }
-        System.out.println(closestObject);
+        //System.out.println(closestObject);
         return ultraSoundObjects;
     }
 

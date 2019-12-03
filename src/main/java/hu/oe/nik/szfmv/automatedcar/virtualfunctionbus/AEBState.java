@@ -1,4 +1,5 @@
 package hu.oe.nik.szfmv.automatedcar.virtualfunctionbus;
 
-public class AEBState {
+public enum  AEBState {
+    NEUTRAL, COLLISION_AVOIDABLE, COLLISION_IMMINENT
 }

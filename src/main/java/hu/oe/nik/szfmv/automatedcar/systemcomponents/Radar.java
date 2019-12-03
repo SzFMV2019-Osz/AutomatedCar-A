@@ -77,7 +77,7 @@ public class Radar extends SystemComponent implements IRadar {
     }
 
     @Override
-    public WorldObject getClosestObjectInLane() {
+    public ClosestObject getClosestObjectInLane() {
 
         //If we do not found any objects yet, return null.
         if (this.SeenObjects == null) {
@@ -96,8 +96,12 @@ public class Radar extends SystemComponent implements IRadar {
                 closestDistance = distance;
                 closest = (WorldObject)object;
             }
-        }
 
-        return closest;
+        }
+        ClosestObject closestInfo = new ClosestObject();
+        closestInfo.setDistanceFromCar(closestDistance);
+        closestInfo.setClosestObject(closest);
+
+        return closestInfo;
     }
 }
