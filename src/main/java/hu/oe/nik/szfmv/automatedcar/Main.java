@@ -6,6 +6,7 @@ import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputReader;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.ParkingPilot;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,12 +30,14 @@ public class Main {
         this.loop();
     }
 
+    ParkingPilot pilot;
     private void init() {
         this.worldManager = new WorldManager("test_world", "reference_points");
         NPC walkerNPC = new NPC(new Position(1000, 100), 90, "woman.png", "walker_npc_road_1");
         //NPC carNPC = new NPC(new Position(220, 824), 180, "car_2_blue.png", "car_npc_road_1");
         AutomatedCar car = new AutomatedCar(80, 80, "car_2_white.png");
         this.worldManager.setAutomatedCar(car);
+        pilot = new ParkingPilot(car.getHeight(), car.getVirtualFunctionBus());
         worldManager.getNpcs().add(walkerNPC);
         //worldManager.getNpcs().add(carNPC);
         worldManager.addObjectToWorld(walkerNPC);
@@ -52,6 +55,7 @@ public class Main {
                 for (NPC npc : worldManager.getNpcs()) {
                     npc.move();
                 }
+                pilot.ParkingPilotManagement();
                 // TODO IWorld-öt használjon a drawWorld
                 this.window.getCourseDisplay().drawWorld((this.worldManager),window.getVirtualFunctionBus().inputPacket);
                 // TODO window.getCourseDisplay().refreshFrame();
