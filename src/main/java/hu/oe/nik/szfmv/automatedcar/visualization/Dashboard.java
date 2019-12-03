@@ -1,11 +1,11 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
-import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
+import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
-import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.LastRoadSign;
-import hu.oe.nik.szfmv.automatedcar.model.Car;
+import hu.oe.nik.szfmv.automatedcar.model.Sign;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
@@ -14,6 +14,7 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 
 /**
@@ -72,7 +73,7 @@ public class Dashboard extends JPanel {
     private StatusIndicator TimeGapIndicator;
     private StatusIndicator ReferenceSpeedIndicator;
 
-    private LastRoadSign roadSign = new LastRoadSign("No sign");
+    private Sign roadSign = null;
 
     private void CreateSpeedometer() {
         speedoMeter = new OMeter();
@@ -105,7 +106,8 @@ public class Dashboard extends JPanel {
         PPIndicator = new StatusIndicator(60, 250, 50, 40, "PP");
         LKAIndicator = new StatusIndicator(10, 300, 50, 40, "LKA");
         LKWARNIndicator = new StatusIndicator(10, 350, 100, 40, "LKA WARN");
-        LastRoadSignIndicator = new StatusIndicator(120, 205, 100, 40, roadSign.getRoadSignName());
+        LastRoadSignIndicator = new StatusIndicator(120, 205, 100, 40, roadSign != null ?
+                                                                       roadSign.getImageFileName() : "No Sign");
         AEBWARNIndicator = new StatusIndicator(120, 310, 100, 40, "AEB WARN");
         RRWARNIndicator = new StatusIndicator(120, 350, 100, 40, "RR WARN");
 
@@ -242,18 +244,41 @@ public class Dashboard extends JPanel {
         speedoMeter.setPerf_Percentage(packet.getVelocity());
         speedLimitValueText.setText(String.valueOf(130));
         RPMmeter.setPerf_Percentage(packet.getRPM());
-        Car car = parent.getAutomatedCar();
-
+        AutomatedCar car = parent.getAutomatedCar();
+        
         xCoordValueText.setText(String.valueOf(car.getPosX()));
         yCoordValueText.setText(String.valueOf(car.getPosY()));
         currentSpeedText.setText(String.valueOf(packet.getVelocity()) + " KM/H");
         currentRpmText.setText(String.valueOf(packet.getRPM()));
     }
 
-    private void RoadSignEventHandling(){
-            LastRoadSignIndicator.setText("No sign");
-
-
+    public void RoadSignEventHandling() {
+        AutomatedCar car = parent.getAutomatedCar();
+        WorldManager manager = parent.getManager(); 
+        
+        int width = parent.getCourseDisplay().getWidth();
+        int height = parent.getCourseDisplay().getHeight();
+        int offsetX = (width / 2) - (car.getPosX() - car.getReferenceX() + (car.getWidth() / 2));
+        int offsetY = (height / 2) - (car.getPosY() - car.getReferenceY() + (car.getHeight() / 2));
+        
+        List<IObject> sensedObjects = car.getCamera().loop(manager, car, offsetX, offsetY, car.getRotation());
+        
+        if (sensedObjects.isEmpty()) {
+            roadSign = null;
+        } else {
+            for (IObject object : sensedObjects) {
+                if (object instanceof Sign) {
+                    roadSign = (Sign)object;
+                    break;
+                }
+            }
+        }
+        
+        String lastSignName = "No Sign";
+        if (roadSign != null) {
+            lastSignName = roadSign.getImageFileName();
+        }
+        LastRoadSignIndicator.setText(lastSignName);
     }
 
     private void EventHandling() {

@@ -68,4 +68,6 @@ public interface IObject {
     List<Shape> getPolygons(int offsetX, int offsetY);
 
     AffineTransform getTransform(int offsetX, int offsetY);
+    
+    String getImageFileName();
 }

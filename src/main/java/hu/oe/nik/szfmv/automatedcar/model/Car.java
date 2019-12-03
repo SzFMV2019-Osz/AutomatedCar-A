@@ -107,4 +107,9 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
     public void setPosX(int x) {
         super.setPosX(x);
     }
+
+    public Camera getCamera()
+    {
+        return camera;
+    }
 }
