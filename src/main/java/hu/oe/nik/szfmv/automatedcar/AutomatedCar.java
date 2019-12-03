@@ -12,6 +12,7 @@ import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.UltraSoundPacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.xml.bind.annotation.XmlTransient;
@@ -36,6 +37,7 @@ public class AutomatedCar extends Car {
 
         new Driver(virtualFunctionBus);
         pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(),getHeight(), getWidth());
+        virtualFunctionBus.ultraSoundPacket = new UltraSoundPacket();
         this.camera = new Camera(x, y);
         this.ultraSounds.add( new UltraSound(x,y,-44,-104,90)); //front-left
         this.ultraSounds.add( new UltraSound(x,y,+44,-104,90)); //front-right
@@ -117,8 +119,10 @@ public class AutomatedCar extends Car {
 
     public List<List<Shape>> checkUltraSound(WorldManager manager, int offsetX, int offsetY) {
         List<List<Shape>> ultraSoundObjects = new ArrayList<>();
+        List<List<IObject>> ultraSoundPacketObjects = new ArrayList<>();
         for (int i = 0; i < ultraSounds.size(); i++) {
             List<IObject> objects = ultraSounds.get(i).loop(manager, this, offsetX, offsetY);
+            ultraSoundPacketObjects.add(objects);
             ultraSoundObjects.addAll(objects.stream().map(o -> o.getPolygons(offsetX, offsetY)).collect(Collectors.toList()));
             for (int j = 0; j < objects.size(); j++) {
                 Position objectPos = new Position(objects.get(j).getPosX(), objects.get(j).getPosY());
@@ -140,6 +144,7 @@ public class AutomatedCar extends Car {
             }
         }
         System.out.println(closestObject);
+        virtualFunctionBus.ultraSoundPacket.setUltraSoundObjects(ultraSoundPacketObjects);
         return ultraSoundObjects;
     }
 

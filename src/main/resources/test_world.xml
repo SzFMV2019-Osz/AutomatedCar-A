@@ -229,15 +229,19 @@
       <Transform m11="1" m12="0" m21="0" m22="1"/>
     </Object>
       <Object type="car_2_blue">
-          <Position x="500" y="950"/>
+          <Position x="485" y="820"/>
+          <Transform m11="1" m12="0" m21="0" m22="1"/>
+      </Object>
+      <Object type="car_2_blue">
+          <Position x="485" y="1120"/>
           <Transform m11="1" m12="0" m21="0" m22="1"/>
       </Object>
     <Object type="parking_space_parallel">
       <Position x="470" y="1377"/>
       <Transform m11="1" m12="0" m21="0" m22="1"/>
     </Object>
-      <Object type="car_1_black">
-          <Position x="500" y="1750"/>
+      <Object type="car_2_blue">
+          <Position x="485" y="1750"/>
           <Transform m11="1" m12="0" m21="0" m22="1"/>
       </Object>
     <Object type="crosswalk">
