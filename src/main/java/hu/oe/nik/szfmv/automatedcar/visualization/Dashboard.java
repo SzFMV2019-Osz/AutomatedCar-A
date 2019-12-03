@@ -1,7 +1,9 @@
 package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.AEBState;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.AEBPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.LastRoadSign;
@@ -255,6 +257,14 @@ public class Dashboard extends JPanel {
 
 
     }
+    private void AEBWarnHandling(AEBPacket packet) {
+        if(packet.getState()== AEBState.COLLISION_AVOIDABLE) {
+            AEBWARNIndicator.switchIt(true);
+        }
+        else {
+            AEBWARNIndicator.switchIt(false);
+        }
+    }
 
     private void EventHandling() {
         VirtualFunctionBus virtualFunctionBus = parent.getVirtualFunctionBus();
@@ -265,6 +275,8 @@ public class Dashboard extends JPanel {
                 OtherEventHandling(virtualFunctionBus.powertrainPacket);
             if(virtualFunctionBus.samplePacket != null)
                 RoadSignEventHandling();
+            if(virtualFunctionBus.emergencyBrakePacket!=null)
+                AEBWarnHandling(virtualFunctionBus.emergencyBrakePacket);
         }
 
 
