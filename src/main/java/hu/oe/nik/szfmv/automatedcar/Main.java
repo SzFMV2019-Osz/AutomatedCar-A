@@ -46,7 +46,7 @@ public class Main {
         //NPC carNPC = new NPC(new Position(220, 824), 180, "car_2_blue.png", "car_npc_road_1");
         AutomatedCar car = new AutomatedCar(80, 80, "car_2_white.png");
         this.worldManager.setAutomatedCar(car);
-        pilot = new ParkingPilot(car.getHeight(), car.getVirtualFunctionBus());
+        pilot = new ParkingPilot(car);
         worldManager.getNpcs().add(walkerNPC);
         //worldManager.getNpcs().add(carNPC);
         worldManager.addObjectToWorld(walkerNPC);
