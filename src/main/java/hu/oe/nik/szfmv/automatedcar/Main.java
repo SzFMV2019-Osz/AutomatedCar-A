@@ -60,11 +60,17 @@ public class Main {
     private void loop() {
         while (true) {
             try {
+                pilot.ParkingPilotManagement();
+                if(pilot.GetParkingPilotOn()==true) {
+                    pilot.AutomaticParkin2();
+                    this.window.setVirtualFunctionBus(pilot.getFunctionbus());
+                }
                 this.worldManager.getAutomatedCar().drive();
+
                 for (NPC npc : worldManager.getNpcs()) {
                     npc.move();
                 }
-                pilot.ParkingPilotManagement();
+
                 // TODO IWorld-öt használjon a drawWorld
                 this.window.getCourseDisplay().drawWorld((this.worldManager),window.getVirtualFunctionBus().inputPacket);
                 // TODO window.getCourseDisplay().refreshFrame();
