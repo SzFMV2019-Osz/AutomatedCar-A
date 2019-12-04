@@ -55,16 +55,16 @@ public class Dashboard extends JPanel {
     private JLabel laneKeepingIndicatorExplainerText=new JLabel("L : LaneKeeping");
     private JLabel timeGapExplainerText=new JLabel("T: Set time Gap");
     private JLabel referenceSpeedExplainer=new JLabel("U/D Arrow : Change ACC speed");
-
+    private JLabel lastRoadSign=new JLabel("No sign");
     private JLabel currentGearText = new JLabel("P");
     private JLabel speedLimitValueText = new JLabel("No limit");
     private JLabel steeringWheelValueText = new JLabel("0");
     private JLabel xCoordValueText = new JLabel("0");
     private JLabel yCoordValueText = new JLabel("0");
-
+    
     private JProgressBar gasProgressBar = new JProgressBar(0, 100);
     private JProgressBar breakProgressBar = new JProgressBar(0, 100);
-    private JLabel lastRoadSign=new JLabel("No sign");
+
     private OMeter speedoMeter;
     private OMeter RPMmeter;
     private StatusIndicator AccIndicator;
@@ -111,7 +111,6 @@ public class Dashboard extends JPanel {
         PPIndicator = new StatusIndicator(60, 250, 50, 40, "PP");
         LKAIndicator = new StatusIndicator(10, 300, 50, 40, "LKA");
         LKWARNIndicator = new StatusIndicator(10, 350, 100, 40, "LKA WARN");
-
         AEBWARNIndicator = new StatusIndicator(120, 310, 100, 40, "AEB WARN");
         RRWARNIndicator = new StatusIndicator(120, 350, 100, 40, "RR WARN");
 
