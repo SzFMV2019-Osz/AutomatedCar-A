@@ -281,19 +281,7 @@ public class Dashboard extends JPanel {
         
         if (roadSign != null) {
             speedLimitValueText.setText(roadSign.getSpeedLimit());
-            try {
-                BufferedImage img = ModelCommonUtil.loadObjectImage(roadSign.getImageFileName());
-                Graphics2D g = img.createGraphics();
-                g.drawImage(img, 120, 205, null);
-                g.fillRect(120, 205, 100, 40);
-                sensedSign.paint(g);
-                sensedSign.setBounds(120, 205, 100, 40);
-                lastRoadSignIndicator.setVisible(false);
-                sensedSign.setVisible(true);
-            } catch (Exception e) {
-                System.out.println("Para van: " + e.getMessage());
-            }
-            
+            lastRoadSignIndicator.setText(roadSign.getImageFileName());
         } else {
             sensedSign.setVisible(false);
             lastRoadSignIndicator.setVisible(true);
