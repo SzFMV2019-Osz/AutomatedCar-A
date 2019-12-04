@@ -298,12 +298,8 @@ public class Dashboard extends JPanel {
         lastRoadSign.setIcon(null);
         lastRoadSign.setText("No Sign");
         }
-    }
 
 
-        lastRoadSign.setIcon(null);
-        lastRoadSign.setText("No Sign");
-        }
     }
     private void AEBEventHandling(AEBPacket packet){
         if(packet.getState()== AEBState.COLLISION_AVOIDABLE)
