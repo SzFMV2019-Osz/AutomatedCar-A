@@ -161,4 +161,13 @@ public final class ModelCommonUtil {
         }
         return RND.nextInt(maxNumber) + 1;
     }
+    
+    public static double getRealAngle(double angle) {
+        if (angle < 0) {
+            return angle + 360;
+        } else if (angle > 360) {
+            return angle - 360;
+        }
+        return angle;
+    }
 }

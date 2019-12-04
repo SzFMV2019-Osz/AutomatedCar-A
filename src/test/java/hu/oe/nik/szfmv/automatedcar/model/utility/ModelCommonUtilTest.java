@@ -1,10 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.model.utility;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 
@@ -21,9 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class ModelCommonUtilTest {
 
+    private List<Pair<Double, Double>> angleCalculationParams;
     Position pointA;
     Position pointB;
     Position pointC;
@@ -53,6 +54,12 @@ public class ModelCommonUtilTest {
         smallLine.addPoint(1,1);
         rectangleFarAway = new Rectangle(2, 2, 2 ,1);
         point = new Point(0,0);
+        
+        angleCalculationParams = new ArrayList<>();
+        angleCalculationParams.add(new ImmutablePair(270d, 270d));
+        angleCalculationParams.add(new ImmutablePair(85d, 85d));
+        angleCalculationParams.add(new ImmutablePair(310d, -50d));
+        angleCalculationParams.add(new ImmutablePair(222d, -138d));
     }
 
     @Test
@@ -173,6 +180,13 @@ public class ModelCommonUtilTest {
             int random = ModelCommonUtil.getRandom(num);
             assertTrue(random > 0);
             assertTrue(random <= num);
+        }
+    }
+    
+    @Test
+    public void getRealAngle_ReturnProperAngle() {
+        for (Pair<Double, Double> angles : angleCalculationParams) {
+            assertEquals(angles.getKey(), ModelCommonUtil.getRealAngle(angles.getValue()));
         }
     }
 }

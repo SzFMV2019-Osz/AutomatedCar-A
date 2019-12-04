@@ -133,5 +133,8 @@ public class Gui extends JFrame {
         return dashboard;
     }
 
-
+    public WorldManager getManager()
+    {
+        return manager;
+    }
 }
