@@ -161,6 +161,9 @@ public class Powertrain extends SystemComponent {
         if (velocityVector.getY() * getDirectionUnitVector(gearShiftPos).getY() <= 0) {
             velocityVector = NULL_VECTOR;
         }
+        if (virtualFunctionBus.inputPacket.getAccState()) {
+            velocityVector = Vec2f.of(0, virtualFunctionBus.inputPacket.getAccSpeed() / 3);
+        }
         currentVelocityVector = velocityVector;
         if (gearShiftPos == GearShift.POS.D) {
             virtualFunctionBus.powertrainPacket.setVelocity((int) (currentVelocityVector.magn() * 3));

@@ -27,7 +27,7 @@ public class InputManager extends SystemComponent {
         rightSteering = new Control(step);
         leftSteering = new Control(step);
         gearShift = new GearShift();
-        acc = new ACC();
+        acc = new ACC(virtualFunctionBus);
     }
 
     @Override
@@ -51,6 +51,7 @@ public class InputManager extends SystemComponent {
 
             case KeyEvent.VK_S:
                 breakPedal.Trigger(trigger);
+                acc.turnOff();
                 break;
 
             case KeyEvent.VK_D:
@@ -109,8 +110,7 @@ public class InputManager extends SystemComponent {
                 break;
 
             case KeyEvent.VK_O:
-                acc.Resume();
-                inputPacket.setAccState(acc.isOn);
+                acc.turnOn();
                 break;
             case KeyEvent.VK_I:
                 inputPacket.setDebugOn();
