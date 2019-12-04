@@ -72,7 +72,7 @@ public class Dashboard extends JPanel {
     private StatusIndicator LKWARNIndicator;
     private StatusIndicator AEBWARNIndicator;
     private StatusIndicator RRWARNIndicator;
-    private StatusIndicator lastRoadSignIndicator;
+    //private StatusIndicator lastRoadSignIndicator;
     private StatusIndicator TimeGapIndicator;
     private StatusIndicator ReferenceSpeedIndicator;
     private LastRoadSign sensedSign;
@@ -110,11 +110,7 @@ public class Dashboard extends JPanel {
         PPIndicator = new StatusIndicator(60, 250, 50, 40, "PP");
         LKAIndicator = new StatusIndicator(10, 300, 50, 40, "LKA");
         LKWARNIndicator = new StatusIndicator(10, 350, 100, 40, "LKA WARN");
-        lastRoadSignIndicator = new StatusIndicator(120, 205, 100, 40, roadSign != null ?
-                                                                       roadSign.getImageFileName() : "No Sign");
-        this.sensedSign = new LastRoadSign();
-        sensedSign.setBounds(120, 205, 100, 40);
-        sensedSign.setVisible(false);
+        sensedSign = new LastRoadSign();
         AEBWARNIndicator = new StatusIndicator(120, 310, 100, 40, "AEB WARN");
         RRWARNIndicator = new StatusIndicator(120, 350, 100, 40, "RR WARN");
 
@@ -124,7 +120,6 @@ public class Dashboard extends JPanel {
         add(LKWARNIndicator);
         add(AEBWARNIndicator);
         add(RRWARNIndicator);
-        add(lastRoadSignIndicator);
         add(sensedSign);
         add(TimeGapIndicator);
         add(ReferenceSpeedIndicator);
@@ -280,15 +275,12 @@ public class Dashboard extends JPanel {
             }
         }
         
-        if (roadSign != null) {
-            speedLimitValueText.setText(roadSign.getSpeedLimit());
-            lastRoadSignIndicator.setText(roadSign.getImageFileName());
+        if (this.roadSign != null) {
+            this.speedLimitValueText.setText(this.roadSign.getSpeedLimit());
+            this.sensedSign.setIsDetected(true);
             this.sensedSign.setRoadSignName(this.roadSign.getImageFileName());
-            this.sensedSign.setVisible(true);
         } else {
-            sensedSign.setVisible(false);
-            lastRoadSignIndicator.setVisible(true);
-            lastRoadSignIndicator.setText("No Sign");
+            //this.sensedSign.setIsDetected(false);
         }
     }
 
