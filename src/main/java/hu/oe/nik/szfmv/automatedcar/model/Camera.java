@@ -79,7 +79,7 @@ public class Camera {
                                   .map((sensedObject) -> sensedObject.getImageFileName() + " | ")
                                   .reduce(sensed, String::concat);
 
-           // System.out.println("Sensed signs: " + sensed);
+            System.out.println("Sensed signs: " + sensed);
         }
 
         return sensedObjects;

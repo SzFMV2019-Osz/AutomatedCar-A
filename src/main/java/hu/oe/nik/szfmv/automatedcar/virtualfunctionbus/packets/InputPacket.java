@@ -15,9 +15,9 @@ public class InputPacket implements OutgoingInputPacket {
     private boolean accState = false;
     private boolean laneKeepingState = false;
     private boolean parkingState = false;
-    private boolean debugon=true;
-    private boolean debugCamon = true;
-    private boolean debugUltraon = true;
+    private boolean debugon=false;
+    private boolean debugCamon = false;
+    private boolean debugUltraon = false;
     private double accTimegap = 0.8;
     private int accSpeed = 50;
     private boolean zoomIn=false;
