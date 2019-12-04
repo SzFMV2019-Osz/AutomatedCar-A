@@ -1,5 +1,6 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.AEBState;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 
 public class ACC extends SystemComponent {
@@ -77,6 +78,12 @@ public class ACC extends SystemComponent {
 
     @Override
     public void loop() {
+        emergencyBrakeCheck();
+    }
 
+    private void emergencyBrakeCheck() {
+        if (virtualFunctionBus.emergencyBrakePacket.getState() == AEBState.COLLISION_IMMINENT) {
+            turnOff();
+        }
     }
 }

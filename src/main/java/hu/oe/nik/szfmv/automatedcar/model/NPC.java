@@ -3,12 +3,13 @@ package hu.oe.nik.szfmv.automatedcar.model;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.xml.XmlParser;
 
-import java.awt.Rectangle;
+import java.awt.*;
 import java.util.List;
 
 public class NPC extends WorldObject implements ICrashable {
     private int index = 0;
     private List<TurningPoint> turningPoints;
+    private int movingSpeed;
 
     public NPC(Position startPosition, int startRotation, String imageFileName, String roadFileName) {
         super(startPosition.getX(), startPosition.getY(), imageFileName);
@@ -40,6 +41,7 @@ public class NPC extends WorldObject implements ICrashable {
     }
 
     private void moveInTurningPointDirection(TurningPoint currentTurningPoint) {
+        movingSpeed = currentTurningPoint.getMovingSpeed();
         setPosX(getPosX() + getTurningPointDirection(getPosX(), currentTurningPoint.getPosition().getX()) * currentTurningPoint.getMovingSpeed());
         setPosY(getPosY() + getTurningPointDirection(getPosY(), currentTurningPoint.getPosition().getY()) * currentTurningPoint.getMovingSpeed());
     }
@@ -64,6 +66,10 @@ public class NPC extends WorldObject implements ICrashable {
 
     private int getTurningPointDirection(int currentCoordinate, int nextCoordinate) {
         return Integer.compare(nextCoordinate, currentCoordinate);
+    }
+
+    public int getMovingSpeed() {
+        return movingSpeed;
     }
 
     @Override
