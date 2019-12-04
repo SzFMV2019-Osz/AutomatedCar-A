@@ -61,10 +61,10 @@ public class Dashboard extends JPanel {
     private JLabel steeringWheelValueText = new JLabel("0");
     private JLabel xCoordValueText = new JLabel("0");
     private JLabel yCoordValueText = new JLabel("0");
-    
+
     private JProgressBar gasProgressBar = new JProgressBar(0, 100);
     private JProgressBar breakProgressBar = new JProgressBar(0, 100);
-
+    private JLabel lastRoadSign=new JLabel("No sign");
     private OMeter speedoMeter;
     private OMeter RPMmeter;
     private StatusIndicator AccIndicator;
@@ -73,10 +73,10 @@ public class Dashboard extends JPanel {
     private StatusIndicator LKWARNIndicator;
     private StatusIndicator AEBWARNIndicator;
     private StatusIndicator RRWARNIndicator;
-    private StatusIndicator lastRoadSignIndicator;
+
     private StatusIndicator TimeGapIndicator;
     private StatusIndicator ReferenceSpeedIndicator;
-    private LastRoadSign sensedSign;
+
 
     private Sign roadSign = null;
 
@@ -111,11 +111,7 @@ public class Dashboard extends JPanel {
         PPIndicator = new StatusIndicator(60, 250, 50, 40, "PP");
         LKAIndicator = new StatusIndicator(10, 300, 50, 40, "LKA");
         LKWARNIndicator = new StatusIndicator(10, 350, 100, 40, "LKA WARN");
-        lastRoadSignIndicator = new StatusIndicator(120, 205, 100, 40, roadSign != null ?
-                                                                       roadSign.getImageFileName() : "No Sign");
-        this.sensedSign = new LastRoadSign();
-        sensedSign.setBounds(120, 205, 100, 40);
-        sensedSign.setVisible(false);
+
         AEBWARNIndicator = new StatusIndicator(120, 310, 100, 40, "AEB WARN");
         RRWARNIndicator = new StatusIndicator(120, 350, 100, 40, "RR WARN");
 
@@ -125,8 +121,6 @@ public class Dashboard extends JPanel {
         add(LKWARNIndicator);
         add(AEBWARNIndicator);
         add(RRWARNIndicator);
-        add(lastRoadSignIndicator);
-        add(sensedSign);
         add(TimeGapIndicator);
         add(ReferenceSpeedIndicator);
     }
@@ -157,10 +151,10 @@ public class Dashboard extends JPanel {
         accIndicatorExplainerText.setBounds(10,575,220,15);
         timeGapExplainerText.setBounds(10,590,220,15);
         referenceSpeedExplainer.setBounds(10,605,220,15);
+        lastRoadSign.setBounds(120,205,110,110);
 
 
-
-
+        add(lastRoadSign);
         add(gearShiftText);
         add(currentGearText);
         add(accMenuText);
@@ -286,14 +280,16 @@ public class Dashboard extends JPanel {
         }
         
         if (roadSign != null) {
+            ImageIcon i=new ImageIcon(roadSign.getImage());
+
+            lastRoadSign.setIcon(i);
+            lastRoadSign.setText(null);
             speedLimitValueText.setText(roadSign.getSpeedLimit());
-            lastRoadSignIndicator.setText(roadSign.getImageFileName());
-            this.sensedSign.setRoadSignName(this.roadSign.getImageFileName());
-            this.sensedSign.setVisible(true);
+
         } else {
-            sensedSign.setVisible(false);
-            lastRoadSignIndicator.setVisible(true);
-            lastRoadSignIndicator.setText("No Sign");
+
+        lastRoadSign.setIcon(null);
+        lastRoadSign.setText("No Sign");
         }
     }
 
