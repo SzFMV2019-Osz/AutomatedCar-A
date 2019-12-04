@@ -4,7 +4,8 @@ import hu.oe.nik.szfmv.automatedcar.systemcomponents.GearShift.POS;
 
 public interface OutgoingInputPacket {
     int getGasPedalValue();
-
+    boolean getZoomIn();
+    boolean getZoomOut();
     boolean getDebugOn();
 
     boolean getDebugCameraOn();

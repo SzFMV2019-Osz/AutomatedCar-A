@@ -2,6 +2,8 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
+import hu.oe.nik.szfmv.automatedcar.visualization.CourseDisplay;
+
 import java.awt.event.KeyEvent;
 
 public class InputManager extends SystemComponent {
@@ -118,6 +120,12 @@ public class InputManager extends SystemComponent {
                 break;
             case KeyEvent.VK_U:
                 this.inputPacket.setDebugUltrasoundOn();
+                break;
+            case KeyEvent.VK_Z:
+                this.inputPacket.setZoomIn();
+                break;
+            case KeyEvent.VK_H:
+                this.inputPacket.setZoomOut();
                 break;
         }
     }

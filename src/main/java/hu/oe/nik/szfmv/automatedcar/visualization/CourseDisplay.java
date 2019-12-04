@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 /**
  * CourseDisplay is for providing a viewport to the virtual world where the simulation happens.
  */
-public class CourseDisplay extends JPanel implements IZoomable {
+public class CourseDisplay extends JPanel  {
 
     private int width = 770;
     private int height = 700;
@@ -81,6 +81,7 @@ public class CourseDisplay extends JPanel implements IZoomable {
         g2d.fill(r);
 
         AffineTransform at = new AffineTransform();
+        scale=inputPacket.getZoom();
         at.translate((this.width - (this.scale * this.width)) / 2, (this.height - (this.scale * this.height)) / 2);
         at.scale(this.scale, this.scale);
 
@@ -196,15 +197,6 @@ public class CourseDisplay extends JPanel implements IZoomable {
         car.checkCollisions(world, offsets[0], offsets[1]);
     }
 
-    public void zoomOut() {
-        if (this.scale > 0.5) {
-            this.scale = this.scale - 0.1;
-        }
-    }
 
-    public void zoomIn() {
-        if (this.scale < 1.2) {
-            this.scale = this.scale + 0.1;
-        }
-    }
+
 }

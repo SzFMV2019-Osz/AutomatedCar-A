@@ -47,7 +47,7 @@ public class Dashboard extends JPanel {
     private JLabel yCoordText = new JLabel("Y: ");
     private JLabel steeringWheelText = new JLabel("Steering Wheel:");
     private JLabel speedLimitText = new JLabel("Speed Limit:");
-    private JLabel controlStartExplainerText=new JLabel("Controls");
+
     private JLabel pedalExplainerText=new JLabel("W/S : Throttle/Break  ");
     private JLabel steeringExplainerText=new JLabel(" A/D :Turn Left/Right");
     private JLabel gearChangeExplainerText=new JLabel("Q/E : Gear Up/Down");
@@ -57,6 +57,7 @@ public class Dashboard extends JPanel {
     private JLabel laneKeepingIndicatorExplainerText=new JLabel("L : LaneKeeping");
     private JLabel timeGapExplainerText=new JLabel("T: Set time Gap");
     private JLabel referenceSpeedExplainer=new JLabel("U/D Arrow : Change ACC speed");
+    private JLabel zoomExplainer=new JLabel("Z/H ZOOM in/out");
     private JLabel lastRoadSign=new JLabel("No sign");
     private JLabel currentGearText = new JLabel("P");
     private JLabel speedLimitValueText = new JLabel("No limit");
@@ -142,7 +143,7 @@ public class Dashboard extends JPanel {
         yCoordValueText.setBounds(110, 635, 40, 15);
         currentSpeedText.setBounds(50, 125, 50, 15);
         currentRpmText.setBounds(150, 125, 50,15);
-        controlStartExplainerText.setBounds(10,470,200,15);
+
         pedalExplainerText.setBounds(10,485,200,15);
         steeringExplainerText.setBounds(10,500,200,15);
         gearChangeExplainerText.setBounds(10,515,200,15);
@@ -152,9 +153,10 @@ public class Dashboard extends JPanel {
         accIndicatorExplainerText.setBounds(10,575,220,15);
         timeGapExplainerText.setBounds(10,590,220,15);
         referenceSpeedExplainer.setBounds(10,605,220,15);
+        zoomExplainer.setBounds(10,470,200,15);
         lastRoadSign.setBounds(120,205,110,110);
 
-
+        add(zoomExplainer);
         add(lastRoadSign);
         add(gearShiftText);
         add(currentGearText);
@@ -171,7 +173,7 @@ public class Dashboard extends JPanel {
         add(yCoordValueText);
         add(currentSpeedText);
         add(currentRpmText);
-        add(controlStartExplainerText);
+
         add(pedalExplainerText);
         add(steeringExplainerText);
         add(gearChangeExplainerText);
