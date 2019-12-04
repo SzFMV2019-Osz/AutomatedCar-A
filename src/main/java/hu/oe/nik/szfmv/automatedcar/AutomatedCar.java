@@ -72,6 +72,9 @@ public class AutomatedCar extends Car {
         ClosestObject closest = radar.getClosestObjectInLane();
         emergencyBrake.setClosest(closest);
         emergencyBrake.decideIfReachedSuboptimalBarrier(virtualFunctionBus.powertrainPacket.getVelocity());
+        if (emergencyBrake.isVelocityRationalBreakingNeeded(virtualFunctionBus.powertrainPacket.getVelocity())){
+            
+        }
 
         //todo: detecting and signaling 70 km/h
         //System.out.println(virtualFunctionBus.emergencyBrakePacket.isAebNotOptimal() ? "AEB SUB" : "AEB OPTIMAL");
