@@ -52,15 +52,15 @@ public class AutomatedEmergencyBrake extends SystemComponent {
         }
     }
 
-    public boolean isVelocityRationalBreakingNeeded(double speed){
+    public AEBState isVelocityRationalBreakingNeeded(double speed){
         double maxDeceleration = -9; // m/s^-2
         double currentVelocity = speed;
         double timeToSlowDown = currentVelocity / maxDeceleration;
         double distanceNeeded = currentVelocity * timeToSlowDown;
         if (distanceNeeded > closest.getDistanceFromCar() + 1){
-            return true;
+            return AEBState.COLLISION_AVOIDABLE;
         }
-        return  false;
+        return AEBState.NEUTRAL;
     }
 
 
