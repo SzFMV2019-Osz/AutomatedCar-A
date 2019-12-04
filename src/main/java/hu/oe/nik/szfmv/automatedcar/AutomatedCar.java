@@ -144,7 +144,7 @@ public class AutomatedCar extends Car {
     }
 
     public List<List<Shape>> checkCamera(WorldManager manager, int offsetX, int offsetY) {
-        return this.camera.loop(manager, this, offsetX, offsetY).stream().map(o -> o.getPolygons(offsetX, offsetY)).collect(Collectors.toList());
+        return this.camera.loop(manager, this, offsetX, offsetY, getRotation()).stream().map(o -> o.getPolygons(offsetX, offsetY)).collect(Collectors.toList());
     }
 
 

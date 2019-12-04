@@ -9,6 +9,8 @@ import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.xml.bind.Unmarshaller;
 
 /**
@@ -63,23 +65,29 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
 
     @Override
     public void afterUnmarshal(Unmarshaller u, Object parent) {
-        switch (this.imageFileName) {
-            case (Consts.RES_IDENTIFIER_CAR_1): {
-                this.imageFileName = this.generateFilename(1);
-                break;
-            }
-            case (Consts.RES_IDENTIFIER_CAR_2): {
-                this.imageFileName = this.generateFilename(2);
-                break;
-            }
-            case (Consts.RES_IDENTIFIER_CAR_3): {
-                this.imageFileName = Consts.RES_IDENTIFIER_CAR_BLACK;
-                break;
-            }
-            default: {
-                this.imageFileName = this.generateFilename(ModelCommonUtil.getRandom(2));
+        Pattern patt = Pattern.compile(Consts.REGEX_CAR_FILENAME);
+        Matcher matcher = patt.matcher(this.imageFileName);
+        
+        if (!matcher.matches()) {
+            switch (this.imageFileName) {
+                case (Consts.RES_IDENTIFIER_CAR_1): {
+                    this.imageFileName = this.generateFilename(1);
+                    break;
+                }
+                case (Consts.RES_IDENTIFIER_CAR_2): {
+                    this.imageFileName = this.generateFilename(2);
+                    break;
+                }
+                case (Consts.RES_IDENTIFIER_CAR_3): {
+                    this.imageFileName = Consts.RES_IDENTIFIER_CAR_BLACK;
+                    break;
+                }
+                default: {
+                    this.imageFileName = this.generateFilename(ModelCommonUtil.getRandom(2));
+                }
             }
         }
+
         super.afterUnmarshal(u, parent);
     }
 
@@ -106,5 +114,10 @@ public class Car extends WorldObject implements ICrashable, IDynamic {
     @Override
     public void setPosX(int x) {
         super.setPosX(x);
+    }
+
+    public Camera getCamera()
+    {
+        return camera;
     }
 }
