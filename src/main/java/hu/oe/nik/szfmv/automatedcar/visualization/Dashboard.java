@@ -6,7 +6,6 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.model.Sign;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
-import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
@@ -15,8 +14,10 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -271,12 +272,16 @@ public class Dashboard extends JPanel {
         if (sensedObjects.isEmpty()) {
             roadSign = null;
         } else {
+            Point closestPoint = null;
+            Map<Point, IObject> signPoints = new HashMap<>();
             for (IObject object : sensedObjects) {
                 if (object instanceof Sign) {
-                    roadSign = (Sign)object;
-                    break;
+                    signPoints.put(new Point(object.getPosX(), object.getPosY()), object);
                 }
             }
+            closestPoint = Collections.min(signPoints.keySet(),
+                                            (final Point p1, final Point p2) -> (int)p1.distanceSq(p2));
+            roadSign = (Sign)signPoints.get(closestPoint);
         }
         
         if (roadSign != null) {
