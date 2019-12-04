@@ -1,6 +1,11 @@
 package hu.oe.nik.szfmv.automatedcar;
 
+import hu.oe.nik.szfmv.automatedcar.model.World;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputReader;
 import hu.oe.nik.szfmv.automatedcar.exceptions.CrashException;
+import hu.oe.nik.szfmv.automatedcar.model.NPC;
+import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.NPC;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
@@ -8,10 +13,14 @@ import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputReader;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.ParkingPilot;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
+import javax.swing.JOptionPane;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
+
+import java.util.List;
 
 public class Main {
 

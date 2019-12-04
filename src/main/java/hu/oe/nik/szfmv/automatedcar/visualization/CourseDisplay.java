@@ -142,8 +142,12 @@ public class CourseDisplay extends JPanel {
 
         hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer viewer = new hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
+        car.setCarOffset(offsets[0], offsets[1]);
+        car.operateSensors(world, offsets[0], offsets[1]); // sensors need world data, first we init sensors and start driving afterwards only
+
         List<List<Shape>> sensedObjects = car.checkCamera(world, offsets[0], offsets[1]);
         List<List<Shape>> soundObjects = car.checkUltraSound(world, offsets[0], offsets[1]);
+
         viewer.setDebuggerSwitchedOn(this.inputPacket.getDebugOn());
         //draw world
         for (IObject object : world.getAllObjectsInRectangle(
@@ -175,14 +179,12 @@ public class CourseDisplay extends JPanel {
         viewer.DrawPolygon(car.getUltraSoundTriangle(offsets[0], offsets[1]));
 
         // Set debug viewer
-        viewer.operateFrontalRadarSensor(g2d, car, t1);
-        viewer.detectObjects(world.getAllObjectsInRectangle(new Position(0 - this.renderDistance, 0 - this.renderDistance),
-                new Position(this.width + this.renderDistance, this.height + this.renderDistance),
-                offsets[0], offsets[1]));
+        viewer.displayRadarSensorArea(g2d, car, t1);
+
         for (List<Shape> shape : soundObjects) {
             viewer.DrawPolygon(shape);
         }
-        //viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
+
 
         car.checkCollisions(world, offsets[0], offsets[1]);
     }
