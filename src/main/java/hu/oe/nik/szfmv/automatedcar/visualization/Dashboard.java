@@ -2,6 +2,8 @@ package hu.oe.nik.szfmv.automatedcar.visualization;
 
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.AEBState;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.AEBPacket;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.model.Sign;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
@@ -280,7 +282,14 @@ public class Dashboard extends JPanel {
         }
         LastRoadSignIndicator.setText(lastSignName);
     }
-
+    private void AEBEventHandling(AEBPacket packet){
+        if(packet.getState()== AEBState.COLLISION_AVOIDABLE)
+            AEBWARNIndicator.switchIt(true);
+        else{
+            AEBWARNIndicator.switchIt(false);
+        }
+        RRWARNIndicator.switchIt(packet.isAebNotOptimal());
+    }
     private void EventHandling() {
         VirtualFunctionBus virtualFunctionBus = parent.getVirtualFunctionBus();
         if (virtualFunctionBus != null) {
@@ -290,6 +299,8 @@ public class Dashboard extends JPanel {
                 OtherEventHandling(virtualFunctionBus.powertrainPacket);
             if(virtualFunctionBus.samplePacket != null)
                 RoadSignEventHandling();
+            if(virtualFunctionBus.emergencyBrakePacket!=null)
+                AEBEventHandling(virtualFunctionBus.emergencyBrakePacket);
         }
 
 
