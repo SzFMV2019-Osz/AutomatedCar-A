@@ -74,4 +74,8 @@ public final class Consts {
     // --- Indexes
 
     public static final int Z_ROAD = 0;
+    
+    // --- Patterns
+
+    public static final String REGEX_CAR_FILENAME = "(((car_)(1|2)_(blue|red|white))|(car_3_black))";
 }
