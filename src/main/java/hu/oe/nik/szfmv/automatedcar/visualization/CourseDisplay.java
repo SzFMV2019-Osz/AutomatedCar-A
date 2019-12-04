@@ -12,9 +12,11 @@ import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.visualization.Utils.DrawingInfo;
 import hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
+import hu.oe.nik.szfmv.automatedcar.visualization.interfaces.IZoomable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +25,17 @@ import javax.swing.JPanel;
 /**
  * CourseDisplay is for providing a viewport to the virtual world where the simulation happens.
  */
-public class CourseDisplay extends JPanel {
+public class CourseDisplay extends JPanel  {
 
     private int width = 770;
     private int height = 700;
     private int backgroundColor = 0xEEEEEE;
     private Gui parent;
     private IWorld world;
-    private int renderDistance = 300;
+    private int renderDistance = 450;
     private boolean showDebugSensors;
     private InputPacket inputPacket;
+    private double scale = 0.8;
 
     /**
      * Initialize the course display
@@ -61,7 +64,6 @@ public class CourseDisplay extends JPanel {
      * @param world {@link World} object that describes the virtual world
      */
     private void paintComponent(Graphics g, WorldManager world) throws CrashException {
-
         g.drawImage(this.renderDoubleBufferedScreen(world), 0, 0, this);
     }
 
@@ -77,6 +79,13 @@ public class CourseDisplay extends JPanel {
         Rectangle r = new Rectangle(0, 0, this.width, this.height);
         g2d.setPaint(new Color(this.backgroundColor));
         g2d.fill(r);
+
+        AffineTransform at = new AffineTransform();
+        scale=inputPacket.getZoom();
+        at.translate((this.width - (this.scale * this.width)) / 2, (this.height - (this.scale * this.height)) / 2);
+        at.scale(this.scale, this.scale);
+
+        g2d.transform(at);
 
         this.drawObjects(g2d, world);
 
@@ -142,8 +151,12 @@ public class CourseDisplay extends JPanel {
 
         hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer viewer = new hu.oe.nik.szfmv.automatedcar.visualization.DebugViewer(g2d);
         AutomatedCar car = world.getAutomatedCar();
+        car.setCarOffset(offsets[0], offsets[1]);
+        car.operateSensors(world, offsets[0], offsets[1]); // sensors need world data, first we init sensors and start driving afterwards only
+
         List<List<Shape>> sensedObjects = car.checkCamera(world, offsets[0], offsets[1]);
         List<List<Shape>> soundObjects = car.checkUltraSound(world, offsets[0], offsets[1]);
+
         viewer.setDebuggerSwitchedOn(this.inputPacket.getDebugOn());
         //draw world
         for (IObject object : world.getAllObjectsInRectangle(
@@ -175,15 +188,15 @@ public class CourseDisplay extends JPanel {
         viewer.DrawPolygon(car.getUltraSoundTriangle(offsets[0], offsets[1]));
 
         // Set debug viewer
-        viewer.operateFrontalRadarSensor(g2d, car, t1);
-        viewer.detectObjects(world.getAllObjectsInRectangle(new Position(0 - this.renderDistance, 0 - this.renderDistance),
-                new Position(this.width + this.renderDistance, this.height + this.renderDistance),
-                offsets[0], offsets[1]));
+        viewer.displayRadarSensorArea(g2d, car, t1);
+
         for (List<Shape> shape : soundObjects) {
             viewer.DrawPolygon(shape);
         }
-        //viewer.DrawSensorTriangle(50, 50, 300, 300, 350, 50, Color.GREEN);
 
         car.checkCollisions(world, offsets[0], offsets[1]);
     }
+
+
+
 }

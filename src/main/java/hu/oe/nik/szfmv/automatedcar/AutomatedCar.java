@@ -2,19 +2,25 @@ package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.exceptions.CrashException;
 import hu.oe.nik.szfmv.automatedcar.model.Car;
+import hu.oe.nik.szfmv.automatedcar.model.Position;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
+import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
 import hu.oe.nik.szfmv.automatedcar.model.Camera;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.UltraSound;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.ICrashable;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Driver;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.Powertrain;
+import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.*;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.AEBState;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.UltraSoundPacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
@@ -24,9 +30,12 @@ import java.util.stream.Collectors;
 public class AutomatedCar extends Car {
     private static final Logger LOGGER = LogManager.getLogger();
 
+    int[] carOffset; // since many sensors on the car use it, we might as well record it here
     private static final int REFRESH_RATE = 10;
     private Powertrain pt;
+    private Radar radar;
     private IObject closestObject;
+    private AutomatedEmergencyBrake emergencyBrake;
 
     @XmlTransient
     private final VirtualFunctionBus virtualFunctionBus = new VirtualFunctionBus();
@@ -36,6 +45,8 @@ public class AutomatedCar extends Car {
 
         new Driver(virtualFunctionBus);
         pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(),getHeight(), getWidth());
+        virtualFunctionBus.ultraSoundPacket = new UltraSoundPacket();
+        radar = new Radar(virtualFunctionBus);
         this.camera = new Camera(x, y);
         this.ultraSounds.add( new UltraSound(x,y,-44,-104,90)); //front-left
         this.ultraSounds.add( new UltraSound(x,y,+44,-104,90)); //front-right
@@ -45,12 +56,46 @@ public class AutomatedCar extends Car {
         this.ultraSounds.add( new UltraSound(x,y,-104,-44,0)); //left side back
         this.ultraSounds.add( new UltraSound(x,y,+104,-44,180)); //right side back
         this.ultraSounds.add( new UltraSound(x,y,-104,-44,180)); //right side front
+        this.emergencyBrake = new AutomatedEmergencyBrake(virtualFunctionBus);
+    }
+    public void setCarOffset(int x, int y){
+        this.carOffset = new int[]{x, y};
+    }
+    public void drive() {
+
+        virtualFunctionBus.loop();
+        calculatePositionAndOrientation();
     }
 
-    public void drive() {
-        this.virtualFunctionBus.loop();
-        this.calculatePositionAndOrientation();
+
+    public void operateSensors(WorldManager manager, int xOffset, int yOffset){
+        // Radar
+        radar.updateSensorPosition(this);
+
+        // the radar is a proxy connecting the model functionality with any other component
+        Shape triangle = ModelCommonUtil.generateTriangle(radar.getSensorPosition(), radar.getRadarAreaLeftTip(),radar.getRadarAreaRightTip());
+        radar.setDetectedObjects(manager.getAllObjectsInTriangle(triangle,xOffset,yOffset));
+
+        // AEB
+        ClosestObject closest = radar.getClosestObjectInLane();
+        emergencyBrake.setClosest(closest);
+        emergencyBrake.decideIfReachedSuboptimalBarrier(virtualFunctionBus.powertrainPacket.getVelocity());
+        emergencyBrake.isVelocityRationalBreakingNeeded(virtualFunctionBus.powertrainPacket.getVelocity());
+
+        //todo: detecting and signaling 70 km/h
+        //System.out.println(virtualFunctionBus.emergencyBrakePacket.isAebNotOptimal() ? "AEB SUB" : "AEB OPTIMAL");
+        // todo: emergency brake state
+        //if(closest != null){
+        //    System.out.println("CLOSEST: " + closest.getClosestObject() + " WITH DISTANCE " + radar.getClosestObjectInLane().getDistanceFromCar());
+        //    System.out.println("AEB: " + virtualFunctionBus.emergencyBrakePacket.getState().toString());
+        //}
+
     }
+
+    public IRadar getRadar(){
+        return this.radar;
+    }
+
 
     public VirtualFunctionBus getVirtualFunctionBus() {
         return this.virtualFunctionBus;
@@ -117,8 +162,10 @@ public class AutomatedCar extends Car {
 
     public List<List<Shape>> checkUltraSound(WorldManager manager, int offsetX, int offsetY) {
         List<List<Shape>> ultraSoundObjects = new ArrayList<>();
+        List<List<IObject>> ultraSoundPacketObjects = new ArrayList<>();
         for (int i = 0; i < ultraSounds.size(); i++) {
             List<IObject> objects = ultraSounds.get(i).loop(manager, this, offsetX, offsetY);
+            ultraSoundPacketObjects.add(objects);
             ultraSoundObjects.addAll(objects.stream().map(o -> o.getPolygons(offsetX, offsetY)).collect(Collectors.toList()));
             for (int j = 0; j < objects.size(); j++) {
                 Position objectPos = new Position(objects.get(j).getPosX(), objects.get(j).getPosY());
@@ -139,7 +186,8 @@ public class AutomatedCar extends Car {
                 }
             }
         }
-        System.out.println(closestObject);
+        //System.out.println(closestObject);
+        virtualFunctionBus.ultraSoundPacket.setUltraSoundObjects(ultraSoundPacketObjects);
         return ultraSoundObjects;
     }
 

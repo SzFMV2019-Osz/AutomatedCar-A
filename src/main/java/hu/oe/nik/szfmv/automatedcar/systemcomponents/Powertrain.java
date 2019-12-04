@@ -55,7 +55,7 @@ public class Powertrain extends SystemComponent {
         virtualFunctionBus.powertrainPacket = new PowertrainPacket();
     }
 
-    private void calculateMovingVector(InputPacket inputPacket) {
+    public void calculateMovingVector(InputPacket inputPacket) {
 
 
         float speed = (float) (Math.sqrt(Math.pow(currentVelocityVector.getX(), 2) + Math.pow(currentVelocityVector.getY(), 2)) / 1.8);
@@ -160,6 +160,9 @@ public class Powertrain extends SystemComponent {
         var velocityVector = currentVelocityVector.plus(Vec2f.of(accelerationVector.getX() * refreshRate, accelerationVector.getY() * refreshRate));
         if (velocityVector.getY() * getDirectionUnitVector(gearShiftPos).getY() <= 0) {
             velocityVector = NULL_VECTOR;
+        }
+        if (virtualFunctionBus.inputPacket.getAccState()) {
+            velocityVector = Vec2f.of(0, virtualFunctionBus.inputPacket.getAccSpeed() / 3);
         }
         currentVelocityVector = velocityVector;
         if (gearShiftPos == GearShift.POS.D) {

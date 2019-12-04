@@ -2,6 +2,8 @@ package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
+import hu.oe.nik.szfmv.automatedcar.visualization.CourseDisplay;
+
 import java.awt.event.KeyEvent;
 
 public class InputManager extends SystemComponent {
@@ -25,7 +27,7 @@ public class InputManager extends SystemComponent {
         rightSteering = new Control(step);
         leftSteering = new Control(step);
         gearShift = new GearShift();
-        acc = new ACC();
+        acc = new ACC(virtualFunctionBus);
     }
 
     @Override
@@ -49,6 +51,7 @@ public class InputManager extends SystemComponent {
 
             case KeyEvent.VK_S:
                 breakPedal.Trigger(trigger);
+                acc.turnOff();
                 break;
 
             case KeyEvent.VK_D:
@@ -107,8 +110,7 @@ public class InputManager extends SystemComponent {
                 break;
 
             case KeyEvent.VK_O:
-                acc.Resume();
-                inputPacket.setAccState(acc.isOn);
+                acc.turnOn();
                 break;
             case KeyEvent.VK_I:
                 inputPacket.setDebugOn();
@@ -118,6 +120,12 @@ public class InputManager extends SystemComponent {
                 break;
             case KeyEvent.VK_U:
                 this.inputPacket.setDebugUltrasoundOn();
+                break;
+            case KeyEvent.VK_Z:
+                this.inputPacket.setZoomIn();
+                break;
+            case KeyEvent.VK_H:
+                this.inputPacket.setZoomOut();
                 break;
         }
     }

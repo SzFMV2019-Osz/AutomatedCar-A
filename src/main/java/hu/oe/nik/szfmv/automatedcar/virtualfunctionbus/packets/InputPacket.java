@@ -15,12 +15,14 @@ public class InputPacket implements OutgoingInputPacket {
     private boolean accState = false;
     private boolean laneKeepingState = false;
     private boolean parkingState = false;
-    private boolean debugon=true;
-    private boolean debugCamon = true;
-    private boolean debugUltraon = true;
+    private boolean debugon=false;
+    private boolean debugCamon = false;
+    private boolean debugUltraon = false;
     private double accTimegap = 0.8;
     private int accSpeed = 50;
-
+    private boolean zoomIn=false;
+    private boolean zoomOut=false;
+    private double zoom=0.8;
     public void setGasPedalValue(int value) {
         gasPedalValue = value;
     }
@@ -157,5 +159,20 @@ public class InputPacket implements OutgoingInputPacket {
     @Override
     public boolean getRightSignalValue() {
         return rightSignValue;
+    }
+
+    @Override
+    public boolean getZoomIn(){return zoomIn;}
+    public void setZoomIn()
+    {
+        if(zoom<1.2)
+            zoom+=0.1;
+    }
+    public double getZoom(){return zoom;}
+    @Override
+    public boolean getZoomOut(){return zoomOut;}
+    public void setZoomOut(){
+        if(zoom>0.5)
+            zoom-=0.1;
     }
 }

@@ -1,12 +1,14 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ACCTest extends ACC {
+class ACCTest {
 
-    ACC accTest = new ACC();
+    ACC accTest = new ACC(new VirtualFunctionBus());
 
     @Test
     void set() {

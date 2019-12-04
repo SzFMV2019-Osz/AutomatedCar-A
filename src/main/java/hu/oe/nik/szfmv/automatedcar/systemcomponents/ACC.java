@@ -1,6 +1,9 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
-public class ACC {
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.AEBState;
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
+
+public class ACC extends SystemComponent {
     protected int referenceSpeed = 50;
 
     protected boolean isOn = false;
@@ -11,17 +14,20 @@ public class ACC {
     private double[] timeGap = {0.8, 1.0, 1.2, 1.4};
     private int index = 0;
 
+    public ACC(VirtualFunctionBus virtualFunctionBus) {
+        super(virtualFunctionBus);
+    }
+
     public void Set(int setSpeed) {
         referenceSpeed = setSpeed;
         isOn = true;
     }
 
     public void Resume() {
-        if(isOn==false){
+        if (isOn == false) {
             isOn = true;
-        }
-        else{
-            isOn=false;
+        } else {
+            isOn = false;
         }
     }
 
@@ -47,6 +53,37 @@ public class ACC {
     public double ReturnTimeGap() {
         return timeGap[index];
     }
-    public int getReferenceSpeed() {return referenceSpeed;}
 
+    public int getReferenceSpeed() {
+        return referenceSpeed;
+    }
+
+    void turnOn() {
+        virtualFunctionBus.inputPacket.setAccState(true);
+        virtualFunctionBus.inputPacket.setAccSpeed(selectNewAccSpeed());
+    }
+
+    void turnOff() {
+        virtualFunctionBus.inputPacket.setAccState(false);
+    }
+
+    private int selectNewAccSpeed() {
+        var currentVelocity = virtualFunctionBus.powertrainPacket.getVelocity();
+        if (currentVelocity >= 30 && currentVelocity <= 160) {
+            return currentVelocity;
+        } else {
+            return virtualFunctionBus.inputPacket.getAccSpeed();
+        }
+    }
+
+    @Override
+    public void loop() {
+        emergencyBrakeCheck();
+    }
+
+    private void emergencyBrakeCheck() {
+        if (virtualFunctionBus.emergencyBrakePacket.getState() == AEBState.COLLISION_IMMINENT) {
+            turnOff();
+        }
+    }
 }

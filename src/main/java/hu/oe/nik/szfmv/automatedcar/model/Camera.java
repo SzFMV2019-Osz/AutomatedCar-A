@@ -78,7 +78,9 @@ public class Camera {
             sensed = sensedObjects.stream()
                                   .map((sensedObject) -> sensedObject.getImageFileName() + " | ")
                                   .reduce(sensed, String::concat);
+
             System.out.println("Sensed signs: " + sensed);
+
         }
 
         return sensedObjects;
