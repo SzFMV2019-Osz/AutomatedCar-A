@@ -6,6 +6,7 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.model.Sign;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
+import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
@@ -14,6 +15,7 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 
@@ -69,9 +71,10 @@ public class Dashboard extends JPanel {
     private StatusIndicator LKWARNIndicator;
     private StatusIndicator AEBWARNIndicator;
     private StatusIndicator RRWARNIndicator;
-    private StatusIndicator LastRoadSignIndicator;
+    private StatusIndicator lastRoadSignIndicator;
     private StatusIndicator TimeGapIndicator;
     private StatusIndicator ReferenceSpeedIndicator;
+    private JPanel sensedSign;
 
     private Sign roadSign = null;
 
@@ -106,8 +109,11 @@ public class Dashboard extends JPanel {
         PPIndicator = new StatusIndicator(60, 250, 50, 40, "PP");
         LKAIndicator = new StatusIndicator(10, 300, 50, 40, "LKA");
         LKWARNIndicator = new StatusIndicator(10, 350, 100, 40, "LKA WARN");
-        LastRoadSignIndicator = new StatusIndicator(120, 205, 100, 40, roadSign != null ?
+        lastRoadSignIndicator = new StatusIndicator(120, 205, 100, 40, roadSign != null ?
                                                                        roadSign.getImageFileName() : "No Sign");
+        sensedSign = new JPanel();
+        sensedSign.setBounds(120, 205, 100, 40);
+        sensedSign.setVisible(false);
         AEBWARNIndicator = new StatusIndicator(120, 310, 100, 40, "AEB WARN");
         RRWARNIndicator = new StatusIndicator(120, 350, 100, 40, "RR WARN");
 
@@ -117,7 +123,8 @@ public class Dashboard extends JPanel {
         add(LKWARNIndicator);
         add(AEBWARNIndicator);
         add(RRWARNIndicator);
-        add(LastRoadSignIndicator);
+        add(lastRoadSignIndicator);
+        add(sensedSign);
         add(TimeGapIndicator);
         add(ReferenceSpeedIndicator);
     }
@@ -274,11 +281,25 @@ public class Dashboard extends JPanel {
             }
         }
         
-        String lastSignName = "No Sign";
         if (roadSign != null) {
-            lastSignName = roadSign.getImageFileName();
+            try {
+                BufferedImage img = ModelCommonUtil.loadObjectImage(roadSign.getImageFileName());
+                Graphics2D g = img.createGraphics();
+                g.drawImage(img, 120, 205, null);
+                g.fillRect(120, 205, 100, 40);
+                sensedSign.paint(g);
+                sensedSign.setBounds(120, 205, 100, 40);
+                lastRoadSignIndicator.setVisible(false);
+                sensedSign.setVisible(true);
+            } catch (Exception e) {
+                System.out.println("Para van: " + e.getMessage());
+            }
+            
+        } else {
+            sensedSign.setVisible(false);
+            lastRoadSignIndicator.setVisible(true);
+            lastRoadSignIndicator.setText("No Sign");
         }
-        LastRoadSignIndicator.setText(lastSignName);
     }
 
     private void EventHandling() {
