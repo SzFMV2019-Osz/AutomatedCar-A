@@ -11,12 +11,14 @@ import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputReader;
-import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputReader;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.ParkingPilot;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import javax.swing.JOptionPane;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import javax.swing.*;
 
 import java.util.List;
 
@@ -37,16 +39,18 @@ public class Main {
         this.loop();
     }
 
+    ParkingPilot pilot;
     private void init() {
         this.worldManager = new WorldManager("test_world", "reference_points");
         NPC walkerNPC = new NPC(new Position(1000, 100), 90, "woman.png", "walker_npc_road_1");
-        NPC carNPC = new NPC(new Position(220, 824), 180, "car_2_blue.png", "car_npc_road_1");
+        //NPC carNPC = new NPC(new Position(220, 824), 180, "car_2_blue.png", "car_npc_road_1");
         AutomatedCar car = new AutomatedCar(80, 80, "car_2_white.png");
         this.worldManager.setAutomatedCar(car);
+        pilot = new ParkingPilot(car);
         worldManager.getNpcs().add(walkerNPC);
-        worldManager.getNpcs().add(carNPC);
+        //worldManager.getNpcs().add(carNPC);
         worldManager.addObjectToWorld(walkerNPC);
-        worldManager.addObjectToWorld(carNPC);
+        //worldManager.addObjectToWorld(carNPC);
         this.window = new Gui(this.worldManager);
         this.window.setVirtualFunctionBus(car.getVirtualFunctionBus());
         this.window.addKeyListener(new InputReader(car.getVirtualFunctionBus()));
@@ -56,10 +60,17 @@ public class Main {
     private void loop() {
         while (true) {
             try {
+                pilot.ParkingPilotManagement();
+                if(pilot.GetParkingPilotOn()==true) {
+                    pilot.AutomaticParkin2();
+                    this.window.setVirtualFunctionBus(pilot.getFunctionbus());
+                }
                 this.worldManager.getAutomatedCar().drive();
+
                 for (NPC npc : worldManager.getNpcs()) {
                     npc.move();
                 }
+
                 // TODO IWorld-öt használjon a drawWorld
                 this.window.getCourseDisplay().drawWorld((this.worldManager),window.getVirtualFunctionBus().inputPacket);
                 // TODO window.getCourseDisplay().refreshFrame();

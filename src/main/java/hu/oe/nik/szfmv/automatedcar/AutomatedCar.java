@@ -16,6 +16,7 @@ import hu.oe.nik.szfmv.automatedcar.systemcomponents.*;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.AEBState;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 
+import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.UltraSoundPacket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.xml.bind.annotation.XmlTransient;
@@ -43,16 +44,23 @@ public class AutomatedCar extends Car {
         super(x, y, imageFileName);
 
         new Driver(virtualFunctionBus);
-        pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(),getHeight(),getWidth());
+        pt = new Powertrain(virtualFunctionBus, REFRESH_RATE, x, y, (float)getRotation(),getHeight(), getWidth());
+        virtualFunctionBus.ultraSoundPacket = new UltraSoundPacket();
         radar = new Radar(virtualFunctionBus);
         this.camera = new Camera(x, y);
+        this.ultraSounds.add( new UltraSound(x,y,-44,-104,90)); //front-left
+        this.ultraSounds.add( new UltraSound(x,y,+44,-104,90)); //front-right
+        this.ultraSounds.add( new UltraSound(x,y,-44,-104,-90)); //back-right
+        this.ultraSounds.add( new UltraSound(x,y,+44,-104,-90)); //back left
+        this.ultraSounds.add( new UltraSound(x,y,+104,-44,0)); //left side front
+        this.ultraSounds.add( new UltraSound(x,y,-104,-44,0)); //left side back
+        this.ultraSounds.add( new UltraSound(x,y,+104,-44,180)); //right side back
+        this.ultraSounds.add( new UltraSound(x,y,-104,-44,180)); //right side front
         this.emergencyBrake = new AutomatedEmergencyBrake(virtualFunctionBus);
     }
-
     public void setCarOffset(int x, int y){
         this.carOffset = new int[]{x, y};
     }
-
     public void drive() {
 
         virtualFunctionBus.loop();
@@ -148,16 +156,16 @@ public class AutomatedCar extends Car {
         return this.camera.loop(manager, this, offsetX, offsetY, getRotation()).stream().map(o -> o.getPolygons(offsetX, offsetY)).collect(Collectors.toList());
     }
 
-
-
     public Shape getCameraTriangle(int offsetX, int offetY) {
         return  this.camera.generateCameraTriangle(this, offsetX, offetY);
     }
 
     public List<List<Shape>> checkUltraSound(WorldManager manager, int offsetX, int offsetY) {
         List<List<Shape>> ultraSoundObjects = new ArrayList<>();
+        List<List<IObject>> ultraSoundPacketObjects = new ArrayList<>();
         for (int i = 0; i < ultraSounds.size(); i++) {
             List<IObject> objects = ultraSounds.get(i).loop(manager, this, offsetX, offsetY);
+            ultraSoundPacketObjects.add(objects);
             ultraSoundObjects.addAll(objects.stream().map(o -> o.getPolygons(offsetX, offsetY)).collect(Collectors.toList()));
             for (int j = 0; j < objects.size(); j++) {
                 Position objectPos = new Position(objects.get(j).getPosX(), objects.get(j).getPosY());
@@ -179,6 +187,7 @@ public class AutomatedCar extends Car {
             }
         }
         //System.out.println(closestObject);
+        virtualFunctionBus.ultraSoundPacket.setUltraSoundObjects(ultraSoundPacketObjects);
         return ultraSoundObjects;
     }
 

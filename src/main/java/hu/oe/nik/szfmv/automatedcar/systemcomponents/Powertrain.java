@@ -55,7 +55,7 @@ public class Powertrain extends SystemComponent {
         virtualFunctionBus.powertrainPacket = new PowertrainPacket();
     }
 
-    private void calculateMovingVector(InputPacket inputPacket) {
+    public void calculateMovingVector(InputPacket inputPacket) {
 
 
         float speed = (float) (Math.sqrt(Math.pow(currentVelocityVector.getX(), 2) + Math.pow(currentVelocityVector.getY(), 2)) / 1.8);
