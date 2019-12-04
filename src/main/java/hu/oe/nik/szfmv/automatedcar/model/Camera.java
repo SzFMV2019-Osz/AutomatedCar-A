@@ -51,7 +51,7 @@ public class Camera {
     }
 
 
-    public List<IObject> loop(WorldManager manager, IObject parent, int offsetX, int offsetY) {
+    public List<IObject> loop(WorldManager manager, IObject parent, int offsetX, int offsetY, double carRotation) {
         Shape cameraTriangle = this.generateCameraTriangle(parent, offsetX, offsetY);
 
         List<IObject> sensedObjects = new ArrayList<>();
@@ -61,10 +61,24 @@ public class Camera {
 
             if (!list.isEmpty()) {
                 sensor.handleSensedObjects(list);
-                System.out.println("Objects found");
-
-                sensedObjects.addAll(list);
+                
+                for (IObject object : list) {
+                    if (object instanceof Sign) {
+                        double carRealAngle = ModelCommonUtil.getRealAngle(carRotation);
+                        double real = ModelCommonUtil.getRealAngle(carRealAngle - 90);
+                        double diff = real - object.getRotation();
+                        
+                        if (diff >= -30 && diff <= 30) {
+                            sensedObjects.add(object);
+                        }
+                    }
+                }
             }
+            String sensed = "";
+            sensed = sensedObjects.stream()
+                                  .map((sensedObject) -> sensedObject.getImageFileName() + " | ")
+                                  .reduce(sensed, String::concat);
+            System.out.println("Sensed signs: " + sensed);
         }
 
         return sensedObjects;
@@ -99,6 +113,6 @@ public class Camera {
     }
 
     private int calculateRangeModifier() {
-        return this.CAMERA_RANGE * Consts.PIXEL_PER_METERS / 10; // TODO: remove range reduction;
+        return this.CAMERA_RANGE * Consts.PIXEL_PER_METERS;
     }
 }

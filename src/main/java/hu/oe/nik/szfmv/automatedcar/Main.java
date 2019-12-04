@@ -1,8 +1,13 @@
 package hu.oe.nik.szfmv.automatedcar;
 
 import hu.oe.nik.szfmv.automatedcar.exceptions.CrashException;
+import hu.oe.nik.szfmv.automatedcar.model.NPC;
+import hu.oe.nik.szfmv.automatedcar.model.Position;
+import hu.oe.nik.szfmv.automatedcar.model.NPC;
+import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
+import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputReader;
 import hu.oe.nik.szfmv.automatedcar.systemcomponents.InputReader;
 import hu.oe.nik.szfmv.automatedcar.visualization.Gui;
 import javax.swing.JOptionPane;
@@ -29,9 +34,14 @@ public class Main {
 
     private void init() {
         this.worldManager = new WorldManager("test_world", "reference_points");
+        NPC walkerNPC = new NPC(new Position(1000, 100), 90, "woman.png", "walker_npc_road_1");
+        NPC carNPC = new NPC(new Position(220, 824), 180, "car_2_blue.png", "car_npc_road_1");
         AutomatedCar car = new AutomatedCar(80, 80, "car_2_white.png");
         this.worldManager.setAutomatedCar(car);
-
+        worldManager.getNpcs().add(walkerNPC);
+        worldManager.getNpcs().add(carNPC);
+        worldManager.addObjectToWorld(walkerNPC);
+        worldManager.addObjectToWorld(carNPC);
         this.window = new Gui(this.worldManager);
         this.window.setVirtualFunctionBus(car.getVirtualFunctionBus());
         this.window.addKeyListener(new InputReader(car.getVirtualFunctionBus()));
@@ -42,8 +52,11 @@ public class Main {
         while (true) {
             try {
                 this.worldManager.getAutomatedCar().drive();
+                for (NPC npc : worldManager.getNpcs()) {
+                    npc.move();
+                }
                 // TODO IWorld-öt használjon a drawWorld
-                this.window.getCourseDisplay().drawWorld((this.worldManager));
+                this.window.getCourseDisplay().drawWorld((this.worldManager),window.getVirtualFunctionBus().inputPacket);
                 // TODO window.getCourseDisplay().refreshFrame();
                 Thread.sleep(CYCLE_PERIOD);
             } catch (InterruptedException e) {
@@ -53,20 +66,20 @@ public class Main {
             }
         }
     }
-    
+
     private void showAndHandlePopupDialog(CrashException e) {
         String message = e.getMessage();
         message += "\n\n" + Consts.CRASH_POPUP_MESSAGE;
-        
+
         int result = JOptionPane.showConfirmDialog(null, message, "Uh-oh...",
                                     JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        
+
         AutomatedCar car = this.worldManager.getAutomatedCar();
         if (result == 1) {
-            car.setPosY(car.getPosY() - 100);
+            car.moveCarByPos(0, -100);
             LOGGER.info("Result: " + result + ". Y coordinate modified!");
         } else {
-            car.setPosX(car.getPosX() - 100);
+            car.moveCarByPos(-100, 0);
             LOGGER.info("Result: " + result + ". X coordinate modified!");
         }
         // key reset (hajlamosak beragadni a gombok a dialog felugrásakor)

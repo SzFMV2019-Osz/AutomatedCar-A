@@ -1,6 +1,7 @@
 package hu.oe.nik.szfmv.automatedcar.xml;
 
 import hu.oe.nik.szfmv.automatedcar.model.References;
+import hu.oe.nik.szfmv.automatedcar.model.TurningPoints;
 import hu.oe.nik.szfmv.automatedcar.model.World;
 import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
 import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
@@ -109,6 +110,28 @@ public class XmlParser {
             logger.info(MessageFormat.format(Consts.XML_MS_DURATION_MESSAGE, getElapsedTimeAndResetStopWatch()));
         }
         return refs;
+    }
+
+    public static TurningPoints parseTurningPoints(String xmlFileName) {
+        xmlFileName = getXmlNameWithExtension(xmlFileName);
+        TurningPoints turningPoints = null;
+
+        try {
+            startStopWatch();
+
+            JAXBContext jaxbContext = createJAXBContext(TurningPoints.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            turningPoints = (TurningPoints) jaxbUnmarshaller.unmarshal(ModelCommonUtil.getFileFromName(xmlFileName));
+        } catch (NullPointerException e) {
+            logger.warn(Consts.ERROR_IN_PROCESSING + " " + Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
+            throw new NullPointerException(Consts.ERROR_FILE_LIKELY_DOESNT_EXIST);
+        } catch (Exception ex) {
+            logger.error(MessageFormat.format(Consts.ERROR_IN_XML_PARSING, xmlFileName), ex);
+        } finally {
+            invalidateCache();
+            logger.info(MessageFormat.format(Consts.XML_MS_DURATION_MESSAGE, getElapsedTimeAndResetStopWatch()));
+        }
+        return turningPoints;
     }
 
     private static String getXmlNameWithExtension(String fileName) {
