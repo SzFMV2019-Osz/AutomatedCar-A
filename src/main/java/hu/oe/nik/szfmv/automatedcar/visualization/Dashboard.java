@@ -8,6 +8,7 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.PowertrainPacket;
 import hu.oe.nik.szfmv.automatedcar.model.Sign;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
+import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.LastRoadSign;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.OMeter;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.StatusIndicator;
 import hu.oe.nik.szfmv.automatedcar.visualization.dashboard.Turn_Signal;
@@ -16,7 +17,10 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.InputPacket;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -53,13 +57,13 @@ public class Dashboard extends JPanel {
     private JLabel laneKeepingIndicatorExplainerText=new JLabel("L : LaneKeeping");
     private JLabel timeGapExplainerText=new JLabel("T: Set time Gap");
     private JLabel referenceSpeedExplainer=new JLabel("U/D Arrow : Change ACC speed");
-
+    private JLabel lastRoadSign=new JLabel("No sign");
     private JLabel currentGearText = new JLabel("P");
-    private JLabel speedLimitValueText = new JLabel("30");
+    private JLabel speedLimitValueText = new JLabel("No limit");
     private JLabel steeringWheelValueText = new JLabel("0");
     private JLabel xCoordValueText = new JLabel("0");
     private JLabel yCoordValueText = new JLabel("0");
-
+    
     private JProgressBar gasProgressBar = new JProgressBar(0, 100);
     private JProgressBar breakProgressBar = new JProgressBar(0, 100);
 
@@ -71,9 +75,10 @@ public class Dashboard extends JPanel {
     private StatusIndicator LKWARNIndicator;
     private StatusIndicator AEBWARNIndicator;
     private StatusIndicator RRWARNIndicator;
-    private StatusIndicator LastRoadSignIndicator;
+
     private StatusIndicator TimeGapIndicator;
     private StatusIndicator ReferenceSpeedIndicator;
+
 
     private Sign roadSign = null;
 
@@ -108,8 +113,6 @@ public class Dashboard extends JPanel {
         PPIndicator = new StatusIndicator(60, 250, 50, 40, "PP");
         LKAIndicator = new StatusIndicator(10, 300, 50, 40, "LKA");
         LKWARNIndicator = new StatusIndicator(10, 350, 100, 40, "LKA WARN");
-        LastRoadSignIndicator = new StatusIndicator(120, 205, 100, 40, roadSign != null ?
-                                                                       roadSign.getImageFileName() : "No Sign");
         AEBWARNIndicator = new StatusIndicator(120, 310, 100, 40, "AEB WARN");
         RRWARNIndicator = new StatusIndicator(120, 350, 100, 40, "RR WARN");
 
@@ -119,7 +122,6 @@ public class Dashboard extends JPanel {
         add(LKWARNIndicator);
         add(AEBWARNIndicator);
         add(RRWARNIndicator);
-        add(LastRoadSignIndicator);
         add(TimeGapIndicator);
         add(ReferenceSpeedIndicator);
     }
@@ -131,7 +133,7 @@ public class Dashboard extends JPanel {
         gasPedalText.setBounds(10, 390, 100, 15);
         breakPedalText.setBounds(10, 420, 100, 15);
         speedLimitText.setBounds(10, 450, 120, 15);
-        speedLimitValueText.setBounds(130, 450, 30, 15);
+        speedLimitValueText.setBounds(90, 450, 60, 15);
         steeringWheelText.setBounds(10, 620, 120, 15);
         steeringWheelValueText.setBounds(130, 620, 40, 15);
         xCoordText.setBounds(10, 635, 30, 15);
@@ -150,10 +152,10 @@ public class Dashboard extends JPanel {
         accIndicatorExplainerText.setBounds(10,575,220,15);
         timeGapExplainerText.setBounds(10,590,220,15);
         referenceSpeedExplainer.setBounds(10,605,220,15);
+        lastRoadSign.setBounds(120,205,110,110);
 
 
-
-
+        add(lastRoadSign);
         add(gearShiftText);
         add(currentGearText);
         add(accMenuText);
@@ -179,7 +181,6 @@ public class Dashboard extends JPanel {
         add(laneKeepingIndicatorExplainerText);
         add(timeGapExplainerText);
         add(referenceSpeedExplainer);
-
     }
 
     private void Turn_SignalPlacing() {
@@ -244,7 +245,6 @@ public class Dashboard extends JPanel {
 
     private void OtherEventHandling(PowertrainPacket packet) {
         speedoMeter.setPerf_Percentage(packet.getVelocity());
-        speedLimitValueText.setText(String.valueOf(130));
         RPMmeter.setPerf_Percentage(packet.getRPM());
         AutomatedCar car = parent.getAutomatedCar();
         
@@ -268,19 +268,30 @@ public class Dashboard extends JPanel {
         if (sensedObjects.isEmpty()) {
             roadSign = null;
         } else {
+            Point closestPoint = null;
+            Map<Point, IObject> signPoints = new HashMap<>();
             for (IObject object : sensedObjects) {
                 if (object instanceof Sign) {
-                    roadSign = (Sign)object;
-                    break;
+                    signPoints.put(new Point(object.getPosX(), object.getPosY()), object);
                 }
             }
+            closestPoint = Collections.min(signPoints.keySet(),
+                                            (final Point p1, final Point p2) -> (int)p1.distanceSq(p2));
+            roadSign = (Sign)signPoints.get(closestPoint);
         }
         
-        String lastSignName = "No Sign";
         if (roadSign != null) {
-            lastSignName = roadSign.getImageFileName();
+            ImageIcon i=new ImageIcon(roadSign.getImage());
+
+            lastRoadSign.setIcon(i);
+            lastRoadSign.setText(null);
+            speedLimitValueText.setText(roadSign.getSpeedLimit());
+
+        } else {
+
+        lastRoadSign.setIcon(null);
+        lastRoadSign.setText("No Sign");
         }
-        LastRoadSignIndicator.setText(lastSignName);
     }
     private void AEBEventHandling(AEBPacket packet){
         if(packet.getState()== AEBState.COLLISION_AVOIDABLE)
