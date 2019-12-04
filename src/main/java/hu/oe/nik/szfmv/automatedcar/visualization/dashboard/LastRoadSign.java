@@ -36,7 +36,6 @@ public class LastRoadSign extends JPanel implements ILastRoadSign {
         try {
             this.image = ModelCommonUtil.loadObjectImage(this.RoadSignName);
         } catch (Exception e) {
-            System.out.println("Para van: " + e.getMessage());
         }
         this.revalidate();
     }
