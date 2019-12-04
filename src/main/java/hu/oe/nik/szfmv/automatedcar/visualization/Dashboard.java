@@ -55,11 +55,11 @@ public class Dashboard extends JPanel {
     private JLabel referenceSpeedExplainer=new JLabel("U/D Arrow : Change ACC speed");
 
     private JLabel currentGearText = new JLabel("P");
-    private JLabel speedLimitValueText = new JLabel("30");
+    private JLabel speedLimitValueText = new JLabel("No limit");
     private JLabel steeringWheelValueText = new JLabel("0");
     private JLabel xCoordValueText = new JLabel("0");
     private JLabel yCoordValueText = new JLabel("0");
-
+    
     private JProgressBar gasProgressBar = new JProgressBar(0, 100);
     private JProgressBar breakProgressBar = new JProgressBar(0, 100);
 
@@ -136,7 +136,7 @@ public class Dashboard extends JPanel {
         gasPedalText.setBounds(10, 390, 100, 15);
         breakPedalText.setBounds(10, 420, 100, 15);
         speedLimitText.setBounds(10, 450, 120, 15);
-        speedLimitValueText.setBounds(130, 450, 30, 15);
+        speedLimitValueText.setBounds(90, 450, 60, 15);
         steeringWheelText.setBounds(10, 620, 120, 15);
         steeringWheelValueText.setBounds(130, 620, 40, 15);
         xCoordText.setBounds(10, 635, 30, 15);
@@ -184,7 +184,6 @@ public class Dashboard extends JPanel {
         add(laneKeepingIndicatorExplainerText);
         add(timeGapExplainerText);
         add(referenceSpeedExplainer);
-
     }
 
     private void Turn_SignalPlacing() {
@@ -249,7 +248,6 @@ public class Dashboard extends JPanel {
 
     private void OtherEventHandling(PowertrainPacket packet) {
         speedoMeter.setPerf_Percentage(packet.getVelocity());
-        speedLimitValueText.setText(String.valueOf(130));
         RPMmeter.setPerf_Percentage(packet.getRPM());
         AutomatedCar car = parent.getAutomatedCar();
         
@@ -282,6 +280,7 @@ public class Dashboard extends JPanel {
         }
         
         if (roadSign != null) {
+            speedLimitValueText.setText(roadSign.getSpeedLimit());
             try {
                 BufferedImage img = ModelCommonUtil.loadObjectImage(roadSign.getImageFileName());
                 Graphics2D g = img.createGraphics();
