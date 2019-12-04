@@ -58,6 +58,7 @@ public class Dashboard extends JPanel {
     private JLabel timeGapExplainerText=new JLabel("T: Set time Gap");
     private JLabel referenceSpeedExplainer=new JLabel("U/D Arrow : Change ACC speed");
     private JLabel zoomExplainer=new JLabel("Z/H ZOOM in/out");
+
     private JLabel lastRoadSign=new JLabel("No sign");
     private JLabel currentGearText = new JLabel("P");
     private JLabel speedLimitValueText = new JLabel("No limit");
@@ -153,10 +154,12 @@ public class Dashboard extends JPanel {
         accIndicatorExplainerText.setBounds(10,575,220,15);
         timeGapExplainerText.setBounds(10,590,220,15);
         referenceSpeedExplainer.setBounds(10,605,220,15);
+
         zoomExplainer.setBounds(10,470,200,15);
         lastRoadSign.setBounds(120,205,110,110);
 
         add(zoomExplainer);
+
         add(lastRoadSign);
         add(gearShiftText);
         add(currentGearText);
@@ -285,11 +288,18 @@ public class Dashboard extends JPanel {
         if (roadSign != null) {
             ImageIcon i=new ImageIcon(roadSign.getImage());
 
+
             lastRoadSign.setIcon(i);
             lastRoadSign.setText(null);
             speedLimitValueText.setText(roadSign.getSpeedLimit());
 
         } else {
+
+        lastRoadSign.setIcon(null);
+        lastRoadSign.setText("No Sign");
+        }
+    }
+
 
         lastRoadSign.setIcon(null);
         lastRoadSign.setText("No Sign");

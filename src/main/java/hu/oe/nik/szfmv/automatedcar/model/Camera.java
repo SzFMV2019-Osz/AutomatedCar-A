@@ -80,6 +80,7 @@ public class Camera {
                                   .reduce(sensed, String::concat);
 
             System.out.println("Sensed signs: " + sensed);
+
         }
 
         return sensedObjects;
