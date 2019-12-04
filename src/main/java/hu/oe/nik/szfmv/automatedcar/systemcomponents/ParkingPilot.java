@@ -1,12 +1,9 @@
 package hu.oe.nik.szfmv.automatedcar.systemcomponents;
 
 import hu.oe.nik.szfmv.automatedcar.AutomatedCar;
-import hu.oe.nik.szfmv.automatedcar.exceptions.CrashException;
 import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
-import hu.oe.nik.szfmv.automatedcar.model.managers.WorldManager;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
-import hu.oe.nik.szfmv.automatedcar.visualization.CourseDisplay;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -72,74 +69,108 @@ public class ParkingPilot {
             }
         }
         //add carWidth/2 to distance
-        if(pointList.size() == 2){
-            distance = Math.abs(pointList.get(0).getPosY() - pointList.get(1).getPosY()) - carSize ;
-            pos.setX(pointList.get(0).getPosX());
-            pos.setY(pointList.get(1).getPosY()-distance/2);
-            if(car.getRotation()>0) {
-                finish.y = pointList.get(1).getPosY();
-                otherY=pointList.get(0).getPosY();
+        if(pointList.size() == 2) {
+
+            int currentdistance = Math.abs(pointList.get(0).getPosY() - pointList.get(1).getPosY()) - carSize;
+            if (currentdistance >= distance) {
+                pos.setX(pointList.get(0).getPosX());
+                pos.setY(pointList.get(1).getPosY() - distance / 2);
+                if (car.getRotation() > 0) {
+                    finish.y = pointList.get(1).getPosY();
+                    otherY = pointList.get(0).getPosY();
+                } else {
+                    otherY = pointList.get(0).getPosY();
+                    finish.y = pointList.get(1).getPosY();
+                }
+                finish.x = pointList.get(0).getPosX() + car.getWidth() / 2;
+                distance=currentdistance;
             }
-            else{
-                otherY=pointList.get(0).getPosY();
-                finish.y = pointList.get(1).getPosY();
-            }
-            finish.x=pointList.get(0).getPosX()+car.getWidth()/2;
+
         }
         else{
-            distance = 0;
+            if(!isOn) {
+                    distance = 0;
+            }
         }
 
         //System.out.print(distance);
     }
     public void AutomaticParkin2() {
         if(distance > carSize * 1.5) {
-        if (Math.abs(car.getPosX() - finish.x) > 10) {
-            if (car.getRotation() > 0) {
-                if (functionBus.inputPacket.getGearShiftValue() == GearShift.POS.D) {
-                    if (car.getPosY() < finish.y - 20) {
-                        functionBus.inputPacket.setGasPedalValue(10);
+        if(car.getRotation()<=0) {
+            if ((car.getPosY() - carSize / 2) > otherY) {
+                functionBus.inputPacket.setGasPedalValue(10);
+            }
+            else {
+                functionBus.inputPacket.setGearShiftValue(GearShift.POS.R);
+                if(car.getPosY()>(otherY-carSize/2-distance/2)) {
+                    functionBus.inputPacket.setRightSteeringWheelValue(100);
+                    functionBus.inputPacket.setLeftSteeringWheelValue(0);
+                    functionBus.inputPacket.setGasPedalValue(100);
+
+                }
+                else if(car.getPosY()<(otherY+carSize-distance/2)&&car.getPosY()<finish.y+carSize+20){
+                    functionBus.inputPacket.setLeftSteeringWheelValue(100);
+                    functionBus.inputPacket.setRightSteeringWheelValue(100);
+                    functionBus.inputPacket.setGasPedalValue(50);
+                }
+            }
+            System.out.println(car.getRotation());
+           /* if (functionBus.inputPacket.getGearShiftValue() == GearShift.POS.D) {
+                if (car.getPosY() > otherY + carSize + 20) {
+                    functionBus.inputPacket.setGasPedalValue(10);
+                } else {
+                    functionBus.inputPacket.setGearShiftValue(GearShift.POS.R);
+                }
+            } else if (functionBus.inputPacket.getGearShiftValue() == GearShift.POS.R) {
+                if (car.getPosY() < (otherY + distance / 2 + carSize / 2)) {
+                    functionBus.inputPacket.setGasPedalValue(90);
+                    functionBus.inputPacket.setRightSteeringWheelValue(40);
+
+                } else if ((car.getPosY() < (finish.y - carSize + 20)) && car.getPosX() > (otherY + distance / 2 + carSize / 2)) {
+                    functionBus.inputPacket.setGasPedalValue(90);
+                    functionBus.inputPacket.setLeftSteeringWheelValue(40);
+                } else {
+                    functionBus.inputPacket.setGearShiftValue(GearShift.POS.D);
+                }
+            }*/
+        }
+         else   if (car.getRotation() > 0) {
+                if ((car.getPosY() - carSize / 2) < finish.y) {
+                    functionBus.inputPacket.setGasPedalValue(10);
+                } else {
+                    functionBus.inputPacket.setGearShiftValue(GearShift.POS.R);
+                    if(car.getPosY() < (finish.y +carSize)) {
+                        functionBus.inputPacket.setGasPedalValue(20);
+                        functionBus.inputPacket.setLeftSteeringWheelValue(100);
+
+                }
+
+               /* if (functionBus.inputPacket.getGearShiftValue() == GearShift.POS.D) {
+                    if (car.getPosY() < finish.y - carSize/2-20) {
+
                         dummy.calculateMovingVector(functionBus.inputPacket);
 
                     } else {
                         functionBus.inputPacket.setGearShiftValue(GearShift.POS.R);
                     }
-                } else  if(functionBus.inputPacket.getGearShiftValue() == GearShift.POS.R) {
-                    if (car.getPosY() > (finish.y - distance / 2 + carSize / 3)) {
-                        functionBus.inputPacket.setGasPedalValue(90);
-                        functionBus.inputPacket.setRightSteeringWheelValue(40);
-                    } else if ((finish.y - distance / 2 + carSize / 3) > car.getPosY() && car.getPosY() > (otherY + carSize * 1.8)) {
-                        functionBus.inputPacket.setGasPedalValue(90);
-                        functionBus.inputPacket.setLeftSteeringWheelValue(40);
-                    } else {
-                        functionBus.inputPacket.setGearShiftValue(GearShift.POS.D);
-                    }
+                } */
+            /*    if{
+                    if (car.getPosY() < (finish.y +car)) {
+                        functionBus.inputPacket.setGasPedalValue(20);
+                        functionBus.inputPacket.setLeftSteeringWheelValue(100);
                 }
-
-            }
-            else if(car.getRotation()<=0){
-                if(functionBus.inputPacket.getGearShiftValue() == GearShift.POS.D){
-                    if(car.getPosY() > otherY+carSize+20) {
-                        functionBus.inputPacket.setGasPedalValue(10);
-                    }
-                    else{
-                        functionBus.inputPacket.setGearShiftValue(GearShift.POS.R);
-                    }
+            }else  if(functionBus.inputPacket.getGearShiftValue() == GearShift.POS.R) {
+                if (car.getPosY() > (finish.y - distance / 2)) {
+                    functionBus.inputPacket.setGasPedalValue(20);
+                    functionBus.inputPacket.setLeftSteeringWheelValue(100);
+                } else if ((finish.y - distance / 2) > car.getPosY() && car.getPosY() > (otherY + carSize * 1.8)) {
+                    functionBus.inputPacket.setGasPedalValue(20);
+                    functionBus.inputPacket.setRightSteeringWheelValue(100);
+                } else {
+                    functionBus.inputPacket.setGearShiftValue(GearShift.POS.D);
                 }
-                else if(functionBus.inputPacket.getGearShiftValue() == GearShift.POS.R){
-                    if(car.getPosY()<(otherY+distance/2+carSize/2)){
-                            functionBus.inputPacket.setGasPedalValue(90);
-                            functionBus.inputPacket.setRightSteeringWheelValue(40);
-
-                    }
-                    else if((car.getPosY()<(finish.y-carSize+20))&&car.getPosX()>(otherY+distance/2+carSize/2)){
-                        functionBus.inputPacket.setGasPedalValue(90);
-                        functionBus.inputPacket.setLeftSteeringWheelValue(40);
-                    }
-                    else{
-                        functionBus.inputPacket.setGearShiftValue(GearShift.POS.D);
-                    }
-                }
+            }*/
 /*                    while (car.getPosY() > otherY+carSize+20) {
                         functionBus.inputPacket.setGasPedalValue(10);
                         dummy.calculateMovingVector(functionBus.inputPacket);
