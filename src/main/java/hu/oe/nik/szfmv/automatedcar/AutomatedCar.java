@@ -70,11 +70,11 @@ public class AutomatedCar extends Car {
 
     public void operateSensors(WorldManager manager, int xOffset, int yOffset){
         // Radar
-        radar.updateSensorPosition(this);
+        radar.updateSensorPosition(this, xOffset, yOffset);
 
         // the radar is a proxy connecting the model functionality with any other component
-        Shape triangle = ModelCommonUtil.generateTriangle(radar.getSensorPosition(), radar.getRadarAreaLeftTip(),radar.getRadarAreaRightTip());
-        radar.setDetectedObjects(manager.getAllObjectsInTriangle(triangle,xOffset,yOffset));
+        Shape triangle = radar.getRadarTriangle();
+        radar.setDetectedObjects(manager.getAllCrashableObjectsInTriangle(triangle,xOffset,yOffset));
 
         // AEB
         ClosestObject closest = radar.getClosestObjectInLane();
@@ -85,10 +85,10 @@ public class AutomatedCar extends Car {
         //todo: detecting and signaling 70 km/h
         //System.out.println(virtualFunctionBus.emergencyBrakePacket.isAebNotOptimal() ? "AEB SUB" : "AEB OPTIMAL");
         // todo: emergency brake state
-        //if(closest != null){
-        //    System.out.println("CLOSEST: " + closest.getClosestObject() + " WITH DISTANCE " + radar.getClosestObjectInLane().getDistanceFromCar());
-        //    System.out.println("AEB: " + virtualFunctionBus.emergencyBrakePacket.getState().toString());
-        //}
+        if(closest != null){
+            System.out.println("CLOSEST: " + closest.getClosestObject() + " WITH DISTANCE " + radar.getClosestObjectInLane().getDistanceFromCar());
+            System.out.println("AEB: " + virtualFunctionBus.emergencyBrakePacket.getState().toString());
+        }
 
     }
 

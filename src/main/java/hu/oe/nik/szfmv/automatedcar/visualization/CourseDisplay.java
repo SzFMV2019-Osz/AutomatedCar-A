@@ -189,6 +189,9 @@ public class CourseDisplay extends JPanel  {
 
         // Set debug viewer
         viewer.displayRadarSensorArea(g2d, car, t1);
+        //viewer.displayRadarSensorArea(g2d, car, t1);
+        viewer.setSensorTriangleColor(Color.RED);
+        viewer.DrawPolygon(car.getRadar().getRadarTriangle(), Color.RED);
 
         for (List<Shape> shape : soundObjects) {
             viewer.DrawPolygon(shape);
