@@ -85,11 +85,11 @@ public class DebugViewer implements IDebugColorable, ISwitchableDebugViewer, ISe
         }
     }
 
-    public void DrawPolygon(int x, int y, int width, int height, Color color, AffineTransform t){
+    public void DrawPolygon(Shape s, Color color){
         if (debuggerSwitchedOn){
             graphics2D.setColor(color);
             graphics2D.setStroke(info.getThickness());
-            graphics2D.drawRect(x, y, width, height);
+            graphics2D.draw(s);
         }
     }
 

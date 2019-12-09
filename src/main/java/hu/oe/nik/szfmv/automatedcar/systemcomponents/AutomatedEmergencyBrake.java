@@ -7,8 +7,8 @@ import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.packets.AEBPacket;
 public class AutomatedEmergencyBrake extends SystemComponent {
 
     private ClosestObject closest;
-    private  int AVOIDABLE_COLLISION_THRESHOLD = 1000;
-    private  int IMMINENT_COLLISION_THRESHOLD = 400;
+    private  int AVOIDABLE_COLLISION_THRESHOLD = 1600;
+    private  int IMMINENT_COLLISION_THRESHOLD = 1300;
     private  int AEB_OPTIMALITY_THRESHOLD = 70;
     private boolean subOptimalReached;
 

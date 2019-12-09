@@ -5,9 +5,12 @@ import hu.oe.nik.szfmv.automatedcar.model.Position;
 import hu.oe.nik.szfmv.automatedcar.model.WorldObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IObject;
 import hu.oe.nik.szfmv.automatedcar.model.interfaces.IWorld;
+import hu.oe.nik.szfmv.automatedcar.model.utility.Consts;
+import hu.oe.nik.szfmv.automatedcar.model.utility.ModelCommonUtil;
 import hu.oe.nik.szfmv.automatedcar.virtualfunctionbus.VirtualFunctionBus;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,8 +26,16 @@ public class Radar extends SystemComponent implements IRadar {
     private Position sensorPosition;
     private Position sensorTriangleLeftTip;
     private Position sensorTriangleRightTip;
-    int sensorLength = 400;
+    int sensorLength = 400* Consts.PIXEL_PER_METERS;
     int baseAngle = 60;
+
+    private Shape radarTriangle;
+    public Shape getRadarTriangle() {
+        return radarTriangle;
+    }
+    public void setRadarTriangle(Shape radarTriangle) {
+        this.radarTriangle = radarTriangle;
+    }
 
     //"seen" object
     public List<IObject> SeenObjects;
@@ -44,15 +55,15 @@ public class Radar extends SystemComponent implements IRadar {
         return sensorTriangleRightTip;
     }
 
-    public void updateSensorPosition(AutomatedCar car){
+    public void updateSensorPosition(AutomatedCar car, int offsetX, int offsetY){
         // the center of the car bumper is the same x as the car refX and hal the car refY
         // the sensor is going to be on the same layer (z) as the car
         sensorPosition = new Position(car.getReferenceX(), car.getReferenceY() - car.getHeight()/2);
-        updateSensorTrianglePosition();
+        updateSensorTrianglePosition(car.getTransform(offsetX, offsetY));
     }
 
 
-    private void updateSensorTrianglePosition(){
+    private void updateSensorTrianglePosition(AffineTransform t){
         /* Calculating the positions of the sensor triangle using ANAL1 trigonometrikus szögfüggvény: tan(alpha) = a/b
            The edge of the triangle is always the exact position of the sensor body.
            Since the sensor area is 2 right-angled triangles and we know that the sensor sees in 60° (30° each),
@@ -64,6 +75,8 @@ public class Radar extends SystemComponent implements IRadar {
         int sensorTriangleBaseHalfLength = (int)(sensorLength/Math.tan(Math.toRadians(baseAngle)));
         sensorTriangleLeftTip = new Position(sensorTriangleBasePoint.getX()-sensorTriangleBaseHalfLength,sensorTriangleBasePoint.getY());
         sensorTriangleRightTip = new Position(sensorTriangleBasePoint.getX() + sensorTriangleBaseHalfLength, sensorTriangleBasePoint.getY());
+        Shape untransformed = ModelCommonUtil.generateTriangle(sensorPosition, sensorTriangleLeftTip, sensorTriangleRightTip);
+        radarTriangle = t.createTransformedShape(untransformed);
     }
 
     @Override
